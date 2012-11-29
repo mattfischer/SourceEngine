@@ -57,6 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -173,6 +174,10 @@
 				RelativePath=".\Main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Renderer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -181,6 +186,10 @@
 			>
 			<File
 				RelativePath=".\BSPFile.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Renderer.hpp"
 				>
 			</File>
 		</Filter>

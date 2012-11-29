@@ -95,19 +95,19 @@ struct Header {
     int revision;
 };
 
-struct Vector {
+struct BSPVector {
 	float x;
 	float y;
 	float z;
 };
 
-struct Plane {
-	Vector normal;
+struct BSPPlane {
+	BSPVector normal;
 	float dist;
 	int type;
 };
 
-struct Face {
+struct BSPFace {
 	unsigned short	planeNum;
 	unsigned char	side;
 	unsigned char	onNode;
@@ -127,14 +127,14 @@ struct Face {
 	unsigned int	smoothingGroups;
 };
 
-struct Edge {
-	int v[2];
+struct BSPEdge {
+	short int v[2];
 };
 
-struct Model {
-	Vector mins;
-	Vector maxs;
-	Vector origin;
+struct BSPModel {
+	BSPVector mins;
+	BSPVector maxs;
+	BSPVector origin;
 	int headNode;
 	int firstFace;
 	int numFaces;
@@ -153,9 +153,34 @@ BSPFile::BSPFile(const std::string &filename)
     Header header;
     mFile.read((char*)&header, sizeof(header));
 
-	Vector *vertices = (Vector*)readLump(mFile, header.lumps[LUMP_VERTICES]);
-	Edge *edges = (Edge*)readLump(mFile, header.lumps[LUMP_EDGES]);
+	BSPVector *vertices = (BSPVector*)readLump(mFile, header.lumps[LUMP_VERTICES]);
+	BSPEdge *edges = (BSPEdge*)readLump(mFile, header.lumps[LUMP_EDGES]);
 	int *surfEdges = (int*)readLump(mFile, header.lumps[LUMP_SURFEDGES]);
-	Face *faces = (Face*)readLump(mFile, header.lumps[LUMP_FACES]);
-	Model *models = (Model*)readLump(mFile, header.lumps[LUMP_MODELS]);
+	BSPFace *faces = (BSPFace*)readLump(mFile, header.lumps[LUMP_FACES]);
+	BSPModel *models = (BSPModel*)readLump(mFile, header.lumps[LUMP_MODELS]);
+
+	mModel = new Model;
+	mModel->numPolys = models[0].numFaces;
+	mModel->polys = new Poly[mModel->numPolys];
+
+	for(int i=0; i<mModel->numPolys; i++) {
+		BSPFace *face = &faces[models[0].firstFace + i];
+		Poly *poly = &mModel->polys[i];
+
+		poly->numPoints = face->numEdges;
+		poly->points = new Point[poly->numPoints];
+		poly->gray = (rand() % 255) / 255.0;
+		for(int j=0; j<poly->numPoints; j++) {
+			int surfEdge = surfEdges[face->firstEdge + j];
+			int vertex;
+			if(surfEdge > 0) {
+				vertex = edges[surfEdge].v[0];
+			} else {
+				vertex = edges[-surfEdge].v[1];
+			}
+			poly->points[j].x = vertices[vertex].x;
+			poly->points[j].y = vertices[vertex].y;
+			poly->points[j].z = vertices[vertex].z;
+		}
+	}
 }
