@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MultiReaderFactory.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Renderer.cpp"
 				>
 			</File>
@@ -210,6 +214,10 @@
 			</File>
 			<File
 				RelativePath=".\IReaderFactory.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MultiReaderFactory.hpp"
 				>
 			</File>
 			<File

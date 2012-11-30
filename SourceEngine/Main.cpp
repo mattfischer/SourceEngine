@@ -5,6 +5,7 @@
 #include "BSPFile.hpp"
 #include "Renderer.hpp"
 #include "VPKReaderFactory.hpp"
+#include "MultiReaderFactory.hpp"
 
 HWND hWnd;
 HDC hDC;
@@ -50,9 +51,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
 
-				VPKReaderFactory *vpkFactory = new VPKReaderFactory("pak01_dir.vpk");
-				FileReaderFactory *fileFactory = new FileReaderFactory();
-				IReader *reader = fileFactory->open("sp_a1_intro1.bsp");
+				MultiReaderFactory *factory = new MultiReaderFactory();
+				factory->addFactory(new FileReaderFactory());
+				factory->addFactory(new VPKReaderFactory("pak01_dir.vpk"));
+				IReader *reader = factory->open("sp_a1_intro1.bsp");
 				bspFile = new BSPFile(reader);
 				renderer = new Renderer(bspFile, SCREEN_WIDTH, SCREEN_HEIGHT);
 
