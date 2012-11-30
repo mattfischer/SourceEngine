@@ -182,6 +182,10 @@
 				RelativePath=".\Renderer.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\VPKFile.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -202,6 +206,10 @@
 			</File>
 			<File
 				RelativePath=".\Renderer.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VPKFile.hpp"
 				>
 			</File>
 		</Filter>

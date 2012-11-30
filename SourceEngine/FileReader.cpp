@@ -1,6 +1,6 @@
 #include "FileReader.hpp"
 
-FileReader::FileReader(const std::string& filename)
+FileReader::FileReader(const std::string &filename)
 : mFile(filename.c_str(), std::ios_base::in | std::ios_base::binary)
 {
 }

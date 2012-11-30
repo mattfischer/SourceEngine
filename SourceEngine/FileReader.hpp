@@ -8,7 +8,7 @@
 
 class FileReader : public IReader {
 public:
-	FileReader(const std::string& filename);
+	FileReader(const std::string &filename);
 
 	virtual void read(char *buffer, int size);
 	virtual void seek(int pos);

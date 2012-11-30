@@ -4,6 +4,7 @@
 #include "FileReader.hpp"
 #include "BSPFile.hpp"
 #include "Renderer.hpp"
+#include "VPKFile.hpp"
 
 HWND hWnd;
 HDC hDC;
@@ -49,6 +50,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
 
+				VPKFile vpk("pak01_dir.vpk");
 				FileReader *reader = new FileReader("sp_a1_intro1.bsp");
 				bspFile = new BSPFile(*reader);
 				renderer = new Renderer(bspFile, SCREEN_WIDTH, SCREEN_HEIGHT);
