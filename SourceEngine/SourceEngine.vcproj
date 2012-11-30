@@ -171,6 +171,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FileReader.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Main.cpp"
 				>
 			</File>
@@ -186,6 +190,14 @@
 			>
 			<File
 				RelativePath=".\BSPFile.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FileReader.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IReader.hpp"
 				>
 			</File>
 			<File

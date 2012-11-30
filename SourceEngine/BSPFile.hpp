@@ -1,6 +1,8 @@
 #ifndef BSPFILE_HPP
 #define BSPFILE_HPP
 
+#include "IReader.hpp"
+
 #include <fstream>
 #include <string>
 
@@ -23,12 +25,12 @@ public:
 		Poly *polys;
 	};
 
-    BSPFile(const std::string &filename);
+    BSPFile(IReader &reader);
 
 	Model *model() { return mModel; }
 
 private:
-	std::ifstream mFile;
+	IReader &mReader;
 	Model *mModel;
 };
 

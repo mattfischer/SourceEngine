@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <GL/gl.h>
 
+#include "FileReader.hpp"
 #include "BSPFile.hpp"
 #include "Renderer.hpp"
 
@@ -48,7 +49,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
 
-				bspFile = new BSPFile("sp_a1_intro1.bsp");
+				FileReader *reader = new FileReader("sp_a1_intro1.bsp");
+				bspFile = new BSPFile(*reader);
 				renderer = new Renderer(bspFile, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;

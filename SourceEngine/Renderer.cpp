@@ -13,7 +13,8 @@ Renderer::Renderer(BSPFile *bspFile, int width, int height)
 
 	glMatrixMode(GL_PROJECTION_MATRIX);
 	glLoadIdentity();
-	glFrustum(-(float)width / (float)width, (float)width / (float)width, -1, 1, 10, 50000);
+	float scale = 10;
+	glFrustum(-(float)width / (float)height * scale, (float)width / (float)height * scale, -scale, scale, 100, 10000);
 
 	glEnable(GL_DEPTH_TEST);
 	mX = mY = mZ = 0;
@@ -27,8 +28,8 @@ void Renderer::rotate(int amount)
 
 void Renderer::move(int amount)
 {
-	mX += 100 * amount * sin(-mRotation * 3.14 / 180);
-	mZ += 100 * amount * cos(-mRotation * 3.14 / 180);
+	mX += 100 * amount * sinf(-mRotation * 3.14f / 180);
+	mZ += 100 * amount * cosf(-mRotation * 3.14f / 180);
 };
 
 void Renderer::rise(int amount)

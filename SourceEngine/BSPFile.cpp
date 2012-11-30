@@ -140,24 +140,24 @@ struct BSPModel {
 	int numFaces;
 };
 
-char *readLump(std::ifstream &file, const Lump &lump)
+char *readLump(IReader &reader, const Lump &lump)
 {
 	char *buffer = new char[lump.length];
-	file.seekg(lump.offset, std::ios_base::beg);
-	file.read(buffer, lump.length);
+	reader.seek(lump.offset);
+	reader.read(buffer, lump.length);
 	return buffer;
 }
-BSPFile::BSPFile(const std::string &filename)
-: mFile(filename.c_str(), std::ios_base::in | std::ios_base::binary)
+BSPFile::BSPFile(IReader &reader)
+: mReader(reader)
 {
     Header header;
-    mFile.read((char*)&header, sizeof(header));
+    mReader.read((char*)&header, sizeof(header));
 
-	BSPVector *vertices = (BSPVector*)readLump(mFile, header.lumps[LUMP_VERTICES]);
-	BSPEdge *edges = (BSPEdge*)readLump(mFile, header.lumps[LUMP_EDGES]);
-	int *surfEdges = (int*)readLump(mFile, header.lumps[LUMP_SURFEDGES]);
-	BSPFace *faces = (BSPFace*)readLump(mFile, header.lumps[LUMP_FACES]);
-	BSPModel *models = (BSPModel*)readLump(mFile, header.lumps[LUMP_MODELS]);
+	BSPVector *vertices = (BSPVector*)readLump(mReader, header.lumps[LUMP_VERTICES]);
+	BSPEdge *edges = (BSPEdge*)readLump(mReader, header.lumps[LUMP_EDGES]);
+	int *surfEdges = (int*)readLump(mReader, header.lumps[LUMP_SURFEDGES]);
+	BSPFace *faces = (BSPFace*)readLump(mReader, header.lumps[LUMP_FACES]);
+	BSPModel *models = (BSPModel*)readLump(mReader, header.lumps[LUMP_MODELS]);
 
 	mModel = new Model;
 	mModel->numPolys = models[0].numFaces;
@@ -169,7 +169,7 @@ BSPFile::BSPFile(const std::string &filename)
 
 		poly->numPoints = face->numEdges;
 		poly->points = new Point[poly->numPoints];
-		poly->gray = (rand() % 255) / 255.0;
+		poly->gray = (rand() % 255) / 255.0f;
 		for(int j=0; j<poly->numPoints; j++) {
 			int surfEdge = surfEdges[face->firstEdge + j];
 			int vertex;
