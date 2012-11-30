@@ -1,4 +1,4 @@
-#include "VPKFile.hpp"
+#include "VPKDirectory.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -49,7 +49,7 @@ std::string readString(std::ifstream &file)
 	return ret;
 }
 
-VPKFile::VPKFile(const std::string &filename)
+VPKDirectory::VPKDirectory(const std::string &filename)
 {
 	std::ifstream file(filename.c_str(), std::ios_base::in | std::ios_base::binary);
 	std::ofstream list("fileList.txt");
@@ -91,12 +91,12 @@ VPKFile::VPKFile(const std::string &filename)
 			FileMap &fileMap = pathMap[path];
 
 			while(1) {
-				std::string name = readString(file);
-				if(name == "") {
+				std::string filename = readString(file);
+				if(filename == "") {
 					break;
 				}
-				list << path << "/" << name << "." << ext << std::endl;
-				FileInfo &info = fileMap[name];
+				list << path << "/" << filename << "." << ext << std::endl;
+				FileInfo &info = fileMap[filename];
 
 				DirectoryEntry entry;
 				file.read((char*)&entry, sizeof(entry));
@@ -112,5 +112,56 @@ VPKFile::VPKFile(const std::string &filename)
 				}
 			}
 		}
+	}
+}
+
+void splitPath(const std::string &name, std::string &ext, std::string &path, std::string &filename)
+{
+	size_t extpos = name.find('.');
+	size_t fnpos = name.rfind('/');
+
+	if(fnpos == name.npos) {
+		fnpos = 0;
+	} else {
+		fnpos++;
+	}
+
+	ext = name.substr(extpos);
+	path = name.substr(0, fnpos);
+	filename = name.substr(fnpos, extpos - fnpos);
+}
+
+bool VPKDirectory::exists(const std::string &name)
+{
+	std::string ext, path, filename;
+	splitPath(name, ext, path, filename);
+
+	if(mDirectory.find(ext) == mDirectory.end()) {
+		return false;
+	}
+
+	PathMap &pathMap = mDirectory[ext];
+	if(pathMap.find(path) == pathMap.end()) {
+		return false;
+	}
+
+	FileMap &fileMap = pathMap[path];
+	if(fileMap.find(filename) == fileMap.end()) {
+		return false;
+	}
+
+	return true;
+}
+
+VPKDirectory::FileInfo emptyInfo;
+VPKDirectory::FileInfo &VPKDirectory::lookup(const std::string &name)
+{
+	if(exists(name)) {
+		std::string ext, path, name;
+		splitPath(name, ext, path, name);
+
+		return mDirectory[ext][path][name];
+	} else {
+		return emptyInfo;
 	}
 }

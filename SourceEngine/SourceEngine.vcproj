@@ -183,7 +183,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\VPKFile.cpp"
+				RelativePath=".\VPKDirectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VPKReaderFactory.cpp"
 				>
 			</File>
 		</Filter>
@@ -213,7 +217,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\VPKFile.hpp"
+				RelativePath=".\VPKDirectory.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\VPKReaderFactory.hpp"
 				>
 			</File>
 		</Filter>

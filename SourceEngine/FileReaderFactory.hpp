@@ -1,5 +1,5 @@
-#ifndef FILEREADER_HPP
-#define FILEREADER_HPP
+#ifndef FILE_READER_FACTORY_HPP
+#define FILE_READER_FACTORY_HPP
 
 #include "IReaderFactory.hpp"
 

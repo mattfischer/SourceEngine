@@ -1,5 +1,5 @@
-#ifndef BSPFILE_HPP
-#define BSPFILE_HPP
+#ifndef BSP_FILE_HPP
+#define BSP_FILE_HPP
 
 #include "IReader.hpp"
 

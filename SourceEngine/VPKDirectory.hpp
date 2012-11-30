@@ -1,15 +1,13 @@
-#ifndef VPKFILE_HPP
-#define VPKFILE_HPP
+#ifndef VPK_DIRECTORY_HPP
+#define VPK_DIRECTORY_HPP
 
-#include <string>
-#include <fstream>
 #include <map>
+#include <string>
 
-class VPKFile {
+class VPKDirectory {
 public:
-	VPKFile(const std::string &filename);
+	VPKDirectory(const std::string &filename);
 
-private:
 	struct FileInfo {
 		unsigned int archiveIndex;
 		unsigned int entryOffset;
@@ -17,9 +15,15 @@ private:
 		unsigned int preloadBytes;
 		char *preloadData;
 	};
+
+	bool exists(const std::string &name);
+	FileInfo &lookup(const std::string &name);
+
+private:
 	typedef std::map<std::string, FileInfo> FileMap;
 	typedef std::map<std::string, FileMap> PathMap;
 	typedef std::map<std::string, PathMap> ExtMap;
 	ExtMap mDirectory;
 };
+
 #endif

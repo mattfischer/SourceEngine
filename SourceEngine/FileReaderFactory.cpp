@@ -44,12 +44,14 @@ std::string getFilename(const std::string &directory, const std::string &name)
 
 IReader *FileReaderFactory::open(const std::string &name)
 {
+	IReader *reader = 0;
+
 	if(exists(name)) {
 		std::string filename = getFilename(mDirectory, name);
-		return new FileReader(filename);
-	} else {
-		return 0;
+		reader = new FileReader(filename);
 	}
+
+	return reader;
 }
 
 bool FileReaderFactory::exists(const std::string &name)
