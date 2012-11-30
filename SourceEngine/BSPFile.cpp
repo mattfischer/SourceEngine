@@ -33,17 +33,17 @@ enum {
 	LUMP_AREAS,
 	LUMP_AREAPORTALS,
 	LUMP_PORTALS,
-	LUMP_UNUSED0,
-	LUMP_PROPCOLLISION,
+	LUMP_UNUSED0 = LUMP_PORTALS,
+	LUMP_PROPCOLLISION = LUMP_PORTALS,
 	LUMP_CLUSTERS,
-	LUMP_UNUSED1,
-	LUMP_PROPHULLS,
+	LUMP_UNUSED1 = LUMP_CLUSTERS,
+	LUMP_PROPHULLS = LUMP_CLUSTERS,
 	LUMP_PORTALVERTS,
-	LUMP_UNUSED2,
-	LUMP_PROPHULLVERTS,
+	LUMP_UNUSED2 = LUMP_PORTALVERTS,
+	LUMP_PROPHULLVERTS = LUMP_PORTALVERTS,
 	LUMP_CLUSTERPORTALS,
-	LUMP_UNUSED3,
-	LUMP_PROPTRIS,
+	LUMP_UNUSED3 = LUMP_CLUSTERPORTALS,
+	LUMP_PROPTRIS = LUMP_CLUSTERPORTALS,
 	LUMP_DISPINFO,
 	LUMP_ORIGINALFACES,
 	LUMP_PHYSDISP,
@@ -68,12 +68,12 @@ enum {
 	LUMP_FACE_MACRO_TEXTURE_INFO,
 	LUMP_DISP_TRIS,
 	LUMP_PHYSCOLLIDESURFACE,
-	LUMP_PROP_BLOB,
+	LUMP_PROP_BLOB = LUMP_PHYSCOLLIDESURFACE,
 	LUMP_WATEROVERLAYS,
 	LUMP_LIGHTMAPPAGES,
-	LUMP_LEAF_AMBIENT_INDEX_HDR,
+	LUMP_LEAF_AMBIENT_INDEX_HDR = LUMP_LIGHTMAPPAGES,
 	LUMP_LIGHTMAPPAGEINFOS,
-	LUMP_LEAF_AMBIENT_INDEX,
+	LUMP_LEAF_AMBIENT_INDEX = LUMP_LIGHTMAPPAGEINFOS,
 	LUMP_LIGHTING_HDR,
 	LUMP_WORLDLIGHTS_HDR,
 	LUMP_LEAF_AMBIENT_LIGHTING_HDR,
@@ -140,24 +140,44 @@ struct BSPModel {
 	int numFaces;
 };
 
-char *readLump(IReader &reader, const Lump &lump)
+struct BSPTexInfo {
+	float textureVecs[2][4];
+	float lightmapVecs[2][4];
+	int	flags;
+	int	texdata;	
+};
+
+struct BSPTexData {
+	BSPVector reflectivity;
+	int	nameStringTableID;
+	int	width;
+	int height;
+	int	view_width;
+	int view_height;
+};
+
+char *readLump(IReader *reader, const Lump &lump)
 {
 	char *buffer = new char[lump.length];
-	reader.seek(lump.offset);
-	reader.read(buffer, lump.length);
+	reader->seek(lump.offset);
+	reader->read(buffer, lump.length);
 	return buffer;
 }
-BSPFile::BSPFile(IReader &reader)
+BSPFile::BSPFile(IReader *reader)
 : mReader(reader)
 {
     Header header;
-    mReader.read((char*)&header, sizeof(header));
+    mReader->read((char*)&header, sizeof(header));
 
 	BSPVector *vertices = (BSPVector*)readLump(mReader, header.lumps[LUMP_VERTICES]);
 	BSPEdge *edges = (BSPEdge*)readLump(mReader, header.lumps[LUMP_EDGES]);
 	int *surfEdges = (int*)readLump(mReader, header.lumps[LUMP_SURFEDGES]);
 	BSPFace *faces = (BSPFace*)readLump(mReader, header.lumps[LUMP_FACES]);
 	BSPModel *models = (BSPModel*)readLump(mReader, header.lumps[LUMP_MODELS]);
+	BSPTexInfo *texInfos = (BSPTexInfo*)readLump(mReader, header.lumps[LUMP_TEXINFO]);
+	BSPTexData *texData = (BSPTexData*)readLump(mReader, header.lumps[LUMP_TEXDATA]);
+	int *texDataStringTable = (int*)readLump(mReader, header.lumps[LUMP_TEXDATA_STRING_TABLE]);
+	char *texDataStringData = (char*)readLump(mReader, header.lumps[LUMP_TEXDATA_STRING_DATA]);
 
 	mModel = new Model;
 	mModel->numPolys = models[0].numFaces;

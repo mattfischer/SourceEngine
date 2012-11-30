@@ -25,12 +25,12 @@ public:
 		Poly *polys;
 	};
 
-    BSPFile(IReader &reader);
+    BSPFile(IReader *reader);
 
 	Model *model() { return mModel; }
 
 private:
-	IReader &mReader;
+	IReader *mReader;
 	Model *mModel;
 };
 

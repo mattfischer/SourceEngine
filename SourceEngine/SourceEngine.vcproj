@@ -171,7 +171,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FileReader.cpp"
+				RelativePath=".\FileReaderFactory.cpp"
 				>
 			</File>
 			<File
@@ -197,11 +197,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FileReader.hpp"
+				RelativePath=".\FileReaderFactory.hpp"
 				>
 			</File>
 			<File
 				RelativePath=".\IReader.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IReaderFactory.hpp"
 				>
 			</File>
 			<File

@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <GL/gl.h>
 
-#include "FileReader.hpp"
+#include "FileReaderFactory.hpp"
 #include "BSPFile.hpp"
 #include "Renderer.hpp"
 #include "VPKFile.hpp"
@@ -51,8 +51,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				wglMakeCurrent(hDC, hglRC);
 
 				VPKFile vpk("pak01_dir.vpk");
-				FileReader *reader = new FileReader("sp_a1_intro1.bsp");
-				bspFile = new BSPFile(*reader);
+				FileReaderFactory *factory = new FileReaderFactory();
+				IReader *reader = factory->open("sp_a1_intro1.bsp");
+				bspFile = new BSPFile(reader);
 				renderer = new Renderer(bspFile, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;
