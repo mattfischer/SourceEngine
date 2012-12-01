@@ -1,5 +1,8 @@
 #include "BSPFile.hpp"
 
+#include "SharedPointer.hpp"
+#include "IReaderFactory.hpp"
+
 #include <vector>
 
 struct Lump {
@@ -103,25 +106,25 @@ template <typename T> void readLump(sp<IReader> reader, std::vector<T> &vector, 
 	reader->read((char*)&vector[0], lump.length);
 }
 
-BSPFile::BSPFile(sp<IReader> reader)
-: mReader(reader)
+BSPFile::BSPFile(IReaderFactory *factory, const std::string &name)
 {
     Header header;
-    mReader->read((char*)&header, sizeof(header));
+	sp<IReader> reader = factory->open(name);
+    reader->read((char*)&header, sizeof(header));
 
-	readLump(mReader, mVertices, header, LUMP_VERTICES);
-	readLump(mReader, mEdges, header, LUMP_EDGES);
-	readLump(mReader, mSurfEdges, header, LUMP_SURFEDGES);
-	readLump(mReader, mFaces, header, LUMP_FACES);
-	readLump(mReader, mModels, header, LUMP_MODELS);
-	readLump(mReader, mTexInfos, header, LUMP_TEXINFO);
-	readLump(mReader, mTexDatas, header, LUMP_TEXDATA);
+	readLump(reader, mVertices, header, LUMP_VERTICES);
+	readLump(reader, mEdges, header, LUMP_EDGES);
+	readLump(reader, mSurfEdges, header, LUMP_SURFEDGES);
+	readLump(reader, mFaces, header, LUMP_FACES);
+	readLump(reader, mModels, header, LUMP_MODELS);
+	readLump(reader, mTexInfos, header, LUMP_TEXINFO);
+	readLump(reader, mTexDatas, header, LUMP_TEXDATA);
 
 	std::vector<int> stringTable;
-	readLump(mReader, stringTable, header, LUMP_TEXDATA_STRING_TABLE);
+	readLump(reader, stringTable, header, LUMP_TEXDATA_STRING_TABLE);
 
 	std::vector<char> stringData;
-	readLump(mReader, stringData, header, LUMP_TEXDATA_STRING_DATA);
+	readLump(reader, stringData, header, LUMP_TEXDATA_STRING_DATA);
 
 	for(unsigned int i=0; i<stringTable.size(); i++) {
 		mTexDataStringTable.push_back(std::string(&stringData[stringTable[i]]));

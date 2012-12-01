@@ -1,12 +1,10 @@
 #ifndef BSP_FILE_HPP
 #define BSP_FILE_HPP
 
-#include "SharedPointer.hpp"
-#include "IReader.hpp"
-
 #include <string>
 #include <vector>
 
+class IReaderFactory;
 class BSPFile {
 public:
 	struct Vector {
@@ -70,7 +68,7 @@ public:
 		int view_height;
 	};
 
-    BSPFile(sp<IReader> reader);
+	BSPFile(IReaderFactory *factory, const std::string &name);
 
 	std::vector<Model> &models() { return mModels; }
 	std::vector<Face> &faces() { return mFaces; }
@@ -82,8 +80,6 @@ public:
 	std::vector<std::string> &texDataStringTable() { return mTexDataStringTable; }
 
 private:
-	sp<IReader> mReader;
-
 	std::vector<Model> mModels;
 	std::vector<Face> mFaces;
 	std::vector<TexInfo> mTexInfos;
