@@ -95,112 +95,35 @@ struct Header {
     int revision;
 };
 
-struct BSPVector {
-	float x;
-	float y;
-	float z;
-};
-
-struct BSPPlane {
-	BSPVector normal;
-	float dist;
-	int type;
-};
-
-struct BSPFace {
-	unsigned short	planeNum;
-	unsigned char	side;
-	unsigned char	onNode;
-	int				firstEdge;
-	short			numEdges;
-	short			texInfo;
-	short			dispInfo;
-	short			surfaceFogVolumeID;
-	unsigned char	styles[4];
-	int				lightOfs;
-	float			area;
-	int				lightmapTextureMinsInLuxels[2];
-	int				lightmapTextureSizeInLuxels[2];
-	int				origFace;
-	unsigned short	numPrims;
-	unsigned short	firstPrimID;
-	unsigned int	smoothingGroups;
-};
-
-struct BSPEdge {
-	short int v[2];
-};
-
-struct BSPModel {
-	BSPVector mins;
-	BSPVector maxs;
-	BSPVector origin;
-	int headNode;
-	int firstFace;
-	int numFaces;
-};
-
-struct BSPTexInfo {
-	float textureVecs[2][4];
-	float lightmapVecs[2][4];
-	int	flags;
-	int	texdata;	
-};
-
-struct BSPTexData {
-	BSPVector reflectivity;
-	int	nameStringTableID;
-	int	width;
-	int height;
-	int	view_width;
-	int view_height;
-};
-
-char *readLump(sp<IReader> reader, const Lump &lump)
+template <typename T> void readLump(sp<IReader> reader, std::vector<T> &vector, const Header &header, int lumpNum)
 {
-	char *buffer = new char[lump.length];
+	const Lump &lump = header.lumps[lumpNum];
+	vector.resize(lump.length / sizeof(T));
 	reader->seek(lump.offset);
-	reader->read(buffer, lump.length);
-	return buffer;
+	reader->read((char*)&vector[0], lump.length);
 }
+
 BSPFile::BSPFile(sp<IReader> reader)
 : mReader(reader)
 {
     Header header;
     mReader->read((char*)&header, sizeof(header));
 
-	BSPVector *vertices = (BSPVector*)readLump(mReader, header.lumps[LUMP_VERTICES]);
-	BSPEdge *edges = (BSPEdge*)readLump(mReader, header.lumps[LUMP_EDGES]);
-	int *surfEdges = (int*)readLump(mReader, header.lumps[LUMP_SURFEDGES]);
-	BSPFace *faces = (BSPFace*)readLump(mReader, header.lumps[LUMP_FACES]);
-	BSPModel *models = (BSPModel*)readLump(mReader, header.lumps[LUMP_MODELS]);
-	BSPTexInfo *texInfos = (BSPTexInfo*)readLump(mReader, header.lumps[LUMP_TEXINFO]);
-	BSPTexData *texData = (BSPTexData*)readLump(mReader, header.lumps[LUMP_TEXDATA]);
-	int *texDataStringTable = (int*)readLump(mReader, header.lumps[LUMP_TEXDATA_STRING_TABLE]);
-	char *texDataStringData = (char*)readLump(mReader, header.lumps[LUMP_TEXDATA_STRING_DATA]);
+	readLump(mReader, mVertices, header, LUMP_VERTICES);
+	readLump(mReader, mEdges, header, LUMP_EDGES);
+	readLump(mReader, mSurfEdges, header, LUMP_SURFEDGES);
+	readLump(mReader, mFaces, header, LUMP_FACES);
+	readLump(mReader, mModels, header, LUMP_MODELS);
+	readLump(mReader, mTexInfos, header, LUMP_TEXINFO);
+	readLump(mReader, mTexDatas, header, LUMP_TEXDATA);
 
-	mModel = new Model;
-	mModel->numPolys = models[0].numFaces;
-	mModel->polys = new Poly[mModel->numPolys];
+	std::vector<int> stringTable;
+	readLump(mReader, stringTable, header, LUMP_TEXDATA_STRING_TABLE);
 
-	for(int i=0; i<mModel->numPolys; i++) {
-		BSPFace *face = &faces[models[0].firstFace + i];
-		Poly *poly = &mModel->polys[i];
+	std::vector<char> stringData;
+	readLump(mReader, stringData, header, LUMP_TEXDATA_STRING_DATA);
 
-		poly->numPoints = face->numEdges;
-		poly->points = new Point[poly->numPoints];
-		poly->gray = (rand() % 255) / 255.0f;
-		for(int j=0; j<poly->numPoints; j++) {
-			int surfEdge = surfEdges[face->firstEdge + j];
-			int vertex;
-			if(surfEdge > 0) {
-				vertex = edges[surfEdge].v[0];
-			} else {
-				vertex = edges[-surfEdge].v[1];
-			}
-			poly->points[j].x = vertices[vertex].x;
-			poly->points[j].y = vertices[vertex].y;
-			poly->points[j].z = vertices[vertex].z;
-		}
+	for(unsigned int i=0; i<stringTable.size(); i++) {
+		mTexDataStringTable.push_back(std::string(&stringData[stringTable[i]]));
 	}
 }

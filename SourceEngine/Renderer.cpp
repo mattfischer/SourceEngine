@@ -45,12 +45,24 @@ void Renderer::render()
 	glTranslatef(mX, mY, mZ);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	for(int i=0; i<mBspFile->model()->numPolys; i++) {
-		BSPFile::Poly *poly = &mBspFile->model()->polys[i];
+	BSPFile::Model &model = mBspFile->models()[0];
+	for(int i=0; i<model.numFaces; i++) {
+		BSPFile::Face &face = mBspFile->faces()[model.firstFace + i];
+
+		float gray = (float)(i * 43 % model.numFaces) / model.numFaces;
+		glColor3f(gray, gray, gray);
 		glBegin(GL_POLYGON);
-		glColor3f(poly->gray, poly->gray, poly->gray);
-		for(int j=0; j<poly->numPoints; j++) {
-			glVertex3f(poly->points[j].x, poly->points[j].y, poly->points[j].z);
+		for(int j=0; j<face.numEdges; j++) {
+			int surfEdge = mBspFile->surfEdges()[face.firstEdge + j];
+			int vertex;
+			if(surfEdge > 0) {
+				vertex = mBspFile->edges()[surfEdge].v[0];
+			} else {
+				vertex = mBspFile->edges()[-surfEdge].v[1];
+			}
+
+			BSPFile::Vector &vector = mBspFile->vertices()[vertex];
+			glVertex3f(vector.x, vector.y, vector.z);
 		}
 		glEnd();
 	}
