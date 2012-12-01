@@ -49,6 +49,14 @@ std::string readString(std::ifstream &file)
 	return ret;
 }
 
+std::string &uppercase(std::string &str)
+{
+	for(unsigned int i=0; i<str.size(); i++) {
+		str[i] = toupper(str[i]);
+	}
+	return str;
+}
+
 VPKDirectory::VPKDirectory(const std::string &filename)
 {
 	std::ifstream file(filename.c_str(), std::ios_base::in | std::ios_base::binary);
@@ -77,21 +85,21 @@ VPKDirectory::VPKDirectory(const std::string &filename)
 	}
 
 	while(true) {
-		std::string ext = readString(file);
+		std::string ext = uppercase(readString(file));
 		if(ext == "") {
 			break;
 		}
 		PathMap &pathMap = mDirectory[ext];
 
 		while(1) {
-			std::string path = readString(file);
+			std::string path = uppercase(readString(file));
 			if(path == "") {
 				break;
 			}
 			FileMap &fileMap = pathMap[path];
 
 			while(1) {
-				std::string filename = readString(file);
+				std::string filename = uppercase(readString(file));
 				if(filename == "") {
 					break;
 				}
@@ -126,9 +134,9 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 		fnpos++;
 	}
 
-	ext = name.substr(extpos);
-	path = name.substr(0, fnpos);
-	filename = name.substr(fnpos, extpos - fnpos);
+	ext = uppercase(name.substr(extpos));
+	path = uppercase(name.substr(0, fnpos));
+	filename = uppercase(name.substr(fnpos, extpos - fnpos));
 }
 
 bool VPKDirectory::exists(const std::string &name)
