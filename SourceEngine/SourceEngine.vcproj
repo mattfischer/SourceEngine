@@ -225,6 +225,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SharedPointer.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\VPKDirectory.hpp"
 				>
 			</File>

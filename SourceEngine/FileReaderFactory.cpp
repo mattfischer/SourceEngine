@@ -42,7 +42,7 @@ std::string getFilename(const std::string &directory, const std::string &name)
 	return filename;
 }
 
-IReader *FileReaderFactory::open(const std::string &name)
+sp<IReader> FileReaderFactory::open(const std::string &name)
 {
 	IReader *reader = 0;
 

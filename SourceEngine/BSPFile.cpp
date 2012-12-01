@@ -156,14 +156,14 @@ struct BSPTexData {
 	int view_height;
 };
 
-char *readLump(IReader *reader, const Lump &lump)
+char *readLump(sp<IReader> reader, const Lump &lump)
 {
 	char *buffer = new char[lump.length];
 	reader->seek(lump.offset);
 	reader->read(buffer, lump.length);
 	return buffer;
 }
-BSPFile::BSPFile(IReader *reader)
+BSPFile::BSPFile(sp<IReader> reader)
 : mReader(reader)
 {
     Header header;

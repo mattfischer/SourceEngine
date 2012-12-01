@@ -1,6 +1,7 @@
 #ifndef BSP_FILE_HPP
 #define BSP_FILE_HPP
 
+#include "SharedPointer.hpp"
 #include "IReader.hpp"
 
 #include <fstream>
@@ -25,12 +26,12 @@ public:
 		Poly *polys;
 	};
 
-    BSPFile(IReader *reader);
+    BSPFile(sp<IReader> reader);
 
 	Model *model() { return mModel; }
 
 private:
-	IReader *mReader;
+	sp<IReader> mReader;
 	Model *mModel;
 };
 
