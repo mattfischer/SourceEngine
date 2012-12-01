@@ -7,9 +7,19 @@
 
 #include <math.h>
 
-Renderer::Renderer(BSPFile *bspFile, int width, int height)
+Renderer::Renderer(BSPFile *bspFile, IReaderFactory *factory, int width, int height)
 {
 	mBspFile = bspFile;
+
+	BSPFile::Model &model = mBspFile->models()[0];
+	BSPFile::Face &face = mBspFile->faces()[model.firstFace];
+	BSPFile::TexInfo &texInfo = mBspFile->texInfos()[face.texInfo];
+	BSPFile::TexData &texData = mBspFile->texDatas()[texInfo.texdata];
+	std::string textureName = mBspFile->texDataStringTable()[texData.nameStringTableID];
+	std::string filename = "materials/" + textureName + ".vmt";
+	sp<IReader> reader = factory->open(filename);
+	char *buffer = new char[reader->size()];
+	reader->read(buffer, reader->size());
 
 	glMatrixMode(GL_PROJECTION_MATRIX);
 	glLoadIdentity();

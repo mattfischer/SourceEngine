@@ -9,6 +9,9 @@ public:
 	FileReader(const std::string &filename)
 		: mFile(filename.c_str(), std::ios_base::in | std::ios_base::binary)
 	{
+		mFile.seekg(0, std::ios_base::end);
+		mSize = mFile.tellg();
+		mFile.seekg(0);
 	}
 
 	virtual void FileReader::read(char *buffer, int size)
@@ -21,8 +24,14 @@ public:
 		mFile.seekg(pos);
 	}
 
+	virtual int FileReader::size()
+	{
+		return mSize;
+	}
+
 private:
 	std::ifstream mFile;
+	int mSize;
 };
 
 FileReaderFactory::FileReaderFactory(const std::string &directory)

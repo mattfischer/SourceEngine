@@ -11,9 +11,13 @@ public:
 
 	sp(T *p)
 	{
-		mRef = new Ref;
-		mRef->p = p;
-		mRef->refCount = 1;
+		if(p) {
+			mRef = new Ref;
+			mRef->p = p;
+			mRef->refCount = 1;
+		} else {
+			mRef = 0;
+		}
 	}
 
 	sp(const sp<T> &other)

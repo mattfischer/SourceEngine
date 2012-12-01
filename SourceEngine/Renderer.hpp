@@ -1,11 +1,14 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
+#include "SharedPointer.hpp"
+#include "IReaderFactory.hpp"
+
 class BSPFile;
 
 class Renderer {
 public:
-	Renderer(BSPFile *bspFile, int width, int height);
+	Renderer(BSPFile *bspFile, IReaderFactory *factory, int width, int height);
 
 	void render();
 

@@ -39,6 +39,11 @@ public:
 		mPointer = pos;
 	}
 
+	virtual int size()
+	{
+		return mFileInfo.preloadBytes + mFileInfo.entryLength;
+	}
+
 private:
 	VPKDirectory::FileInfo &mFileInfo;
 	VPKDirectory &mDirectory;

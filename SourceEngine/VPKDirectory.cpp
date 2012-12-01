@@ -128,7 +128,13 @@ VPKDirectory::VPKDirectory(const std::string &filename)
 void splitPath(const std::string &name, std::string &ext, std::string &path, std::string &filename)
 {
 	size_t extpos = name.find('.');
+	size_t fnend = extpos;
 	size_t fnpos = name.rfind('/');
+	size_t pathend = fnpos;
+
+	if(extpos != name.npos) {
+		extpos++;
+	}
 
 	if(fnpos == name.npos) {
 		fnpos = 0;
@@ -137,8 +143,8 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 	}
 
 	ext = uppercase(name.substr(extpos));
-	path = uppercase(name.substr(0, fnpos));
-	filename = uppercase(name.substr(fnpos, extpos - fnpos));
+	path = uppercase(name.substr(0, pathend));
+	filename = uppercase(name.substr(fnpos, fnend - fnpos));
 }
 
 bool VPKDirectory::exists(const std::string &name)
@@ -167,10 +173,10 @@ VPKDirectory::FileInfo emptyInfo;
 VPKDirectory::FileInfo &VPKDirectory::lookup(const std::string &name)
 {
 	if(exists(name)) {
-		std::string ext, path, name;
-		splitPath(name, ext, path, name);
+		std::string ext, path, filename;
+		splitPath(name, ext, path, filename);
 
-		return mDirectory[ext][path][name];
+		return mDirectory[ext][path][filename];
 	} else {
 		return emptyInfo;
 	}

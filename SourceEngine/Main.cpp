@@ -56,7 +56,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				factory->addFactory(new VPKReaderFactory("pak01_dir.vpk"));
 				sp<IReader> reader = factory->open("sp_a1_intro1.bsp");
 				bspFile = new BSPFile(reader);
-				renderer = new Renderer(bspFile, SCREEN_WIDTH, SCREEN_HEIGHT);
+				renderer = new Renderer(bspFile, factory, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;
 			}
