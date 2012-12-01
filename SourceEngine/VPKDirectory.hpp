@@ -19,11 +19,15 @@ public:
 	bool exists(const std::string &name);
 	FileInfo &lookup(const std::string &name);
 
+	std::string getArchiveName(unsigned short index, int &startOffset);
+
 private:
 	typedef std::map<std::string, FileInfo> FileMap;
 	typedef std::map<std::string, FileMap> PathMap;
 	typedef std::map<std::string, PathMap> ExtMap;
 	ExtMap mDirectory;
+	std::string mFilename;
+	int mDataStart;
 };
 
 #endif

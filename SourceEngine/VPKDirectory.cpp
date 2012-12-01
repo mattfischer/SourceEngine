@@ -2,6 +2,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 struct Header_v1
 {
@@ -58,19 +60,19 @@ std::string &uppercase(std::string &str)
 }
 
 VPKDirectory::VPKDirectory(const std::string &filename)
+: mFilename(filename)
 {
 	std::ifstream file(filename.c_str(), std::ios_base::in | std::ios_base::binary);
 	std::ofstream list("fileList.txt");
 
 	Header_v1 header_v1;
 
-	int dataStart;
 	file.read((char*)&header_v1, sizeof(header_v1));
 
 	switch(header_v1.version) {
 		case 1:
 		{
-			dataStart = sizeof(header_v1) + header_v1.treeLength;
+			mDataStart = sizeof(header_v1) + header_v1.treeLength;
 			break;
 		}
 
@@ -79,7 +81,7 @@ VPKDirectory::VPKDirectory(const std::string &filename)
 			Header_v2 header_v2;
 			file.seekg(0);
 			file.read((char*)&header_v2, sizeof(header_v2));
-			dataStart = sizeof(header_v2) + header_v2.treeLength;
+			mDataStart = sizeof(header_v2) + header_v2.treeLength;
 			break;
 		}
 	}
@@ -172,4 +174,23 @@ VPKDirectory::FileInfo &VPKDirectory::lookup(const std::string &name)
 	} else {
 		return emptyInfo;
 	}
+}
+
+std::string VPKDirectory::getArchiveName(unsigned short index, int &startOffset)
+{
+	std::string ret;
+
+	if(index == 0x7fff) {
+		ret = mFilename;
+		startOffset = mDataStart;
+	} else {
+		size_t pos = mFilename.find("dir.vpk");
+		std::string stem = mFilename.substr(0, pos);
+		std::stringstream ss;
+		ss << std::setw(3) << index;
+		ret = stem + ss.str();
+		startOffset = 0;
+	}
+
+	return ret;
 }
