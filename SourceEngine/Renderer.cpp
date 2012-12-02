@@ -1,24 +1,23 @@
 #include "Renderer.hpp"
 
-#include "BSPFile.hpp"
-#include "VMTFile.hpp"
+#include "File/VMT.hpp"
 
 #include <windows.h>
 #include <GL/gl.h>
 
 #include <math.h>
 
-Renderer::Renderer(BSPFile *bspFile, IReaderFactory *factory, int width, int height)
+Renderer::Renderer(File::BSP *bspFile, File::IReaderFactory *factory, int width, int height)
 {
 	mBspFile = bspFile;
 
-	BSPFile::Model &model = mBspFile->models()[0];
-	BSPFile::Face &face = mBspFile->faces()[model.firstFace];
-	BSPFile::TexInfo &texInfo = mBspFile->texInfos()[face.texInfo];
-	BSPFile::TexData &texData = mBspFile->texDatas()[texInfo.texdata];
+	File::BSP::Model &model = mBspFile->models()[0];
+	File::BSP::Face &face = mBspFile->faces()[model.firstFace];
+	File::BSP::TexInfo &texInfo = mBspFile->texInfos()[face.texInfo];
+	File::BSP::TexData &texData = mBspFile->texDatas()[texInfo.texdata];
 	std::string textureName = mBspFile->texDataStringTable()[texData.nameStringTableID];
 	std::string filename = "materials/" + textureName + ".vmt";
-	VMTFile *file = new VMTFile(factory, filename);
+	File::VMT *file = new File::VMT(factory, filename);
 
 	glMatrixMode(GL_PROJECTION_MATRIX);
 	glLoadIdentity();
@@ -54,9 +53,9 @@ void Renderer::render()
 	glTranslatef(mX, mY, mZ);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	BSPFile::Model &model = mBspFile->models()[0];
+	File::BSP::Model &model = mBspFile->models()[0];
 	for(int i=0; i<model.numFaces; i++) {
-		BSPFile::Face &face = mBspFile->faces()[model.firstFace + i];
+		File::BSP::Face &face = mBspFile->faces()[model.firstFace + i];
 
 		float gray = (float)(i * 43 % model.numFaces) / model.numFaces;
 		glColor3f(gray, gray, gray);
@@ -70,7 +69,7 @@ void Renderer::render()
 				vertex = mBspFile->edges()[-surfEdge].v[1];
 			}
 
-			BSPFile::Vector &vector = mBspFile->vertices()[vertex];
+			File::BSP::Vector &vector = mBspFile->vertices()[vertex];
 			glVertex3f(vector.x, vector.y, vector.z);
 		}
 		glEnd();

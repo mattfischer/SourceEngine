@@ -1,11 +1,14 @@
-#ifndef BSP_FILE_HPP
-#define BSP_FILE_HPP
+#ifndef FILE_BSP_HPP
+#define FILE_BSP_HPP
+
+#include "File/IReaderFactory.hpp"
 
 #include <string>
 #include <vector>
 
-class IReaderFactory;
-class BSPFile {
+namespace File {
+
+class BSP {
 public:
 	struct Vector {
 		float x;
@@ -68,7 +71,7 @@ public:
 		int view_height;
 	};
 
-	BSPFile(IReaderFactory *factory, const std::string &name);
+	BSP(IReaderFactory *factory, const std::string &name);
 
 	std::vector<Model> &models() { return mModels; }
 	std::vector<Face> &faces() { return mFaces; }
@@ -89,5 +92,7 @@ private:
 	std::vector<int> mSurfEdges;
 	std::vector<std::string> mTexDataStringTable;
 };
+
+}
 
 #endif

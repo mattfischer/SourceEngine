@@ -1,12 +1,14 @@
-#ifndef VPK_DIRECTORY_HPP
-#define VPK_DIRECTORY_HPP
+#ifndef FILE_VPK_HPP
+#define FILE_VPK_HPP
 
 #include <map>
 #include <string>
 
-class VPKDirectory {
+namespace File {
+
+class VPK {
 public:
-	VPKDirectory(const std::string &filename);
+	VPK(const std::string &filename);
 
 	struct FileInfo {
 		unsigned int archiveIndex;
@@ -29,5 +31,7 @@ private:
 	std::string mFilename;
 	int mDataStart;
 };
+
+}
 
 #endif

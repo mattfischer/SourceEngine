@@ -1,5 +1,7 @@
-#ifndef IREADER_HPP
-#define IREADER_HPP
+#ifndef FILE_IREADER_HPP
+#define FILE_IREADER_HPP
+
+namespace File {
 
 class IReader {
 public:
@@ -7,5 +9,7 @@ public:
 	virtual void seek(int pos) = 0;
 	virtual int size() = 0;
 };
+
+}
 
 #endif

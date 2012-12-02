@@ -1,8 +1,10 @@
-#include "FileReaderFactory.hpp"
+#include "File/FileReaderFactory.hpp"
 
-#include "IReader.hpp"
+#include "File/IReader.hpp"
 
 #include <fstream>
+
+namespace File {
 
 class FileReader : public IReader {
 public:
@@ -68,4 +70,6 @@ bool FileReaderFactory::exists(const std::string &name)
 	std::string filename = getFilename(mDirectory, name);
 	std::ifstream file(filename.c_str());
 	return !file.fail();
+}
+
 }

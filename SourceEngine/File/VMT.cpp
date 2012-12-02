@@ -1,6 +1,8 @@
-#include "VMTFile.hpp"
+#include "File/VMT.hpp"
 
 #include <vector>
+
+namespace File {
 
 std::vector<std::string> splitLines(const std::string &string)
 {
@@ -40,7 +42,7 @@ std::string trimString(const std::string &string)
 	return ret;
 }
 
-VMTFile::VMTFile(IReaderFactory *factory, const std::string &name)
+VMT::VMT(IReaderFactory *factory, const std::string &name)
 {
 	IReader *reader = factory->open(name);
 	char *buffer = new char[reader->size() + 1];
@@ -92,4 +94,6 @@ VMTFile::VMTFile(IReaderFactory *factory, const std::string &name)
 	}
 
 	delete reader;
+}
+
 }

@@ -1,9 +1,11 @@
-#ifndef FILE_READER_FACTORY_HPP
-#define FILE_READER_FACTORY_HPP
+#ifndef FILE_FILE_READER_FACTORY_HPP
+#define FILE_FILE_READER_FACTORY_HPP
 
-#include "IReaderFactory.hpp"
+#include "File/IReaderFactory.hpp"
 
 #include <string>
+
+namespace File {
 
 class FileReaderFactory : public IReaderFactory {
 public:
@@ -15,5 +17,7 @@ public:
 private:
 	std::string mDirectory;
 };
+
+}
 
 #endif

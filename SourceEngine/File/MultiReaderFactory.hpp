@@ -1,10 +1,11 @@
-#ifndef MULTI_READER_FACTORY_HPP
-#define MULTI_READER_FACTORY_HPP
+#ifndef FILE_MULTI_READER_FACTORY_HPP
+#define FILE_MULTI_READER_FACTORY_HPP
 
-#include "SharedPointer.hpp"
-#include "IReaderFactory.hpp"
+#include "File/IReaderFactory.hpp"
 
 #include <vector>
+
+namespace File {
 
 class MultiReaderFactory : public IReaderFactory {
 public:
@@ -18,5 +19,7 @@ public:
 private:
 	std::vector<IReaderFactory*> mFactories;
 };
+
+}
 
 #endif

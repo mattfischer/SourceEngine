@@ -1,4 +1,6 @@
-#include "MultiReaderFactory.hpp"
+#include "File/MultiReaderFactory.hpp"
+
+namespace File {
 
 MultiReaderFactory::MultiReaderFactory()
 {
@@ -33,4 +35,6 @@ IReader *MultiReaderFactory::open(const std::string &name)
 	}
 
 	return ret;
+}
+
 }

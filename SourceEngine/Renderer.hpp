@@ -1,14 +1,12 @@
 #ifndef RENDERER_HPP
 #define RENDERER_HPP
 
-#include "SharedPointer.hpp"
-#include "IReaderFactory.hpp"
-
-class BSPFile;
+#include "File/IReaderFactory.hpp"
+#include "File/BSP.hpp"
 
 class Renderer {
 public:
-	Renderer(BSPFile *bspFile, IReaderFactory *factory, int width, int height);
+	Renderer(File::BSP *bspFile, File::IReaderFactory *factory, int width, int height);
 
 	void render();
 
@@ -17,7 +15,7 @@ public:
 	void rise(int amount);
 
 private:
-	BSPFile *mBspFile;
+	File::BSP *mBspFile;
 	float mX;
 	float mY;
 	float mZ;

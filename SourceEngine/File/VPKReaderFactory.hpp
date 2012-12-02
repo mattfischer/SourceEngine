@@ -1,11 +1,13 @@
-#ifndef VPK_READER_FACTORY_HPP
-#define VPK_READER_FACTORY_HPP
+#ifndef FILE_VPK_READER_FACTORY_HPP
+#define FILE_VPK_READER_FACTORY_HPP
 
-#include "IReaderFactory.hpp"
-#include "VPKDirectory.hpp"
+#include "File/IReaderFactory.hpp"
+#include "File/VPK.hpp"
 
 #include <string>
 #include <fstream>
+
+namespace File {
 
 class VPKReaderFactory : public IReaderFactory {
 public:
@@ -15,6 +17,9 @@ public:
 	virtual bool exists(const std::string &name);
 
 private:
-	VPKDirectory mDirectory;
+	VPK mDirectory;
 };
+
+}
+
 #endif

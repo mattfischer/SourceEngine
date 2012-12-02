@@ -1,17 +1,17 @@
 #include <windows.h>
 #include <GL/gl.h>
 
-#include "FileReaderFactory.hpp"
-#include "BSPFile.hpp"
+#include "File/FileReaderFactory.hpp"
+#include "File/BSP.hpp"
 #include "Renderer.hpp"
-#include "VPKReaderFactory.hpp"
-#include "MultiReaderFactory.hpp"
+#include "File/VPKReaderFactory.hpp"
+#include "File/MultiReaderFactory.hpp"
 
 HWND hWnd;
 HDC hDC;
 HGLRC hglRC;
 
-BSPFile *bspFile;
+File::BSP *bspFile;
 Renderer *renderer;
 
 #define SCREEN_WIDTH 800
@@ -51,10 +51,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
 
-				MultiReaderFactory *factory = new MultiReaderFactory();
-				factory->addFactory(new FileReaderFactory());
-				factory->addFactory(new VPKReaderFactory("pak01_dir.vpk"));
-				bspFile = new BSPFile(factory, "sp_a1_intro1.bsp");
+				File::MultiReaderFactory *factory = new File::MultiReaderFactory();
+				factory->addFactory(new File::FileReaderFactory());
+				factory->addFactory(new File::VPKReaderFactory("pak01_dir.vpk"));
+				bspFile = new File::BSP(factory, "sp_a1_intro1.bsp");
 				renderer = new Renderer(bspFile, factory, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;

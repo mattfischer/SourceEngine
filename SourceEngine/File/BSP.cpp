@@ -1,9 +1,10 @@
-#include "BSPFile.hpp"
+#include "File/BSP.hpp"
 
-#include "SharedPointer.hpp"
-#include "IReaderFactory.hpp"
+#include "File/IReaderFactory.hpp"
 
 #include <vector>
+
+namespace File {
 
 struct Lump {
     int offset;
@@ -106,7 +107,7 @@ template <typename T> void readLump(IReader *reader, std::vector<T> &vector, con
 	reader->read((char*)&vector[0], lump.length);
 }
 
-BSPFile::BSPFile(IReaderFactory *factory, const std::string &name)
+BSP::BSP(IReaderFactory *factory, const std::string &name)
 {
     Header header;
 	IReader *reader = factory->open(name);
@@ -131,4 +132,6 @@ BSPFile::BSPFile(IReaderFactory *factory, const std::string &name)
 	}
 
 	delete reader;
+}
+
 }

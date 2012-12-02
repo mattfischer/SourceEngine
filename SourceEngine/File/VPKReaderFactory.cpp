@@ -1,14 +1,16 @@
-#include "VPKReaderFactory.hpp"
+#include "File/VPKReaderFactory.hpp"
 
-#include "VPKDirectory.hpp"
-#include "IReader.hpp"
+#include "File/VPK.hpp"
+#include "File/IReader.hpp"
 
 #include <fstream>
 #include <algorithm>
 
+namespace File {
+
 class VPKReader : public IReader {
 public:
-	VPKReader(VPKDirectory::FileInfo &fileInfo, VPKDirectory &directory)
+	VPKReader(File::VPK::FileInfo &fileInfo, File::VPK &directory)
 		: mFileInfo(fileInfo),
 		  mDirectory(directory)
 	{
@@ -45,8 +47,8 @@ public:
 	}
 
 private:
-	VPKDirectory::FileInfo &mFileInfo;
-	VPKDirectory &mDirectory;
+	File::VPK::FileInfo &mFileInfo;
+	File::VPK &mDirectory;
 	unsigned int mPointer;
 	std::ifstream mFile;
 	int mDataStart;
@@ -61,7 +63,7 @@ IReader *VPKReaderFactory::open(const std::string &name)
 {
 	IReader *reader = 0;
 	if(mDirectory.exists(name)) {
-		VPKDirectory::FileInfo &info = mDirectory.lookup(name);
+		File::VPK::FileInfo &info = mDirectory.lookup(name);
 		reader = new VPKReader(info, mDirectory);
 	}
 
@@ -71,4 +73,6 @@ IReader *VPKReaderFactory::open(const std::string &name)
 bool VPKReaderFactory::exists(const std::string &name)
 {
 	return mDirectory.exists(name);
+}
+
 }

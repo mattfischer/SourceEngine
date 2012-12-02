@@ -1,9 +1,11 @@
-#include "VPKDirectory.hpp"
+#include "File/VPK.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+
+namespace File {
 
 struct Header_v1
 {
@@ -59,7 +61,7 @@ std::string &uppercase(std::string &str)
 	return str;
 }
 
-VPKDirectory::VPKDirectory(const std::string &filename)
+VPK::VPK(const std::string &filename)
 : mFilename(filename)
 {
 	std::ifstream file(filename.c_str(), std::ios_base::in | std::ios_base::binary);
@@ -147,7 +149,7 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 	filename = uppercase(name.substr(fnpos, fnend - fnpos));
 }
 
-bool VPKDirectory::exists(const std::string &name)
+bool VPK::exists(const std::string &name)
 {
 	std::string ext, path, filename;
 	splitPath(name, ext, path, filename);
@@ -169,8 +171,8 @@ bool VPKDirectory::exists(const std::string &name)
 	return true;
 }
 
-VPKDirectory::FileInfo emptyInfo;
-VPKDirectory::FileInfo &VPKDirectory::lookup(const std::string &name)
+VPK::FileInfo emptyInfo;
+VPK::FileInfo &VPK::lookup(const std::string &name)
 {
 	if(exists(name)) {
 		std::string ext, path, filename;
@@ -182,7 +184,7 @@ VPKDirectory::FileInfo &VPKDirectory::lookup(const std::string &name)
 	}
 }
 
-std::string VPKDirectory::getArchiveName(unsigned short index, int &startOffset)
+std::string VPK::getArchiveName(unsigned short index, int &startOffset)
 {
 	std::string ret;
 
@@ -199,4 +201,6 @@ std::string VPKDirectory::getArchiveName(unsigned short index, int &startOffset)
 	}
 
 	return ret;
+}
+
 }

@@ -1,14 +1,16 @@
-#ifndef VMT_FILE_HPP
-#define VMT_FILE_HPP
+#ifndef FILE_VMT_HPP
+#define FILE_VMT_HPP
 
-#include "IReaderFactory.hpp"
+#include "File/IReaderFactory.hpp"
 
 #include <string>
 #include <map>
 
-class VMTFile {
+namespace File {
+
+class VMT {
 public:
-	VMTFile(IReaderFactory *factory, const std::string &name);
+	VMT(IReaderFactory *factory, const std::string &name);
 
 	const std::string &shader() { return mShader; }
 	typedef std::map<std::string, std::string> StringToStringMap;
@@ -18,4 +20,7 @@ private:
 	std::string mShader;
 	StringToStringMap mParameters;
 };
+
+}
+
 #endif

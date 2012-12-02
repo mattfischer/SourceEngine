@@ -39,6 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="."
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -167,63 +168,47 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BSPFile.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FileReaderFactory.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MultiReaderFactory.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Renderer.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\VMTFile.cpp"
+			<Filter
+				Name="File"
 				>
-			</File>
-			<File
-				RelativePath=".\VPKDirectory.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\VPKReaderFactory.cpp"
-				>
-			</File>
+				<File
+					RelativePath=".\File\BSP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\FileReaderFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\MultiReaderFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VMT.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VPK.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VPKReaderFactory.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\BSPFile.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FileReaderFactory.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IReader.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IReaderFactory.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MultiReaderFactory.hpp"
-				>
-			</File>
 			<File
 				RelativePath=".\Renderer.hpp"
 				>
@@ -232,18 +217,42 @@
 				RelativePath=".\SharedPointer.hpp"
 				>
 			</File>
-			<File
-				RelativePath=".\VMTFile.hpp"
+			<Filter
+				Name="File"
 				>
-			</File>
-			<File
-				RelativePath=".\VPKDirectory.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\VPKReaderFactory.hpp"
-				>
-			</File>
+				<File
+					RelativePath=".\File\BSP.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\FileReaderFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\IReader.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\IReaderFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\MultiReaderFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VMT.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VPK.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VPKReaderFactory.hpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
