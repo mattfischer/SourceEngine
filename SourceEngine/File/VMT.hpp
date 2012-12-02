@@ -12,9 +12,10 @@ class VMT {
 public:
 	VMT(IReaderFactory *factory, const std::string &name);
 
-	const std::string &shader() { return mShader; }
 	typedef std::map<std::string, std::string> StringToStringMap;
-	const StringToStringMap &parameters() { return mParameters; }
+
+	std::string &shader() { return mShader; }
+	StringToStringMap &parameters() { return mParameters; }
 
 private:
 	std::string mShader;

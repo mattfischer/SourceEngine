@@ -195,8 +195,8 @@ std::string VPK::getArchiveName(unsigned short index, int &startOffset)
 		size_t pos = mFilename.find("dir.vpk");
 		std::string stem = mFilename.substr(0, pos);
 		std::stringstream ss;
-		ss << std::setw(3) << index;
-		ret = stem + ss.str();
+		ss << std::setw(3) << std::setfill('0') << index;
+		ret = stem + ss.str() + ".vpk";
 		startOffset = 0;
 	}
 

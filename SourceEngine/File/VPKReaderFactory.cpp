@@ -27,7 +27,7 @@ public:
 			bytesRead = readSize;
 		}
 
-		if(!mFile.good()) {
+		if(!mFile.is_open()) {
 			std::string filename = mDirectory.getArchiveName(mFileInfo.archiveIndex, mDataStart);
 			mFile.open(filename.c_str(), std::ios_base::in | std::ios_base::binary);
 		}

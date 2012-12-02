@@ -202,6 +202,10 @@
 					RelativePath=".\File\VPKReaderFactory.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\File\VTF.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -250,6 +254,10 @@
 				</File>
 				<File
 					RelativePath=".\File\VPKReaderFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VTF.hpp"
 					>
 				</File>
 			</Filter>

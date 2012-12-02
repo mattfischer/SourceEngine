@@ -44,7 +44,8 @@ std::string trimString(const std::string &string)
 
 VMT::VMT(IReaderFactory *factory, const std::string &name)
 {
-	IReader *reader = factory->open(name);
+	std::string filename = "materials/" + name + ".vmt";
+	IReader *reader = factory->open(filename);
 	char *buffer = new char[reader->size() + 1];
 	reader->read(buffer, reader->size());
 	buffer[reader->size()] = '\0';
