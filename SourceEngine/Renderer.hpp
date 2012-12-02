@@ -4,9 +4,11 @@
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
 
+#include "Map.hpp"
+
 class Renderer {
 public:
-	Renderer(File::BSP *bspFile, File::IReaderFactory *factory, int width, int height);
+	Renderer(Map *map, int width, int height);
 
 	void render();
 
@@ -15,7 +17,8 @@ public:
 	void rise(int amount);
 
 private:
-	File::BSP *mBspFile;
+	Map *mMap;
+
 	float mX;
 	float mY;
 	float mZ;

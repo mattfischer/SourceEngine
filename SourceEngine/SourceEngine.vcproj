@@ -172,6 +172,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Map.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Renderer.cpp"
 				>
 			</File>
@@ -213,6 +217,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\Map.hpp"
+				>
+			</File>
 			<File
 				RelativePath=".\Renderer.hpp"
 				>
@@ -258,6 +266,14 @@
 				</File>
 				<File
 					RelativePath=".\File\VTF.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Geo"
+				>
+				<File
+					RelativePath=".\Geo\Vector.hpp"
 					>
 				</File>
 			</Filter>
