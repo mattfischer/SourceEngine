@@ -4,7 +4,6 @@
 #include "File/IReaderFactory.hpp"
 
 #include <string>
-#include <vector>
 
 namespace File {
 
@@ -73,24 +72,54 @@ public:
 
 	BSP(IReaderFactory *factory, const std::string &name);
 
-	std::vector<Model> &models() { return mModels; }
-	std::vector<Face> &faces() { return mFaces; }
-	std::vector<TexInfo> &texInfos() { return mTexInfos; }
-	std::vector<TexData> &texDatas() { return mTexDatas; }
-	std::vector<Edge> &edges() { return mEdges; }
-	std::vector<Vector> &vertices() { return mVertices; }
-	std::vector<int> &surfEdges() { return mSurfEdges; }
-	std::vector<std::string> &texDataStringTable() { return mTexDataStringTable; }
+	int numModels() { return mNumModels; }
+	const Model &model(int model) { return mModels[model]; }
+
+	int numFaces() { return mNumFaces; }
+	const Face &face(int face) { return mFaces[face]; }
+
+	int numTexInfos() { return mNumTexInfos; }
+	const TexInfo &texInfo(int texInfo) { return mTexInfos[texInfo]; }
+
+	int numTexDatas() { return mNumTexDatas; }
+	const TexData &texData(int texData) { return mTexDatas[texData]; }
+
+	int numEdges() { return mNumEdges; }
+	const Edge &edge(int edge) { return mEdges[edge]; }
+
+	int numVertices() { return mNumVertices; }
+	const Vector &vertex(int vertex) { return mVertices[vertex]; }
+
+	int numSurfEdges() { return mNumSurfEdges; }
+	const int surfEdge(int surfEdge) { return mSurfEdges[surfEdge]; }
+
+	int numTexDataStrings() { return mNumTexDataStrings; }
+	const std::string &texDataString(int texDataString) { return mTexDataStringTable[texDataString]; }
 
 private:
-	std::vector<Model> mModels;
-	std::vector<Face> mFaces;
-	std::vector<TexInfo> mTexInfos;
-	std::vector<TexData> mTexDatas;
-	std::vector<Edge> mEdges;
-	std::vector<Vector> mVertices;
-	std::vector<int> mSurfEdges;
-	std::vector<std::string> mTexDataStringTable;
+	int mNumModels;
+	Model *mModels;
+
+	int mNumFaces;
+	Face *mFaces;
+
+	int mNumTexInfos;
+	TexInfo *mTexInfos;
+
+	int mNumTexDatas;
+	TexData *mTexDatas;
+
+	int mNumEdges;
+	Edge *mEdges;
+
+	int mNumVertices;
+	Vector *mVertices;
+
+	int mNumSurfEdges;
+	int *mSurfEdges;
+
+	int mNumTexDataStrings;
+	std::string *mTexDataStringTable;
 };
 
 }

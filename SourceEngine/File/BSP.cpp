@@ -1,9 +1,5 @@
 #include "File/BSP.hpp"
 
-#include "File/IReaderFactory.hpp"
-
-#include <vector>
-
 namespace File {
 
 struct Lump {
@@ -99,12 +95,14 @@ struct Header {
     int revision;
 };
 
-template <typename T> void readLump(IReader *reader, std::vector<T> &vector, const Header &header, int lumpNum)
+template <typename T> void readLump(IReader *reader, T *&list, int &num, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
-	vector.resize(lump.length / sizeof(T));
+
+	num = lump.length / sizeof(T);
+	list = new T[num];
 	reader->seek(lump.offset);
-	reader->read((char*)&vector[0], lump.length);
+	reader->read((char*)list, lump.length);
 }
 
 BSP::BSP(IReaderFactory *factory, const std::string &name)
@@ -113,23 +111,29 @@ BSP::BSP(IReaderFactory *factory, const std::string &name)
 	IReader *reader = factory->open(name);
     reader->read((char*)&header, sizeof(header));
 
-	readLump(reader, mVertices, header, LUMP_VERTICES);
-	readLump(reader, mEdges, header, LUMP_EDGES);
-	readLump(reader, mSurfEdges, header, LUMP_SURFEDGES);
-	readLump(reader, mFaces, header, LUMP_FACES);
-	readLump(reader, mModels, header, LUMP_MODELS);
-	readLump(reader, mTexInfos, header, LUMP_TEXINFO);
-	readLump(reader, mTexDatas, header, LUMP_TEXDATA);
+	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
+	readLump(reader, mEdges, mNumEdges, header, LUMP_EDGES);
+	readLump(reader, mSurfEdges, mNumSurfEdges, header, LUMP_SURFEDGES);
+	readLump(reader, mFaces, mNumFaces, header, LUMP_FACES);
+	readLump(reader, mModels, mNumModels, header, LUMP_MODELS);
+	readLump(reader, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
+	readLump(reader, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
 
-	std::vector<int> stringTable;
-	readLump(reader, stringTable, header, LUMP_TEXDATA_STRING_TABLE);
+	int *stringTable;
+	int stringTableLength;
+	readLump(reader, stringTable, stringTableLength, header, LUMP_TEXDATA_STRING_TABLE);
 
-	std::vector<char> stringData;
-	readLump(reader, stringData, header, LUMP_TEXDATA_STRING_DATA);
+	char *stringData;
+	int stringDataLength;
+	readLump(reader, stringData, stringDataLength, header, LUMP_TEXDATA_STRING_DATA);
 
-	for(unsigned int i=0; i<stringTable.size(); i++) {
-		mTexDataStringTable.push_back(std::string(&stringData[stringTable[i]]));
+	mTexDataStringTable = new std::string[stringTableLength];
+	for(int i=0; i<stringTableLength; i++) {
+		mTexDataStringTable[i] = std::string(&stringData[stringTable[i]]);
 	}
+
+	delete[] stringData;
+	delete[] stringTable;
 
 	delete reader;
 }
