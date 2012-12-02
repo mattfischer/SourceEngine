@@ -17,6 +17,8 @@ public:
 		mPointer = 0;
 	}
 
+	virtual ~VPKReader() {}
+
 	virtual void read(char *buffer, int size)
 	{
 		int bytesRead = 0;

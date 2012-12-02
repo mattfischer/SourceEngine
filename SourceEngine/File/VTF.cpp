@@ -26,10 +26,22 @@ struct Header
 };
 #pragma pack(pop)
 
-VTF::VTF(IReaderFactory *factory, const std::string &name)
+VTF *VTF::open(IReaderFactory *factory, const std::string &name)
 {
+	VTF *ret = 0;
 	std::string filename = "materials/" + name + ".vtf";
 	IReader *reader = factory->open(filename);
+
+	if(reader) {
+		ret = new VTF(reader);
+		delete reader;
+	}
+
+	return ret;
+}
+
+VTF::VTF(IReader *reader)
+{
 	Header header;
 
 	reader->read((char*)&header, sizeof(header));

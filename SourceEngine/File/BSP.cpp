@@ -105,10 +105,23 @@ template <typename T> void readLump(IReader *reader, T *&list, int &num, const H
 	reader->read((char*)list, lump.length);
 }
 
-BSP::BSP(IReaderFactory *factory, const std::string &name)
+BSP *BSP::open(IReaderFactory *factory, const std::string &name)
+{
+	BSP *ret = 0;
+	std::string filename = "maps/" + name + ".bsp";
+	IReader *reader = factory->open(filename);
+
+	if(reader) {
+		ret = new BSP(reader);
+		delete reader;
+	}
+
+	return ret;
+}
+
+BSP::BSP(IReader *reader)
 {
     Header header;
-	IReader *reader = factory->open(name);
     reader->read((char*)&header, sizeof(header));
 
 	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
@@ -134,8 +147,6 @@ BSP::BSP(IReaderFactory *factory, const std::string &name)
 
 	delete[] stringData;
 	delete[] stringTable;
-
-	delete reader;
 }
 
 }

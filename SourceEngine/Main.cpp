@@ -54,7 +54,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				File::MultiReaderFactory *factory = new File::MultiReaderFactory();
 				factory->addFactory(new File::FileReaderFactory("portal2"));
 				factory->addFactory(new File::VPKReaderFactory("portal2/pak01_dir.vpk"));
-				Map *map = new Map(factory, "maps/sp_a1_intro1.bsp");
+				Map *map = new Map(factory, "sp_a1_intro1");
 				renderer = new Renderer(map, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;

@@ -16,6 +16,8 @@ public:
 		mFile.seekg(0);
 	}
 
+	virtual ~FileReader() {}
+
 	virtual void FileReader::read(char *buffer, int size)
 	{
 		mFile.read(buffer, size);

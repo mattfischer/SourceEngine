@@ -70,7 +70,7 @@ public:
 		int view_height;
 	};
 
-	BSP(IReaderFactory *factory, const std::string &name);
+	BSP(IReader *reader);
 
 	int numModels() { return mNumModels; }
 	const Model &model(int model) { return mModels[model]; }
@@ -95,6 +95,8 @@ public:
 
 	int numTexDataStrings() { return mNumTexDataStrings; }
 	const std::string &texDataString(int texDataString) { return mTexDataStringTable[texDataString]; }
+
+	static BSP *open(IReaderFactory *factory, const std::string &name);
 
 private:
 	int mNumModels;

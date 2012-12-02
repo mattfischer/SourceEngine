@@ -10,16 +10,16 @@ namespace File {
 
 class VMT {
 public:
-	VMT(IReaderFactory *factory, const std::string &name);
+	VMT(IReader *reader);
 
-	typedef std::map<std::string, std::string> StringToStringMap;
+	const std::string &shader() { return mShader; }
+	const std::string &parameter(const std::string &parameter) { return mParameters[parameter]; }
 
-	std::string &shader() { return mShader; }
-	StringToStringMap &parameters() { return mParameters; }
+	static VMT *open(IReaderFactory *factory, const std::string &name);
 
 private:
 	std::string mShader;
-	StringToStringMap mParameters;
+	std::map<std::string, std::string> mParameters;
 };
 
 }

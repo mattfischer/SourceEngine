@@ -9,7 +9,7 @@ namespace File {
 
 class VTF {
 public:
-	VTF(IReaderFactory *factory, const std::string &name);
+	VTF(IReader *reader);
 
 	int width() { return mWidth; }
 	int height() { return mHeight; }
@@ -17,6 +17,8 @@ public:
 
 	const char *lowResData() { return mLowResData; }
 	const char *data(int mipMapLevel) { return mData[mipMapLevel]; }
+
+	static VTF *open(IReaderFactory *factory, const std::string &name);
 
 private:
 	int mWidth;

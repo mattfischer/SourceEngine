@@ -131,7 +131,7 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 {
 	size_t extpos = name.find('.');
 	size_t fnend = extpos;
-	size_t fnpos = name.rfind('/');
+	size_t fnpos = name.find_last_of("/\\");
 	size_t pathend = fnpos;
 
 	if(extpos != name.npos) {
@@ -146,6 +146,12 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 
 	ext = uppercase(name.substr(extpos));
 	path = uppercase(name.substr(0, pathend));
+	for(int i=0; i<path.size(); i++) {
+		if(path[i] == '\\') {
+			path[i] = '/';
+		}
+	}
+
 	filename = uppercase(name.substr(fnpos, fnend - fnpos));
 }
 

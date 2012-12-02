@@ -1,8 +1,10 @@
 #include "Map.hpp"
 
+#include "File/VMT.hpp"
+
 Map::Map(File::IReaderFactory *factory, const std::string &name)
 {
-	mBSP = new File::BSP(factory, name);
+	mBSP = File::BSP::open(factory, name);
 
 	const File::BSP::Model &model = mBSP->model(0);
 
@@ -26,6 +28,21 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			const File::BSP::Vector &bspVector = mBSP->vertex(vertex);
 
 			face.vertices[j] = Geo::Vector(bspVector.x, bspVector.y, bspVector.z);
+		}
+	}
+
+	mNumTextures = mBSP->numTexDatas();
+	mTextures = new Texture[mNumTextures];
+	for(int i=0; i<mNumTextures; i++) {
+		const File::BSP::TexData &texData = mBSP->texData(i);
+		const std::string &materialFilename = mBSP->texDataString(texData.nameStringTableID);
+
+		mTextures[i].texture = 0;
+		File::VMT *vmt = File::VMT::open(factory, materialFilename);
+		if(vmt) {
+			const std::string &textureFilename = vmt->parameter("$basetexture");
+			mTextures[i].texture = File::VTF::open(factory, textureFilename);
+			delete vmt;
 		}
 	}
 }
