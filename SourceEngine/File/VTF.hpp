@@ -15,8 +15,8 @@ public:
 	int height() { return mHeight; }
 	int numMipMaps() { return mNumMipMaps; }
 
-	const char *lowResData() { return mLowResData; }
-	const char *data(int mipMapLevel) { return mData[mipMapLevel]; }
+	const unsigned short *lowResData() { return mLowResData; }
+	const unsigned short *data(int mipMapLevel) { return mData[mipMapLevel]; }
 
 	static VTF *open(IReaderFactory *factory, const std::string &name);
 
@@ -25,8 +25,8 @@ private:
 	int mHeight;
 	int mNumMipMaps;
 
-	char *mLowResData;
-	char **mData;
+	unsigned short *mLowResData;
+	unsigned short **mData;
 };
 
 }
