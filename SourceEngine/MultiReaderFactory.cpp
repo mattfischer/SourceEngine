@@ -4,7 +4,7 @@ MultiReaderFactory::MultiReaderFactory()
 {
 }
 
-void MultiReaderFactory::addFactory(sp<IReaderFactory> factory)
+void MultiReaderFactory::addFactory(IReaderFactory *factory)
 {
 	mFactories.push_back(factory);
 }
@@ -22,9 +22,9 @@ bool MultiReaderFactory::exists(const std::string &name)
 	return ret;
 }
 
-sp<IReader> MultiReaderFactory::open(const std::string &name)
+IReader *MultiReaderFactory::open(const std::string &name)
 {
-	sp<IReader> ret;
+	IReader *ret;
 	for(unsigned int i=0; i<mFactories.size(); i++) {
 		ret = mFactories[i]->open(name);
 		if(ret) {

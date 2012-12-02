@@ -98,7 +98,7 @@ struct Header {
     int revision;
 };
 
-template <typename T> void readLump(sp<IReader> reader, std::vector<T> &vector, const Header &header, int lumpNum)
+template <typename T> void readLump(IReader *reader, std::vector<T> &vector, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
 	vector.resize(lump.length / sizeof(T));
@@ -109,7 +109,7 @@ template <typename T> void readLump(sp<IReader> reader, std::vector<T> &vector, 
 BSPFile::BSPFile(IReaderFactory *factory, const std::string &name)
 {
     Header header;
-	sp<IReader> reader = factory->open(name);
+	IReader *reader = factory->open(name);
     reader->read((char*)&header, sizeof(header));
 
 	readLump(reader, mVertices, header, LUMP_VERTICES);
@@ -129,4 +129,6 @@ BSPFile::BSPFile(IReaderFactory *factory, const std::string &name)
 	for(unsigned int i=0; i<stringTable.size(); i++) {
 		mTexDataStringTable.push_back(std::string(&stringData[stringTable[i]]));
 	}
+
+	delete reader;
 }

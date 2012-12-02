@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 
 #include "BSPFile.hpp"
+#include "VMTFile.hpp"
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -17,9 +18,7 @@ Renderer::Renderer(BSPFile *bspFile, IReaderFactory *factory, int width, int hei
 	BSPFile::TexData &texData = mBspFile->texDatas()[texInfo.texdata];
 	std::string textureName = mBspFile->texDataStringTable()[texData.nameStringTableID];
 	std::string filename = "materials/" + textureName + ".vmt";
-	sp<IReader> reader = factory->open(filename);
-	char *buffer = new char[reader->size()];
-	reader->read(buffer, reader->size());
+	VMTFile *file = new VMTFile(factory, filename);
 
 	glMatrixMode(GL_PROJECTION_MATRIX);
 	glLoadIdentity();

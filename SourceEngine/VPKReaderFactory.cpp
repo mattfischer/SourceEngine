@@ -57,7 +57,7 @@ VPKReaderFactory::VPKReaderFactory(const std::string &filename)
 {
 }
 
-sp<IReader> VPKReaderFactory::open(const std::string &name)
+IReader *VPKReaderFactory::open(const std::string &name)
 {
 	IReader *reader = 0;
 	if(mDirectory.exists(name)) {

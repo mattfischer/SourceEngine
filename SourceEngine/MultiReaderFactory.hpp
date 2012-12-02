@@ -10,13 +10,13 @@ class MultiReaderFactory : public IReaderFactory {
 public:
 	MultiReaderFactory();
 
-	void addFactory(sp<IReaderFactory> factory);
+	void addFactory(IReaderFactory *factory);
 
 	virtual bool exists(const std::string &name);
-	virtual sp<IReader> open(const std::string &name);
+	virtual IReader *open(const std::string &name);
 
 private:
-	std::vector< sp<IReaderFactory> > mFactories;
+	std::vector<IReaderFactory*> mFactories;
 };
 
 #endif

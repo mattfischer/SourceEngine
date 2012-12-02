@@ -11,7 +11,7 @@ class VPKReaderFactory : public IReaderFactory {
 public:
 	VPKReaderFactory(const std::string &filename);
 
-	virtual sp<IReader> open(const std::string &name);
+	virtual IReader *open(const std::string &name);
 	virtual bool exists(const std::string &name);
 
 private:

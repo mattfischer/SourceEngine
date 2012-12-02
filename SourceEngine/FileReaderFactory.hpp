@@ -9,7 +9,7 @@ class FileReaderFactory : public IReaderFactory {
 public:
 	FileReaderFactory(const std::string &directory = "");
 
-	virtual sp<IReader> open(const std::string &name);
+	virtual IReader *open(const std::string &name);
 	virtual bool exists(const std::string &name);
 
 private:
