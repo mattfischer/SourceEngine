@@ -1,46 +1,10 @@
 #include "File/VMT.hpp"
 
+#include "StringUtils.hpp"
+
 #include <vector>
 
 namespace File {
-
-std::vector<std::string> splitLines(const std::string &string)
-{
-	std::vector<std::string> strings;
-	size_t start = 0;
-	size_t end = 0;
-	while(end != string.npos) {
-		end = string.find_first_of("\r\n", start);
-		std::string line;
-		if(end == string.npos) {
-			line = string.substr(start);
-		} else {
-			line = string.substr(start, end - start);
-		}
-
-		if(line != "") {
-			strings.push_back(line);
-		}
-		start = end + 1;
-	}
-
-	return strings;
-}
-
-std::string trimString(const std::string &string)
-{
-	size_t start = string.find_first_not_of(" ");
-	size_t end = string.find_last_not_of(" ");
-	std::string ret;
-
-	if(end == string.npos) {
-		ret = string.substr(start);
-	} else {
-		ret = string.substr(start, end - start + 1);
-	}
-
-	return ret;
-}
 
 VMT *VMT::open(IReaderFactory *factory, const std::string &name)
 {
@@ -64,8 +28,8 @@ VMT::VMT(IReader *reader)
 	std::string source(buffer);
 	delete[] buffer;
 
-	std::vector<std::string> lines = splitLines(source);
-	mShader = trimString(lines[0]);
+	std::vector<std::string> lines = StringUtils::splitLines(source);
+	mShader = StringUtils::trimSpaces(lines[0]);
 	for(unsigned int i=2; i<lines.size(); i++) {
 		std::string &line = lines[i];
 
@@ -102,8 +66,13 @@ VMT::VMT(IReader *reader)
 			value = line.substr(start);
 		}
 
-		mParameters[key] = value;
+		mParameters[StringUtils::uppercase(key)] = value;
 	}
+}
+
+const std::string &VMT::parameter(const std::string &parameter)
+{
+	return mParameters[StringUtils::uppercase(parameter)];
 }
 
 }

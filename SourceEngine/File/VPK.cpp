@@ -1,5 +1,7 @@
 #include "File/VPK.hpp"
 
+#include "StringUtils.hpp"
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -53,14 +55,6 @@ std::string readString(std::ifstream &file)
 	return ret;
 }
 
-std::string &uppercase(std::string &str)
-{
-	for(unsigned int i=0; i<str.size(); i++) {
-		str[i] = toupper(str[i]);
-	}
-	return str;
-}
-
 VPK::VPK(const std::string &filename)
 : mFilename(filename)
 {
@@ -89,21 +83,21 @@ VPK::VPK(const std::string &filename)
 	}
 
 	while(true) {
-		std::string ext = uppercase(readString(file));
+		std::string ext = StringUtils::uppercase(readString(file));
 		if(ext == "") {
 			break;
 		}
 		PathMap &pathMap = mDirectory[ext];
 
 		while(1) {
-			std::string path = uppercase(readString(file));
+			std::string path = StringUtils::uppercase(readString(file));
 			if(path == "") {
 				break;
 			}
 			FileMap &fileMap = pathMap[path];
 
 			while(1) {
-				std::string filename = uppercase(readString(file));
+				std::string filename = StringUtils::uppercase(readString(file));
 				if(filename == "") {
 					break;
 				}
@@ -144,15 +138,15 @@ void splitPath(const std::string &name, std::string &ext, std::string &path, std
 		fnpos++;
 	}
 
-	ext = uppercase(name.substr(extpos));
-	path = uppercase(name.substr(0, pathend));
-	for(int i=0; i<path.size(); i++) {
+	ext = StringUtils::uppercase(name.substr(extpos));
+	path = StringUtils::uppercase(name.substr(0, pathend));
+	for(unsigned int i=0; i<path.size(); i++) {
 		if(path[i] == '\\') {
 			path[i] = '/';
 		}
 	}
 
-	filename = uppercase(name.substr(fnpos, fnend - fnpos));
+	filename = StringUtils::uppercase(name.substr(fnpos, fnend - fnpos));
 }
 
 bool VPK::exists(const std::string &name)

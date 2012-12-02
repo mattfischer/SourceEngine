@@ -179,6 +179,10 @@
 				RelativePath=".\Renderer.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\StringUtils.cpp"
+				>
+			</File>
 			<Filter
 				Name="File"
 				>
@@ -227,6 +231,10 @@
 			</File>
 			<File
 				RelativePath=".\SharedPointer.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StringUtils.hpp"
 				>
 			</File>
 			<Filter

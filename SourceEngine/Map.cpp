@@ -37,12 +37,17 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		const File::BSP::TexData &texData = mBSP->texData(i);
 		const std::string &materialFilename = mBSP->texDataString(texData.nameStringTableID);
 
-		mTextures[i].texture = 0;
+		mTextures[i].vtf = 0;
 		File::VMT *vmt = File::VMT::open(factory, materialFilename);
 		if(vmt) {
 			const std::string &textureFilename = vmt->parameter("$basetexture");
-			mTextures[i].texture = File::VTF::open(factory, textureFilename);
+			File::VTF *vtf = File::VTF::open(factory, textureFilename);
 			delete vmt;
+
+			mTextures[i].vtf = vtf;
+			glGenTextures(1, &mTextures[i].tex);
+			glBindTexture(GL_TEXTURE_2D, mTextures[i].tex);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, vtf->width(), vtf->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(vtf->numMipMaps() - 1));
 		}
 	}
 }

@@ -4,8 +4,10 @@
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
 #include "File/VTF.hpp"
-
 #include "Geo/Vector.hpp"
+
+#include <windows.h>
+#include <GL/gl.h>
 
 #include <string>
 
@@ -19,7 +21,8 @@ public:
 	};
 
 	struct Texture {
-		File::VTF *texture;
+		File::VTF *vtf;
+		GLuint tex;
 	};
 
 	const Face &face(int face) { return mFaces[face]; }

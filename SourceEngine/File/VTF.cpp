@@ -26,7 +26,7 @@ struct Header
 };
 #pragma pack(pop)
 
-unsigned short *readDXT1(IReader *reader, int width, int height)
+unsigned char *readDXT1(IReader *reader, int width, int height)
 {
 	int srcSize = width * height / 2;
 	if(srcSize < 8) {
@@ -36,8 +36,7 @@ unsigned short *readDXT1(IReader *reader, int width, int height)
 	char *src = new char[srcSize];
 	reader->read(src, srcSize);
 
-	int dstSize = width * height;
-	unsigned short *dst = new unsigned short[dstSize];
+	unsigned char *dst = new unsigned char[width * height * 4];
 
 	int blockWidth = width / 4;
 	int blockHeight = height / 4;
@@ -66,7 +65,10 @@ unsigned short *readDXT1(IReader *reader, int width, int height)
 
 					int pos = j * 4 + i;
 					char bits = 0x3 & (src[srcStart + pos / 4 + 4] >> (6 - 2 * (pos % 4)));
-					dst[y * width + x] = c[bits];
+					dst[4 * (y * width + x) + 0] = 0x1f & (c[bits] >> 11);
+					dst[4 * (y * width + x) + 1] = 0x3f & (c[bits] >> 5);
+					dst[4 * (y * width + x) + 2] = 0x1f & (c[bits] >> 0);
+					dst[4 * (y * width + x) + 3] = 0;
 				}
 			}
 		}
@@ -103,19 +105,19 @@ VTF::VTF(IReader *reader)
 
 	mLowResData = readDXT1(reader, header.lowResImageWidth, header.lowResImageHeight);
 
-	mData = new unsigned short*[mNumMipMaps];
-	int width = mWidth;
-	int height = mHeight;
-	for(int i=0; i<mNumMipMaps - 1; i++) {
-		width /= 2;
-		height /= 2;
-	}
-
+	mData = new unsigned char*[mNumMipMaps];
 	for(int i=0; i<mNumMipMaps; i++) {
-		mData[i] = readDXT1(reader, width, height);
+		int width = mWidth >> (mNumMipMaps - i - 1);
+		if(width == 0) {
+			width = 1;
+		}
 
-		width *= 2;
-		height *= 2;
+		int height = mHeight >> (mNumMipMaps - i - 1);
+		if(height == 0) {
+			height = 1;
+		}
+
+		mData[i] = readDXT1(reader, width, height);
 	}
 }
 

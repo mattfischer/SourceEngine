@@ -13,7 +13,7 @@ public:
 	VMT(IReader *reader);
 
 	const std::string &shader() { return mShader; }
-	const std::string &parameter(const std::string &parameter) { return mParameters[parameter]; }
+	const std::string &parameter(const std::string &parameter);
 
 	static VMT *open(IReaderFactory *factory, const std::string &name);
 
