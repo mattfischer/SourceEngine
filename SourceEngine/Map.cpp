@@ -8,29 +8,6 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 	const File::BSP::Model &model = mBSP->model(0);
 
-	mNumFaces = model.numFaces;;
-	mFaces = new Face[mNumFaces];
-	for(int i=0; i<mNumFaces; i++) {
-		const File::BSP::Face &bspFace = mBSP->face(model.firstFace + i);
-		Face &face = mFaces[i];
-
-		face.numVertices = bspFace.numEdges;
-		face.vertices = new Geo::Vector[face.numVertices];
-
-		for(int j=0; j<face.numVertices; j++) {
-			int surfEdge = mBSP->surfEdge(bspFace.firstEdge + j);
-			int vertex;
-			if(surfEdge > 0) {
-				vertex = mBSP->edge(surfEdge).v[0];
-			} else {
-				vertex = mBSP->edge(-surfEdge).v[1];
-			}
-			const File::BSP::Vector &bspVector = mBSP->vertex(vertex);
-
-			face.vertices[j] = Geo::Vector(bspVector.x, bspVector.y, bspVector.z);
-		}
-	}
-
 	mNumTextures = mBSP->numTexDatas();
 	mTextures = new Texture[mNumTextures];
 	for(int i=0; i<mNumTextures; i++) {
@@ -47,7 +24,37 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			mTextures[i].vtf = vtf;
 			glGenTextures(1, &mTextures[i].tex);
 			glBindTexture(GL_TEXTURE_2D, mTextures[i].tex);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, vtf->width(), vtf->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(vtf->numMipMaps() - 1));
+		}
+	}
+
+	mNumFaces = model.numFaces;;
+	mFaces = new Face[mNumFaces];
+	for(int i=0; i<mNumFaces; i++) {
+		const File::BSP::Face &bspFace = mBSP->face(model.firstFace + i);
+		Face &face = mFaces[i];
+
+		face.texInfo = bspFace.texInfo;
+		face.texture = &mTextures[mBSP->texInfo(face.texInfo).texdata];
+		face.numVertices = bspFace.numEdges;
+		face.vertices = new Geo::Vector[face.numVertices];
+
+		for(int j=0; j<face.numVertices; j++) {
+			int surfEdge = mBSP->surfEdge(bspFace.firstEdge + j);
+			int vertex;
+			if(surfEdge > 0) {
+				vertex = mBSP->edge(surfEdge).v[0];
+			} else {
+				vertex = mBSP->edge(-surfEdge).v[1];
+			}
+			const File::BSP::Vector &bspVector = mBSP->vertex(vertex);
+
+			face.vertices[j] = Geo::Vector(bspVector.x, bspVector.y, bspVector.z);
 		}
 	}
 }

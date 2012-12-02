@@ -15,18 +15,22 @@ class Map {
 public:
 	Map(File::IReaderFactory *factory, const std::string &name);
 
-	struct Face {
-		int numVertices;
-		Geo::Vector *vertices;
-	};
-
 	struct Texture {
 		File::VTF *vtf;
 		GLuint tex;
 	};
 
+	struct Face {
+		int numVertices;
+		Geo::Vector *vertices;
+		Texture *texture;
+		int texInfo;
+	};
+
 	const Face &face(int face) { return mFaces[face]; }
 	int numFaces() { return mNumFaces; }
+
+	File::BSP *bsp() { return mBSP; }
 
 private:
 	File::BSP *mBSP;
