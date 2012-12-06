@@ -67,11 +67,24 @@ unsigned int interp8888(unsigned int a, unsigned int b, int num, int den)
 	return 0xff000000 | (_r << 16) | (_g << 8) | (_b << 0);
 }
 
-unsigned char *readDXT1(IReader *reader, int width, int height)
+unsigned char *readDXT(IReader *reader, int width, int height, int n)
 {
-	int srcSize = width * height / 2;
-	if(srcSize < 8) {
-		srcSize = 8;
+	int srcSize;
+
+	switch(n) {
+		case 1:
+			srcSize = width * height / 2;
+			if(srcSize < 8) {
+				srcSize = 8;
+			}
+			break;
+
+		case 5:
+			srcSize = width * height;
+			if(srcSize < 16) {
+				srcSize = 16;
+			}
+			break;
 	}
 
 	unsigned char *src = new unsigned char[srcSize];
@@ -83,58 +96,16 @@ unsigned char *readDXT1(IReader *reader, int width, int height)
 	int blockHeight = height / 4;
 	for(int blockY=0; blockY<blockHeight; blockY++) {
 		for(int blockX=0; blockX<blockWidth; blockX++) {
-			int srcStart = (blockY * blockWidth + blockX) * 8;
-			unsigned short c0 = *(unsigned short*)(&src[srcStart + 0]);
-			unsigned short c1 = *(unsigned short*)(&src[srcStart + 2]);
-			unsigned int c[4];
-			c[0] = unpack565(c0);
-			c[1] = unpack565(c1);
+			int srcStart;
+			switch(n) {
+				case 1:
+					srcStart = (blockY * blockWidth + blockX) * 8;
+					break;
 
-			if(c0 > c1) {
-				c[2] = interp8888(c[0], c[1], 2, 3);
-				c[3] = interp8888(c[0], c[1], 1, 3);
-			} else {
-				c[2] = interp8888(c[0], c[1], 1, 2);
-				c[3] = 0;
+				case 5:
+					srcStart = (blockY * blockWidth + blockX) * 16 + 8;
+					break;
 			}
-
-			for(int j=0; j<4; j++) {
-				for(int i=0; i<4; i++) {
-					int x = blockX * 4 + i;
-					int y = blockY * 4 + j;
-					if(x >= width || y >= height) {
-						continue;
-					}
-
-					int pos = j * 4 + i;
-					unsigned int bits = *(unsigned int*)&src[srcStart + 4];
-					dst[y * width + x] = c[0x3 & (bits >> (pos * 2))];
-				}
-			}
-		}
-	}
-
-	delete[] src;
-	return (unsigned char*)dst;
-}
-
-unsigned char *readDXT5(IReader *reader, int width, int height)
-{
-	int srcSize = width * height;
-	if(srcSize < 16) {
-		srcSize = 16;
-	}
-
-	unsigned char *src = new unsigned char[srcSize];
-	reader->read((char*)src, srcSize);
-
-	unsigned int *dst = new unsigned int[width * height];
-
-	int blockWidth = width / 4;
-	int blockHeight = height / 4;
-	for(int blockY=0; blockY<blockHeight; blockY++) {
-		for(int blockX=0; blockX<blockWidth; blockX++) {
-			int srcStart = (blockY * blockWidth + blockX) * 16 + 8;
 			unsigned short c0 = *(unsigned short*)(&src[srcStart + 0]);
 			unsigned short c1 = *(unsigned short*)(&src[srcStart + 2]);
 			unsigned int c[4];
@@ -194,27 +165,17 @@ VTF::VTF(IReader *reader)
 	mHeight = header.height;
 	mNumMipMaps = header.mipmapCount;
 
-	mLowResData = readDXT1(reader, header.lowResImageWidth, header.lowResImageHeight);
+	mLowResData = readDXT(reader, header.lowResImageWidth, header.lowResImageHeight, 1);
 
 	mData = new unsigned char*[mNumMipMaps];
 	for(int i=0; i<mNumMipMaps; i++) {
-		int width = mWidth >> (mNumMipMaps - i - 1);
-		if(width == 0) {
-			width = 1;
-		}
-
-		int height = mHeight >> (mNumMipMaps - i - 1);
-		if(height == 0) {
-			height = 1;
-		}
-
 		switch(header.highResImageFormat) {
 			case 0xd:
-				mData[i] = readDXT1(reader, width, height);
+				mData[i] = readDXT(reader, width(i), height(i), 1);
 				break;
 
 			case 0xf:
-				mData[i] = readDXT5(reader, width, height);
+				mData[i] = readDXT(reader, width(i), height(i), 5);
 				break;
 
 			default:
@@ -222,6 +183,26 @@ VTF::VTF(IReader *reader)
 				break;
 		}
 	}
+}
+
+int VTF::width(int n)
+{
+	int ret = mWidth >> (mNumMipMaps - n - 1);
+	if(ret == 0) {
+		ret = 1;
+	}
+
+	return ret;
+}
+
+int VTF::height(int n)
+{
+	int ret = mHeight >> (mNumMipMaps - n - 1);
+	if(ret == 0) {
+		ret = 1;
+	}
+
+	return ret;
 }
 
 }

@@ -11,8 +11,10 @@ class VTF {
 public:
 	VTF(IReader *reader);
 
-	int width() { return mWidth; }
-	int height() { return mHeight; }
+	int width(int n);
+	int height(int n);
+	int width() { return width(mNumMipMaps - 1); }
+	int height() { return height(mNumMipMaps - 1); }
 	int numMipMaps() { return mNumMipMaps; }
 
 	const unsigned char *lowResData() { return mLowResData; }

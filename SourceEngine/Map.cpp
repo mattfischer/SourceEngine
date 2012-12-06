@@ -25,11 +25,13 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			glGenTextures(1, &mTextures[i].tex);
 			glBindTexture(GL_TEXTURE_2D, mTextures[i].tex);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST );
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, vtf->width(), vtf->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(vtf->numMipMaps() - 1));
+			for(int j=0; j<vtf->numMipMaps(); j++) {
+				glTexImage2D(GL_TEXTURE_2D, vtf->numMipMaps() - j - 1, GL_RGBA, vtf->width(j), vtf->height(j), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(j));
+			}
 		}
 	}
 
