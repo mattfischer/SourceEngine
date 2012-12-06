@@ -125,6 +125,8 @@ BSP::BSP(IReader *reader)
     reader->read((char*)&header, sizeof(header));
 
 	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
+	readLump(reader, mNodes, mNumNodes, header, LUMP_NODES);
+	readLump(reader, mLeaves, mNumLeaves, header, LUMP_LEAFS);
 	readLump(reader, mEdges, mNumEdges, header, LUMP_EDGES);
 	readLump(reader, mSurfEdges, mNumSurfEdges, header, LUMP_SURFEDGES);
 	readLump(reader, mFaces, mNumFaces, header, LUMP_FACES);
@@ -147,6 +149,44 @@ BSP::BSP(IReader *reader)
 
 	delete[] stringData;
 	delete[] stringTable;
+
+	unsigned char *visData;
+	int visDataLength;
+	readLump(reader, visData, visDataLength, header, LUMP_VISIBILITY);
+	parseVisData(visData, visDataLength);
+	delete[] visData;
+}
+
+void BSP::parseVisData(unsigned char *visData, int visDataLength)
+{
+	int numClusters = *(int*)visData;
+	int *offsets = (int*)visData + 1;
+
+	mVisData = new bool*[numClusters];
+	for(int i=0; i<numClusters; i++) {
+		int offset = offsets[i*2];
+
+		mVisData[i] = new bool[numClusters];
+		int cluster = 0;
+		while(cluster < numClusters) {
+			unsigned char byte = visData[offset];
+			if(byte == 0) {
+				offset++;
+				byte = visData[offset];
+				for(int j=0; j<byte * 8; j++) {
+					mVisData[i][cluster] = false;
+					cluster++;
+				}
+			} else {
+				for(int j=0; j<8; j++) {
+					mVisData[i][cluster] = (((byte >> j) & 0x1) == 0x1);
+					cluster++;
+				}
+			}
+
+			offset++;
+		}
+	}
 }
 
 }

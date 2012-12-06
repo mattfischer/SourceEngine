@@ -21,6 +21,31 @@ public:
 		int type;
 	};
 
+	struct Node {
+		int	planeNum;
+		int	children[2];
+		short mins[3];
+		short maxs[3];
+		unsigned short firstFace;
+		unsigned short numFaces;
+		short area;
+		short padding;
+	};
+
+	struct Leaf {
+		int	contents;
+		short cluster;
+		short area:9;
+		short flags:7;
+		short mins[3];
+		short maxs[3];
+		unsigned short firstleafFace;
+		unsigned short numLeafFaces;
+		unsigned short firstLeafBrush;
+		unsigned short numLeafBrushes;
+		short leafWaterDataID;
+	};
+
 	struct Face {
 		unsigned short	planeNum;
 		unsigned char	side;
@@ -96,6 +121,12 @@ public:
 	int numTexDataStrings() { return mNumTexDataStrings; }
 	const std::string &texDataString(int texDataString) { return mTexDataStringTable[texDataString]; }
 
+	int numNodes() { return mNumNodes; }
+	const Node &node(int node) { return mNodes[node]; }
+
+	int numLeaves() { return mNumLeaves; }
+	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
+
 	static BSP *open(IReaderFactory *factory, const std::string &name);
 
 private:
@@ -122,6 +153,15 @@ private:
 
 	int mNumTexDataStrings;
 	std::string *mTexDataStringTable;
+
+	int mNumNodes;
+	Node *mNodes;
+
+	int mNumLeaves;
+	Leaf *mLeaves;
+
+	bool **mVisData;
+	void parseVisData(unsigned char *visData, int visDataLength);
 };
 
 }
