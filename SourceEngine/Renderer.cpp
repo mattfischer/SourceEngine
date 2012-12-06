@@ -20,9 +20,9 @@ Renderer::Renderer(Map *map, int width, int height)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
-	mX = 0;
-	mY = -300;
-	mZ = 0;
+	mX = -8674;
+	mY = 1773;
+	mZ = 37;
 	mRotation = -90;
 }
 
@@ -33,13 +33,13 @@ void Renderer::rotate(int amount)
 
 void Renderer::move(int amount)
 {
-	mX += 100 * amount * sinf(-mRotation * 3.14f / 180);
-	mZ += 100 * amount * cosf(-mRotation * 3.14f / 180);
+	mX += 100 * amount * sinf(mRotation * 3.14f / 180);
+	mY += 100 * amount * cosf(mRotation * 3.14f / 180);
 };
 
 void Renderer::rise(int amount)
 {
-	mY += amount * 100;
+	mZ += amount * 100;
 };
 
 const File::BSP::Leaf &findCameraLeaf(File::BSP *bsp, float x, float y, float z)
@@ -77,7 +77,7 @@ void renderFace(const Map::Face &face, File::BSP *bsp)
 		if(face.texture->vtf) {
 			glTexCoord2f(s / face.texture->vtf->width(), t / face.texture->vtf->height());
 		}
-		glVertex3f(vertex.x(), vertex.y(), vertex.z());
+		glVertex3f(vertex.x(), vertex.z(), -vertex.y());
 	}
 	glEnd();
 }
@@ -87,12 +87,12 @@ void Renderer::render()
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
 	glRotatef(mRotation, 0, 1, 0);
-	glTranslatef(mX, mY, mZ);
+	glTranslatef(-mX, -mZ, mY);
 
 	const File::BSP::Leaf &cameraLeaf = findCameraLeaf(mMap->bsp(), mX, mY, mZ);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(cameraLeaf.cluster == -1) {
+	if(true) { //cameraLeaf.cluster == -1) {
 		for(int i=0; i<mMap->numFaces(); i++) {
 			const Map::Face &face = mMap->face(i);
 			renderFace(face, mMap->bsp());

@@ -35,10 +35,10 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		}
 	}
 
-	mNumFaces = model.numFaces;;
+	mNumFaces = mBSP->numFaces();
 	mFaces = new Face[mNumFaces];
 	for(int i=0; i<mNumFaces; i++) {
-		const File::BSP::Face &bspFace = mBSP->face(model.firstFace + i);
+		const File::BSP::Face &bspFace = mBSP->face(i);
 		Face &face = mFaces[i];
 
 		face.texInfo = bspFace.texInfo;

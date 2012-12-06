@@ -79,11 +79,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case 'A':
-					renderer->rise(-1);
+					renderer->rise(1);
 					break;
 
 				case 'Z':
-					renderer->rise(1);
+					renderer->rise(-1);
 					break;
 			}
 			return 0;
