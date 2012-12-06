@@ -125,6 +125,7 @@ BSP::BSP(IReader *reader)
     reader->read((char*)&header, sizeof(header));
 
 	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
+	readLump(reader, mPlanes, mNumPlanes, header, LUMP_PLANES);
 	readLump(reader, mNodes, mNumNodes, header, LUMP_NODES);
 	readLump(reader, mLeaves, mNumLeaves, header, LUMP_LEAFS);
 	readLump(reader, mEdges, mNumEdges, header, LUMP_EDGES);
@@ -133,6 +134,7 @@ BSP::BSP(IReader *reader)
 	readLump(reader, mModels, mNumModels, header, LUMP_MODELS);
 	readLump(reader, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
 	readLump(reader, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
+	readLump(reader, mLeafFaces, mNumLeafFaces, header, LUMP_LEAFFACES);
 
 	int *stringTable;
 	int stringTableLength;

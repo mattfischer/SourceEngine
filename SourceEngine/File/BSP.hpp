@@ -39,7 +39,7 @@ public:
 		short flags:7;
 		short mins[3];
 		short maxs[3];
-		unsigned short firstleafFace;
+		unsigned short firstLeafFace;
 		unsigned short numLeafFaces;
 		unsigned short firstLeafBrush;
 		unsigned short numLeafBrushes;
@@ -127,6 +127,14 @@ public:
 	int numLeaves() { return mNumLeaves; }
 	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
 
+	int numPlanes() { return mNumPlanes; }
+	const Plane &plane(int plane) { return mPlanes[plane]; }
+
+	int numLeafFaces() { return mNumLeafFaces; }
+	const int leafFace(int leafFace) { return mLeafFaces[leafFace]; }
+
+	bool clusterVisibleFrom(int cameraCluster, int cluster) { return mVisData[cameraCluster][cluster]; }
+
 	static BSP *open(IReaderFactory *factory, const std::string &name);
 
 private:
@@ -159,6 +167,12 @@ private:
 
 	int mNumLeaves;
 	Leaf *mLeaves;
+
+	int mNumPlanes;
+	Plane *mPlanes;
+
+	int mNumLeafFaces;
+	int *mLeafFaces;
 
 	bool **mVisData;
 	void parseVisData(unsigned char *visData, int visDataLength);
