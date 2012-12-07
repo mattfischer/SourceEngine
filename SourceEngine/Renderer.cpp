@@ -92,7 +92,7 @@ void Renderer::render()
 	const File::BSP::Leaf &cameraLeaf = findCameraLeaf(mMap->bsp(), mX, mY, mZ);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(true) { //cameraLeaf.cluster == -1) {
+	if(cameraLeaf.cluster == -1) {
 		for(int i=0; i<mMap->numFaces(); i++) {
 			const Map::Face &face = mMap->face(i);
 			renderFace(face, mMap->bsp());

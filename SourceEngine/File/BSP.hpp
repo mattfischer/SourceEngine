@@ -131,7 +131,7 @@ public:
 	const Plane &plane(int plane) { return mPlanes[plane]; }
 
 	int numLeafFaces() { return mNumLeafFaces; }
-	const int leafFace(int leafFace) { return mLeafFaces[leafFace]; }
+	const unsigned short leafFace(int leafFace) { return mLeafFaces[leafFace]; }
 
 	bool clusterVisibleFrom(int cameraCluster, int cluster) { return mVisData[cameraCluster][cluster]; }
 
@@ -172,7 +172,7 @@ private:
 	Plane *mPlanes;
 
 	int mNumLeafFaces;
-	int *mLeafFaces;
+	unsigned short *mLeafFaces;
 
 	bool **mVisData;
 	void parseVisData(unsigned char *visData, int visDataLength);
