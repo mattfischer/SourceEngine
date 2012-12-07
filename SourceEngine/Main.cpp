@@ -14,8 +14,8 @@ HGLRC hglRC;
 File::BSP *bspFile;
 Renderer *renderer;
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 800
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -85,6 +85,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				case 'Z':
 					renderer->rise(-1);
 					break;
+
+				case VK_ESCAPE:
+					DestroyWindow(hWnd);
+					break;
 			}
 			return 0;
 
@@ -117,7 +121,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 	RegisterClassEx(&cls);
 
-	hWnd = CreateWindowEx(0, "SourceEngine", "Source Engine", WS_VISIBLE | WS_OVERLAPPEDWINDOW, 10, 10, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, hInst, NULL);
+	hWnd = CreateWindowEx(0, "SourceEngine", "Source Engine", WS_VISIBLE | WS_POPUP, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, hInst, NULL);
+
+	DEVMODE dm;
+	dm.dmSize = sizeof(DEVMODE);
+	dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
+	dm.dmPelsWidth = SCREEN_WIDTH;
+	dm.dmPelsHeight = SCREEN_HEIGHT;
+	dm.dmBitsPerPel = 32;
+	ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
 
 	MSG msg;
 	while(1) {
