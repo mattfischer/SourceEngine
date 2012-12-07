@@ -16,7 +16,7 @@ Renderer::Renderer(Map *map, int width, int height)
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glLoadIdentity();
 	float scale = 10;
-	glFrustum(-(float)width / (float)height * scale, (float)width / (float)height * scale, -scale, scale, 100, 10000);
+	glFrustum(-(float)width / (float)height * scale, (float)width / (float)height * scale, -scale, scale, 50, 10000);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
@@ -28,18 +28,18 @@ Renderer::Renderer(Map *map, int width, int height)
 
 void Renderer::rotate(int amount)
 {
-	mRotation += 3 * amount;
+	mRotation += amount;
 }
 
 void Renderer::move(int amount)
 {
-	mX += 100 * amount * sinf(mRotation * 3.14f / 180);
-	mY += 100 * amount * cosf(mRotation * 3.14f / 180);
+	mX += 30 * amount * sinf(mRotation * 3.14f / 180);
+	mY += 30 * amount * cosf(mRotation * 3.14f / 180);
 };
 
 void Renderer::rise(int amount)
 {
-	mZ += amount * 100;
+	mZ += amount * 30;
 };
 
 const File::BSP::Leaf &findCameraLeaf(File::BSP *bsp, float x, float y, float z)
