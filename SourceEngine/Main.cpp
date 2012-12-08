@@ -60,38 +60,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				return 0;
 			}
 
-		case WM_KEYDOWN:
-			switch(wParam) {
-				case VK_LEFT:
-					renderer->rotate(-1);
-					break;
-
-				case VK_RIGHT:
-					renderer->rotate(1);
-					break;
-
-				case VK_UP:
-					renderer->move(1);
-					break;
-
-				case VK_DOWN:
-					renderer->move(-1);
-					break;
-
-				case 'A':
-					renderer->rise(1);
-					break;
-
-				case 'Z':
-					renderer->rise(-1);
-					break;
-
-				case VK_ESCAPE:
-					DestroyWindow(hWnd);
-					break;
-			}
-			return 0;
-
 		case WM_DESTROY:
 			wglMakeCurrent(NULL, NULL);
 			wglDeleteContext(hglRC);
@@ -132,6 +100,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 	ChangeDisplaySettings(&dm, CDS_FULLSCREEN);
 
 	MSG msg;
+	DWORD clock = GetTickCount();
+	ShowCursor(FALSE);
+	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	while(1) {
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -144,6 +115,39 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		renderer->render();
 		SwapBuffers(hDC);
+		DWORD nextClock = GetTickCount();
+		int elapsed = nextClock - clock;
+
+		POINT point;
+		GetCursorPos(&point);
+		float mouseScale = 0.1;
+		renderer->rotate(((int)point.x - SCREEN_WIDTH/2) * elapsed * mouseScale, ((int)point.y - SCREEN_HEIGHT/2) * elapsed * mouseScale);
+		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+#define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
+
+		float moveScale = 0.1f;
+		if(KEY_DOWN(VK_UP)) {
+			renderer->move(elapsed * moveScale);
+		}
+
+		if(KEY_DOWN(VK_DOWN)) {
+			renderer->move(-elapsed * moveScale);
+		}
+
+		if(KEY_DOWN('A')) {
+			renderer->rise(elapsed * moveScale);
+		}
+
+		if(KEY_DOWN('Z')) {
+			renderer->rise(-elapsed * moveScale);
+		}
+
+		if(KEY_DOWN(VK_ESCAPE)) {
+			break;
+		}
+
+		clock = nextClock;
 	}
 
     return 0;

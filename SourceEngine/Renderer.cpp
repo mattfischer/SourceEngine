@@ -23,18 +23,35 @@ Renderer::Renderer(Map *map, int width, int height)
 	mX = -8674;
 	mY = 1773;
 	mZ = 37;
-	mRotation = -90;
+	mYaw = -90;
+	mPitch = 0;
 }
 
-void Renderer::rotate(int amount)
+void Renderer::rotate(int yaw, int pitch)
 {
-	mRotation += amount;
+	mYaw += yaw;
+	if(mYaw > 360) {
+		mYaw -= 360;
+	}
+
+	if(mYaw < 0) {
+		mYaw += 360;
+	}
+
+	mPitch += pitch;
+	if(mPitch > 70) {
+		mPitch = 70;
+	}
+
+	if(mPitch < -70) {
+		mPitch = -70;
+	}
 }
 
 void Renderer::move(int amount)
 {
-	mX += 30 * amount * sinf(mRotation * 3.14f / 180);
-	mY += 30 * amount * cosf(mRotation * 3.14f / 180);
+	mX += 30 * amount * sinf(mYaw * 3.14f / 180);
+	mY += 30 * amount * cosf(mYaw * 3.14f / 180);
 };
 
 void Renderer::rise(int amount)
@@ -86,7 +103,8 @@ void Renderer::render()
 {
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
-	glRotatef(mRotation, 0, 1, 0);
+	glRotatef(mPitch, 1, 0, 0);
+	glRotatef(mYaw, 0, 1, 0);
 	glTranslatef(-mX, -mZ, mY);
 
 	const File::BSP::Leaf &cameraLeaf = findCameraLeaf(mMap->bsp(), mX, mY, mZ);

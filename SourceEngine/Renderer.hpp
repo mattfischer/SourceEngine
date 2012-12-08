@@ -12,7 +12,7 @@ public:
 
 	void render();
 
-	void rotate(int amount);
+	void rotate(int yaw, int pitch);
 	void move(int amount);
 	void rise(int amount);
 
@@ -22,7 +22,8 @@ private:
 	float mX;
 	float mY;
 	float mZ;
-	float mRotation;
+	float mYaw;
+	float mPitch;
 };
 
 #endif
