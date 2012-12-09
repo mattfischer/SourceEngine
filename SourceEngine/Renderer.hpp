@@ -3,6 +3,7 @@
 
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
+#include "Geo/Vector.hpp"
 
 #include "Map.hpp"
 
@@ -19,9 +20,7 @@ public:
 private:
 	Map *mMap;
 
-	float mX;
-	float mY;
-	float mZ;
+	Geo::Vector mPosition;
 	float mYaw;
 	float mPitch;
 };

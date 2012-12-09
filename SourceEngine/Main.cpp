@@ -120,7 +120,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		POINT point;
 		GetCursorPos(&point);
-		float mouseScale = 0.1;
+		float mouseScale = 0.1f;
 		renderer->rotate(((int)point.x - SCREEN_WIDTH/2) * elapsed * mouseScale, ((int)point.y - SCREEN_HEIGHT/2) * elapsed * mouseScale);
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 

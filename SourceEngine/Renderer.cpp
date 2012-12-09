@@ -20,9 +20,7 @@ Renderer::Renderer(Map *map, int width, int height)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
-	mX = -8674;
-	mY = 1773;
-	mZ = 37;
+	mPosition = Geo::Vector(-8674, 1773, 37);
 	mYaw = -90;
 	mPitch = 0;
 }
@@ -50,24 +48,28 @@ void Renderer::rotate(int yaw, int pitch)
 
 void Renderer::move(int amount)
 {
-	mX += 30 * amount * sinf(mYaw * 3.14f / 180);
-	mY += 30 * amount * cosf(mYaw * 3.14f / 180);
+	float speed = 30;
+	float angleRad = mYaw * 3.14f / 180;
+
+	Geo::Vector delta(sinf(angleRad), cosf(angleRad), 0);
+	mPosition = mPosition + speed * amount * delta;
 };
 
 void Renderer::rise(int amount)
 {
-	mZ += amount * 30;
+	float speed = 30;
+
+	mPosition = mPosition + speed * amount * Geo::Vector(0, 0, 1);
 };
 
-const Map::Leaf *findCameraLeaf(Map *map, float x, float y, float z)
+const Map::Leaf *findCameraLeaf(Map *map, const Geo::Vector &position)
 {
 	Map::BSPBase *cursor = map->rootNode();
 	while(cursor->type == Map::BSPBase::TypeNode) {
 		int child;
 		Map::Node *node = (Map::Node*)cursor;
 
-		Geo::Vector normal = node->plane.normal();
-		if(x*normal.x() + y*normal.y() + z*normal.z() - node->plane.distance() > 0) {
+		if(node->plane.pointInFront(position)) {
 			child = 0;
 		} else {
 			child = 1;
@@ -103,9 +105,9 @@ void Renderer::render()
 	glPushMatrix();
 	glRotatef(mPitch, 1, 0, 0);
 	glRotatef(mYaw, 0, 1, 0);
-	glTranslatef(-mX, -mZ, mY);
+	glTranslatef(-mPosition.x(), -mPosition.z(), mPosition.y());
 
-	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mX, mY, mZ);
+	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mPosition);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	for(int i=0; i<mMap->numLeaves(); i++) {
