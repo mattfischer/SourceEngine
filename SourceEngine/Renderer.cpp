@@ -59,24 +59,24 @@ void Renderer::rise(int amount)
 	mZ += amount * 30;
 };
 
-const File::BSP::Leaf &findCameraLeaf(File::BSP *bsp, float x, float y, float z)
+const Map::Leaf *findCameraLeaf(Map *map, float x, float y, float z)
 {
-	int nodeNum = bsp->model(0).headNode;
-	while(nodeNum >= 0) {
+	Map::BSPBase *cursor = map->rootNode();
+	while(cursor->type == Map::BSPBase::TypeNode) {
 		int child;
-		const File::BSP::Node &node = bsp->node(nodeNum);
-		const File::BSP::Plane &plane = bsp->plane(node.planeNum);
+		Map::Node *node = (Map::Node*)cursor;
 
-		if(x*plane.normal.x + y*plane.normal.y + z*plane.normal.z - plane.dist > 0) {
+		Geo::Vector normal = node->plane.normal();
+		if(x*normal.x() + y*normal.y() + z*normal.z() - node->plane.distance() > 0) {
 			child = 0;
 		} else {
 			child = 1;
 		}
 
-		nodeNum = node.children[child];
+		cursor = node->children[child];
 	}
 
-	return bsp->leaf(-nodeNum - 1);
+	return (Map::Leaf*)cursor;
 }
 
 void renderFace(const Map::Face &face)
@@ -105,30 +105,18 @@ void Renderer::render()
 	glRotatef(mYaw, 0, 1, 0);
 	glTranslatef(-mX, -mZ, mY);
 
-	const File::BSP::Leaf &cameraLeaf = findCameraLeaf(mMap->bsp(), mX, mY, mZ);
+	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mX, mY, mZ);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	if(cameraLeaf.cluster == -1) {
-		for(int i=0; i<mMap->numFaces(); i++) {
-			renderFace(mMap->face(i));
+	for(int i=0; i<mMap->numLeaves(); i++) {
+		const Map::Leaf &leaf = mMap->leaf(i);
+		if(leaf.number == -1) {
+			continue;
 		}
-	} else {
-		for(int i=0; i<mMap->bsp()->numLeaves(); i++) {
-			const File::BSP::Leaf &leaf = mMap->bsp()->leaf(i);
-			if(leaf.cluster == -1) {
-				continue;
-			}
 
-			if(mMap->bsp()->clusterVisibleFrom(cameraLeaf.cluster, leaf.cluster)) {
-				for(int j=0; j<leaf.numLeafFaces; j++) {
-					int leafFace = leaf.firstLeafFace + j;
-					if(leafFace < mMap->bsp()->numLeafFaces()) {
-						int faceNum = mMap->bsp()->leafFace(leafFace);
-						if(faceNum < mMap->numFaces()) {
-							renderFace(mMap->face(faceNum));
-						}
-					}
-				}
+		if(cameraLeaf->visibleLeaves == 0 || cameraLeaf->visibleLeaves[i]) {
+			for(int j=0; j<leaf.numFaces; j++) {
+				renderFace(*leaf.faces[j]);
 			}
 		}
 	}

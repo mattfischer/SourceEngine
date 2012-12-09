@@ -281,6 +281,10 @@
 				Name="Geo"
 				>
 				<File
+					RelativePath=".\Geo\Plane.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Vector.hpp"
 					>
 				</File>

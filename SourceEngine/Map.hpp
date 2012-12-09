@@ -5,6 +5,7 @@
 #include "File/BSP.hpp"
 #include "File/VTF.hpp"
 #include "Geo/Vector.hpp"
+#include "Geo/Plane.hpp"
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -27,9 +28,37 @@ public:
 		Texture *texture;
 	};
 
-	const Face &face(int face) { return mFaces[face]; }
-	int numFaces() { return mNumFaces; }
+	struct BSPBase {
+		enum Type {
+			TypeNode,
+			TypeLeaf
+		};
 
+		BSPBase(Type _type) : type(_type) {}
+
+		Type type;
+	};
+
+	struct Node : public BSPBase {
+		Node() : BSPBase(TypeNode) {}
+
+		Geo::Plane plane;
+		BSPBase *children[2];
+	};
+
+	struct Leaf : public BSPBase {
+		Leaf() : BSPBase(TypeLeaf) {}
+
+		int numFaces;
+		Face **faces;
+		int number;
+		bool *visibleLeaves;
+	};
+
+	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
+	int numLeaves() { return mNumLeaves; }
+
+	Node *rootNode();
 	File::BSP *bsp() { return mBSP; }
 
 private:
@@ -40,6 +69,12 @@ private:
 
 	Texture *mTextures;
 	int mNumTextures;
+
+	Node *mNodes;
+	int mNumNodes;
+
+	Leaf *mLeaves;
+	int mNumLeaves;
 };
 
 #endif

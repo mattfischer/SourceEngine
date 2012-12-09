@@ -65,4 +65,58 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			face.vertices[j] = Geo::Vector(bspVector.x, bspVector.y, bspVector.z);
 		}
 	}
+
+	mNumLeaves = mBSP->numLeaves();
+	mLeaves = new Leaf[mNumLeaves];
+	for(int i=0; i<mNumLeaves; i++) {
+		const File::BSP::Leaf &bspLeaf = mBSP->leaf(i);
+		Leaf &leaf = mLeaves[i];
+
+		leaf.number = bspLeaf.cluster;
+		leaf.numFaces = bspLeaf.numLeafFaces;
+		leaf.faces = new Face*[leaf.numFaces];
+		for(int j=0; j<leaf.numFaces; j++) {
+			int leafFace = bspLeaf.firstLeafFace + j;
+			leaf.faces[j] = &mFaces[mBSP->leafFace(leafFace)];
+		}
+
+		if(bspLeaf.cluster == -1) {
+			leaf.visibleLeaves = 0;
+		} else {
+			leaf.visibleLeaves = new bool[mNumLeaves];
+			for(int j=0; j<mNumLeaves; j++) {
+				const File::BSP::Leaf &otherBspLeaf = mBSP->leaf(j);
+				if(otherBspLeaf.cluster == -1) {
+					leaf.visibleLeaves[j] = false;
+				} else {
+					leaf.visibleLeaves[j] = mBSP->clusterVisibleFrom(bspLeaf.cluster, otherBspLeaf.cluster);
+				}
+			}
+		}
+	}
+
+	mNumNodes = mBSP->numNodes();
+	mNodes = new Node[mNumNodes];
+	for(int i=0; i<mNumNodes; i++) {
+		const File::BSP::Node &bspNode = mBSP->node(i);
+		Node &node = mNodes[i];
+
+		const File::BSP::Plane &bspPlane = mBSP->plane(bspNode.planeNum);
+		node.plane = Geo::Plane(Geo::Vector(bspPlane.normal.x, bspPlane.normal.y, bspPlane.normal.z), bspPlane.dist);
+
+		for(int j=0; j<2; j++) {
+			int child = bspNode.children[j];
+			if(child > 0) {
+				node.children[j] = &mNodes[child];
+			} else {
+				node.children[j] = &mLeaves[-child - 1];
+			}
+		}
+	}
+}
+
+Map::Node *Map::rootNode()
+{
+	const File::BSP::Model &model = mBSP->model(0);
+	return &mNodes[model.headNode];
 }
