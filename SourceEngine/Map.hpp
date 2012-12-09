@@ -23,8 +23,8 @@ public:
 	struct Face {
 		int numVertices;
 		Geo::Vector *vertices;
+		float textureVertices[2][4];
 		Texture *texture;
-		int texInfo;
 	};
 
 	const Face &face(int face) { return mFaces[face]; }

@@ -39,10 +39,16 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 	mFaces = new Face[mNumFaces];
 	for(int i=0; i<mNumFaces; i++) {
 		const File::BSP::Face &bspFace = mBSP->face(i);
+		const File::BSP::TexInfo &texInfo = mBSP->texInfo(bspFace.texInfo);
 		Face &face = mFaces[i];
 
-		face.texInfo = bspFace.texInfo;
-		face.texture = &mTextures[mBSP->texInfo(face.texInfo).texdata];
+		for(int j=0; j<2; j++) {
+			for(int k=0; k<4; k++) {
+				face.textureVertices[j][k] = texInfo.textureVecs[j][k];
+			}
+		}
+
+		face.texture = &mTextures[texInfo.texdata];
 		face.numVertices = bspFace.numEdges;
 		face.vertices = new Geo::Vector[face.numVertices];
 

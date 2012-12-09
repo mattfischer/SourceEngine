@@ -79,17 +79,15 @@ const File::BSP::Leaf &findCameraLeaf(File::BSP *bsp, float x, float y, float z)
 	return bsp->leaf(-nodeNum - 1);
 }
 
-void renderFace(const Map::Face &face, File::BSP *bsp)
+void renderFace(const Map::Face &face)
 {
-	const File::BSP::TexInfo &texInfo = bsp->texInfo(face.texInfo);
-
 	glBindTexture(GL_TEXTURE_2D, face.texture->tex);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
 	for(int j=0; j<face.numVertices; j++) {
 		Geo::Vector &vertex = face.vertices[j];
-		float s = texInfo.textureVecs[0][0] * vertex.x() + texInfo.textureVecs[0][1] * vertex.y() + texInfo.textureVecs[0][2] * vertex.z() + texInfo.textureVecs[0][3];
-		float t = texInfo.textureVecs[1][0] * vertex.x() + texInfo.textureVecs[1][1] * vertex.y() + texInfo.textureVecs[1][2] * vertex.z() + texInfo.textureVecs[1][3];
+		float s = face.textureVertices[0][0] * vertex.x() + face.textureVertices[0][1] * vertex.y() + face.textureVertices[0][2] * vertex.z() + face.textureVertices[0][3];
+		float t = face.textureVertices[1][0] * vertex.x() + face.textureVertices[1][1] * vertex.y() + face.textureVertices[1][2] * vertex.z() + face.textureVertices[1][3];
 
 		if(face.texture->vtf) {
 			glTexCoord2f(s / face.texture->vtf->width(), t / face.texture->vtf->height());
@@ -112,8 +110,7 @@ void Renderer::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if(cameraLeaf.cluster == -1) {
 		for(int i=0; i<mMap->numFaces(); i++) {
-			const Map::Face &face = mMap->face(i);
-			renderFace(face, mMap->bsp());
+			renderFace(mMap->face(i));
 		}
 	} else {
 		for(int i=0; i<mMap->bsp()->numLeaves(); i++) {
@@ -128,8 +125,7 @@ void Renderer::render()
 					if(leafFace < mMap->bsp()->numLeafFaces()) {
 						int faceNum = mMap->bsp()->leafFace(leafFace);
 						if(faceNum < mMap->numFaces()) {
-							const Map::Face &face = mMap->face(faceNum);
-							renderFace(face, mMap->bsp());
+							renderFace(mMap->face(faceNum));
 						}
 					}
 				}
