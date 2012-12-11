@@ -289,6 +289,10 @@
 				Name="Geo"
 				>
 				<File
+					RelativePath=".\Geo\Box.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Frustum.hpp"
 					>
 				</File>

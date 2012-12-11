@@ -73,6 +73,9 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		Leaf &leaf = mLeaves[i];
 
 		leaf.number = bspLeaf.cluster;
+		Geo::Vector minPoint = Geo::Vector(bspLeaf.mins[0], bspLeaf.mins[1], bspLeaf.mins[2]);
+		Geo::Vector maxPoint = Geo::Vector(bspLeaf.maxs[0], bspLeaf.maxs[1], bspLeaf.maxs[2]);
+		leaf.bbox = Geo::Box(minPoint, maxPoint);
 		leaf.numFaces = bspLeaf.numLeafFaces;
 		leaf.faces = new Face*[leaf.numFaces];
 		for(int j=0; j<leaf.numFaces; j++) {
@@ -103,6 +106,10 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 		const File::BSP::Plane &bspPlane = mBSP->plane(bspNode.planeNum);
 		node.plane = Geo::Plane(Geo::Vector(bspPlane.normal.x, bspPlane.normal.y, bspPlane.normal.z), bspPlane.dist);
+
+		Geo::Vector minPoint = Geo::Vector(bspNode.mins[0], bspNode.mins[1], bspNode.mins[2]);
+		Geo::Vector maxPoint = Geo::Vector(bspNode.maxs[0], bspNode.maxs[1], bspNode.maxs[2]);
+		node.bbox = Geo::Box(minPoint, maxPoint);
 
 		for(int j=0; j<2; j++) {
 			int child = bspNode.children[j];

@@ -6,6 +6,7 @@
 #include "File/VTF.hpp"
 #include "Geo/Vector.hpp"
 #include "Geo/Plane.hpp"
+#include "Geo/Box.hpp"
 
 #include <windows.h>
 #include <GL/gl.h>
@@ -37,6 +38,7 @@ public:
 		BSPBase(Type _type) : type(_type) {}
 
 		Type type;
+		Geo::Box bbox;
 	};
 
 	struct Node : public BSPBase {
