@@ -215,6 +215,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Geo"
+				>
+				<File
+					RelativePath=".\Geo\Frustum.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -280,6 +288,10 @@
 			<Filter
 				Name="Geo"
 				>
+				<File
+					RelativePath=".\Geo\Frustum.hpp"
+					>
+				</File>
 				<File
 					RelativePath=".\Geo\Plane.hpp"
 					>

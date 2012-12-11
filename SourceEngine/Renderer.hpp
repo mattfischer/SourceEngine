@@ -4,6 +4,7 @@
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
 #include "Geo/Vector.hpp"
+#include "Geo/Frustum.hpp"
 
 #include "Map.hpp"
 
@@ -23,6 +24,7 @@ private:
 	Geo::Vector mPosition;
 	float mYaw;
 	float mPitch;
+	Geo::Frustum mFrustum;
 };
 
 #endif

@@ -23,6 +23,11 @@ Renderer::Renderer(Map *map, int width, int height)
 	mPosition = Geo::Vector(-8674, 1773, 37);
 	mYaw = -90;
 	mPitch = 0;
+
+	mFrustum = Geo::Frustum(70, (float)width / (float)height);
+	mFrustum = mFrustum.rotateX(mPitch);
+	mFrustum = mFrustum.rotateZ(mYaw);
+	mFrustum = mFrustum.translate(mPosition);
 }
 
 void Renderer::rotate(int yaw, int pitch)
