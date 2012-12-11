@@ -5,6 +5,7 @@
 
 #include <windows.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 
 #include <math.h>
 
@@ -16,7 +17,7 @@ Renderer::Renderer(Map *map, int width, int height)
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glLoadIdentity();
 	float scale = 10;
-	glFrustum(-(float)width / (float)height * scale, (float)width / (float)height * scale, -scale, scale, 50, 10000);
+	gluPerspective(60, (float)width / (float)height, 50, 10000);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
@@ -24,7 +25,7 @@ Renderer::Renderer(Map *map, int width, int height)
 	mYaw = -90;
 	mPitch = 0;
 
-	mFrustum = Geo::Frustum(70, (float)width / (float)height);
+	mFrustum = Geo::Frustum(60, (float)width / (float)height);
 	mFrustum = mFrustum.rotateX(mPitch);
 	mFrustum = mFrustum.rotateZ(mYaw);
 	mFrustum = mFrustum.translate(mPosition);
