@@ -133,6 +133,7 @@ public:
 	int numLeafFaces() { return mNumLeafFaces; }
 	const unsigned short leafFace(int leafFace) { return mLeafFaces[leafFace]; }
 
+	int numClusters() { return mNumClusters; }
 	bool clusterVisibleFrom(int cameraCluster, int cluster) { return mVisData[cameraCluster][cluster]; }
 
 	static BSP *open(IReaderFactory *factory, const std::string &name);
@@ -175,6 +176,8 @@ private:
 	unsigned short *mLeafFaces;
 
 	bool **mVisData;
+	int mNumClusters;
+
 	void parseVisData(unsigned char *visData, int visDataLength);
 };
 

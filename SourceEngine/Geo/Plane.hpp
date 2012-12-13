@@ -17,7 +17,7 @@ public:
 	const Vector &normal() { return mNormal; }
 	float distance() { return mDistance; }
 
-	bool pointInFront(const Vector &point) { return mNormal * point > mDistance; }
+	bool pointInFront(const Vector &point) const { return mNormal * point > mDistance; }
 
 private:
 	Vector mNormal;

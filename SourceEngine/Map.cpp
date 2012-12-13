@@ -86,14 +86,9 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		if(bspLeaf.cluster == -1) {
 			leaf.visibleLeaves = 0;
 		} else {
-			leaf.visibleLeaves = new bool[mNumLeaves];
-			for(int j=0; j<mNumLeaves; j++) {
-				const File::BSP::Leaf &otherBspLeaf = mBSP->leaf(j);
-				if(otherBspLeaf.cluster == -1) {
-					leaf.visibleLeaves[j] = false;
-				} else {
-					leaf.visibleLeaves[j] = mBSP->clusterVisibleFrom(bspLeaf.cluster, otherBspLeaf.cluster);
-				}
+			leaf.visibleLeaves = new bool[mBSP->numClusters()];
+			for(int j=0; j<mBSP->numClusters(); j++) {
+				leaf.visibleLeaves[j] = mBSP->clusterVisibleFrom(bspLeaf.cluster, j);
 			}
 		}
 	}

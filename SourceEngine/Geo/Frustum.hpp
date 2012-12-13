@@ -2,6 +2,7 @@
 #define GEO_FRUSTUM_HPP
 
 #include "Geo/Plane.hpp"
+#include "Geo/Box.hpp"
 
 namespace Geo {
 
@@ -14,6 +15,8 @@ public:
 	Frustum rotateX(float angle);
 	Frustum rotateZ(float angle);
 	Frustum translate(const Vector &disp);
+
+	bool boxOutside(const Box &box) const;
 
 private:
 	Plane mPlanes[4];

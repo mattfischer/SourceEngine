@@ -12,8 +12,8 @@ public:
 		: mMinPoint(minPoint), mMaxPoint(maxPoint)
 	{}
 
-	const Vector &minPoint() { return mMinPoint; }
-	const Vector &maxPoint() { return mMaxPoint; }
+	const Vector &minPoint() const { return mMinPoint; }
+	const Vector &maxPoint() const { return mMaxPoint; }
 
 private:
 	Vector mMinPoint;

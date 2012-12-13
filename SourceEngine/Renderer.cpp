@@ -87,7 +87,7 @@ const Map::Leaf *findCameraLeaf(Map *map, const Geo::Vector &position)
 	return (Map::Leaf*)cursor;
 }
 
-void renderFace(const Map::Face &face)
+static void renderFace(const Map::Face &face)
 {
 	glBindTexture(GL_TEXTURE_2D, face.texture->tex);
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -105,6 +105,44 @@ void renderFace(const Map::Face &face)
 	glEnd();
 }
 
+static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum)
+{
+	if(leaf->number == -1) {
+		return;
+	}
+
+	if(cameraLeaf->visibleLeaves != 0 && !cameraLeaf->visibleLeaves[leaf->number]) {
+		return;
+	}
+
+	if(frustum.boxOutside(leaf->bbox)) {
+		return;
+	}
+
+	for(int j=0; j<leaf->numFaces; j++) {
+		renderFace(*leaf->faces[j]);
+	}
+}
+
+static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum)
+{
+	if(frustum.boxOutside(node->bbox)) {
+		return;
+	}
+
+	for(int i=0; i<2; i++) {
+		switch(node->children[i]->type) {
+			case Map::BSPBase::TypeNode:
+				renderNode((Map::Node*)node->children[i], cameraLeaf, frustum);
+				break;
+
+			case Map::BSPBase::TypeLeaf:
+				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf, frustum);
+				break;
+		}
+	}
+}
+
 void Renderer::render()
 {
 	glMatrixMode(GL_MODELVIEW_MATRIX);
@@ -116,17 +154,6 @@ void Renderer::render()
 	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mPosition);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	for(int i=0; i<mMap->numLeaves(); i++) {
-		const Map::Leaf &leaf = mMap->leaf(i);
-		if(leaf.number == -1) {
-			continue;
-		}
-
-		if(cameraLeaf->visibleLeaves == 0 || cameraLeaf->visibleLeaves[i]) {
-			for(int j=0; j<leaf.numFaces; j++) {
-				renderFace(*leaf.faces[j]);
-			}
-		}
-	}
+	renderNode(mMap->rootNode(), cameraLeaf, mFrustum);
 	glPopMatrix();
 }

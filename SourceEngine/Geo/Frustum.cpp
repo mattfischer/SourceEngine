@@ -33,7 +33,7 @@ Frustum Frustum::rotateX(float angle)
 
 	for(int i=0; i<4; i++) {
 		const Vector &normal = mPlanes[i].normal();
-		const Vector newNormal(normal.x(), normal.y() * cos + normal.z() * sin, -normal.z() * sin + normal.y() * cos);
+		const Vector newNormal(normal.x(), normal.y() * cos + normal.z() * sin, normal.z() * cos - normal.y() * sin);
 		planes[i] = Plane(newNormal, mPlanes[i].distance());
 	}
 
@@ -65,6 +65,33 @@ Frustum Frustum::translate(const Vector &disp)
 	}
 
 	return Frustum(planes);
+}
+
+bool Frustum::boxOutside(const Box &box) const
+{
+	bool outside;
+
+	for(int i=0; i<4; i++) {
+		outside = true;
+
+		for(int j=0; j<8; j++) {
+			float x = (j&1) ? box.minPoint().x() : box.maxPoint().x();
+			float y = (j&2) ? box.minPoint().y() : box.maxPoint().y();
+			float z = (j&4) ? box.minPoint().z() : box.maxPoint().z();
+
+			Vector point(x, y, z);
+			if(mPlanes[i].pointInFront(point)) {
+				outside = false;
+				break;
+			}
+		}
+
+		if(outside) {
+			break;
+		}
+	}
+
+	return outside;
 }
 
 }

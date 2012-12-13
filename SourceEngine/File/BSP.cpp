@@ -161,16 +161,16 @@ BSP::BSP(IReader *reader)
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)
 {
-	int numClusters = *(int*)visData;
+	mNumClusters = *(int*)visData;
 	int *offsets = (int*)visData + 1;
 
-	mVisData = new bool*[numClusters];
-	for(int i=0; i<numClusters; i++) {
+	mVisData = new bool*[mNumClusters];
+	for(int i=0; i<mNumClusters; i++) {
 		int offset = offsets[i*2];
 
-		mVisData[i] = new bool[numClusters];
+		mVisData[i] = new bool[mNumClusters];
 		int cluster = 0;
-		while(cluster < numClusters) {
+		while(cluster < mNumClusters) {
 			unsigned char byte = visData[offset];
 			if(byte == 0) {
 				offset++;
