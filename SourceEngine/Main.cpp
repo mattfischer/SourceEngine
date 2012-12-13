@@ -121,7 +121,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 		POINT point;
 		GetCursorPos(&point);
 		float mouseScale = 0.1f;
-		renderer->rotate(((int)point.x - SCREEN_WIDTH/2) * elapsed * mouseScale, ((int)point.y - SCREEN_HEIGHT/2) * elapsed * mouseScale);
+		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2) * elapsed * mouseScale, ((int)point.y - SCREEN_HEIGHT/2) * elapsed * mouseScale);
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
@@ -141,6 +141,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		if(KEY_DOWN('Z')) {
 			renderer->rise(-elapsed * moveScale);
+		}
+
+		if(KEY_DOWN('C')) {
+			renderer->frustumCull(false);
+		} else {
+			renderer->frustumCull(true);
+		}
+
+		if(KEY_DOWN('U')) {
+			renderer->updateFrustum(false);
+		} else {
+			renderer->updateFrustum(true);
 		}
 
 		if(KEY_DOWN(VK_ESCAPE)) {

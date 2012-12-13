@@ -18,13 +18,19 @@ public:
 	void move(int amount);
 	void rise(int amount);
 
+	void frustumCull(bool cull) { mFrustumCull = cull; }
+	void updateFrustum(bool update) { mUpdateFrustum = update; }
+
 private:
 	Map *mMap;
 
 	Geo::Vector mPosition;
 	float mYaw;
 	float mPitch;
+	Geo::Frustum mStartFrustum;
 	Geo::Frustum mFrustum;
+	bool mFrustumCull;
+	bool mUpdateFrustum;
 };
 
 #endif

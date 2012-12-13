@@ -25,10 +25,10 @@ Renderer::Renderer(Map *map, int width, int height)
 	mYaw = -90;
 	mPitch = 0;
 
-	mFrustum = Geo::Frustum(60, (float)width / (float)height);
-	mFrustum = mFrustum.rotateX(mPitch);
-	mFrustum = mFrustum.rotateZ(mYaw);
-	mFrustum = mFrustum.translate(mPosition);
+	mStartFrustum = Geo::Frustum(60, (float)width / (float)height);
+
+	mFrustumCull = false;
+	mUpdateFrustum = true;
 }
 
 void Renderer::rotate(int yaw, int pitch)
@@ -57,7 +57,7 @@ void Renderer::move(int amount)
 	float speed = 30;
 	float angleRad = mYaw * 3.14f / 180;
 
-	Geo::Vector delta(sinf(angleRad), cosf(angleRad), 0);
+	Geo::Vector delta(cosf(angleRad), sinf(angleRad), 0);
 	mPosition = mPosition + speed * amount * delta;
 };
 
@@ -100,12 +100,12 @@ static void renderFace(const Map::Face &face)
 		if(face.texture->vtf) {
 			glTexCoord2f(s / face.texture->vtf->width(), t / face.texture->vtf->height());
 		}
-		glVertex3f(vertex.x(), vertex.z(), -vertex.y());
+		glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
 	}
 	glEnd();
 }
 
-static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum)
+static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum, bool cull)
 {
 	if(leaf->number == -1) {
 		return;
@@ -115,7 +115,7 @@ static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const
 		return;
 	}
 
-	if(frustum.boxOutside(leaf->bbox)) {
+	if(cull && frustum.boxOutside(leaf->bbox)) {
 		return;
 	}
 
@@ -124,20 +124,20 @@ static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const
 	}
 }
 
-static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum)
+static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum, bool cull)
 {
-	if(frustum.boxOutside(node->bbox)) {
+	if(cull && frustum.boxOutside(node->bbox)) {
 		return;
 	}
 
 	for(int i=0; i<2; i++) {
 		switch(node->children[i]->type) {
 			case Map::BSPBase::TypeNode:
-				renderNode((Map::Node*)node->children[i], cameraLeaf, frustum);
+				renderNode((Map::Node*)node->children[i], cameraLeaf, frustum, cull);
 				break;
 
 			case Map::BSPBase::TypeLeaf:
-				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf, frustum);
+				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf, frustum, cull);
 				break;
 		}
 	}
@@ -145,15 +145,21 @@ static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const
 
 void Renderer::render()
 {
+	if(mUpdateFrustum) {
+		mFrustum = mStartFrustum.rotateY(mPitch);
+		mFrustum = mFrustum.rotateZ(mYaw);
+		mFrustum = mFrustum.translate(mPosition);
+	}
+
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
 	glRotatef(mPitch, 1, 0, 0);
-	glRotatef(mYaw, 0, 1, 0);
-	glTranslatef(-mPosition.x(), -mPosition.z(), mPosition.y());
+	glRotatef(-mYaw, 0, 1, 0);
+	glTranslatef(mPosition.y(), -mPosition.z(), mPosition.x());
 
 	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mPosition);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderNode(mMap->rootNode(), cameraLeaf, mFrustum);
+	renderNode(mMap->rootNode(), cameraLeaf, mFrustum, mFrustumCull);
 	glPopMatrix();
 }

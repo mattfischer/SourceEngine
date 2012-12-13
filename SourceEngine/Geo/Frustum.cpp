@@ -8,13 +8,13 @@ Frustum::Frustum(float hfov, float aspectRatio)
 {
 	float hFovRad = hfov * 3.14f / 180.0f;
 
-	mPlanes[0] = Plane(Vector(cosf(hFovRad), sinf(hFovRad), 0), 0);
-	mPlanes[1] = Plane(Vector(-cosf(hFovRad), sinf(hFovRad), 0), 0);
+	mPlanes[0] = Plane(Vector(sinf(hFovRad), cosf(hFovRad), 0), 0);
+	mPlanes[1] = Plane(Vector(sinf(hFovRad), -cosf(hFovRad), 0), 0);
 
 	float vFovRad = atanf(aspectRatio * tanf(hFovRad));
 
-	mPlanes[2] = Plane(Vector(0, sinf(vFovRad), cosf(vFovRad)), 0);
-	mPlanes[3] = Plane(Vector(0, sinf(vFovRad), -cosf(vFovRad)), 0);
+	mPlanes[2] = Plane(Vector(sinf(vFovRad), 0, cosf(vFovRad)), 0);
+	mPlanes[3] = Plane(Vector(sinf(vFovRad), 0, -cosf(vFovRad)), 0);
 }
 
 Frustum::Frustum(const Plane planes[4])
@@ -24,7 +24,7 @@ Frustum::Frustum(const Plane planes[4])
 	}
 }
 
-Frustum Frustum::rotateX(float angle)
+Frustum Frustum::rotateY(float angle)
 {
 	float anglef = angle * 3.14f / 180.0f;
 	float cos = cosf(anglef);
@@ -33,7 +33,7 @@ Frustum Frustum::rotateX(float angle)
 
 	for(int i=0; i<4; i++) {
 		const Vector &normal = mPlanes[i].normal();
-		const Vector newNormal(normal.x(), normal.y() * cos + normal.z() * sin, normal.z() * cos - normal.y() * sin);
+		const Vector newNormal(normal.x() * cos + normal.z() * sin, normal.y(), normal.z() * cos - normal.x() * sin);
 		planes[i] = Plane(newNormal, mPlanes[i].distance());
 	}
 

@@ -12,7 +12,7 @@ public:
 	Frustum(float hfov, float aspectRatio);
 	Frustum(const Plane planes[4]);
 
-	Frustum rotateX(float angle);
+	Frustum rotateY(float angle);
 	Frustum rotateZ(float angle);
 	Frustum translate(const Vector &disp);
 
