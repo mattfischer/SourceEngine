@@ -87,7 +87,7 @@ const Map::Leaf *findCameraLeaf(Map *map, const Geo::Vector &position)
 	return (Map::Leaf*)cursor;
 }
 
-static void renderFace(const Map::Face &face)
+void Renderer::renderFace(const Map::Face &face)
 {
 	glBindTexture(GL_TEXTURE_2D, face.texture->tex);
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -102,10 +102,11 @@ static void renderFace(const Map::Face &face)
 		}
 		glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
 	}
+	mNumPolysDrawn++;
 	glEnd();
 }
 
-static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum, bool cull)
+void Renderer::renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf)
 {
 	if(leaf->number == -1) {
 		return;
@@ -115,7 +116,10 @@ static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const
 		return;
 	}
 
-	if(cull && frustum.boxOutside(leaf->bbox)) {
+	mNumVisLeaves++;
+
+	if(mFrustumCull && mFrustum.boxOutside(leaf->bbox)) {
+		mNumFrustumCulled++;
 		return;
 	}
 
@@ -124,20 +128,21 @@ static void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf, const
 	}
 }
 
-static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const Geo::Frustum &frustum, bool cull)
+void Renderer::renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf)
 {
-	if(cull && frustum.boxOutside(node->bbox)) {
+	/*if(mFrustumCull && mFrustum.boxOutside(node->bbox)) {
+		mNumFrustumCulled++;
 		return;
-	}
+	}*/
 
 	for(int i=0; i<2; i++) {
 		switch(node->children[i]->type) {
 			case Map::BSPBase::TypeNode:
-				renderNode((Map::Node*)node->children[i], cameraLeaf, frustum, cull);
+				renderNode((Map::Node*)node->children[i], cameraLeaf);
 				break;
 
 			case Map::BSPBase::TypeLeaf:
-				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf, frustum, cull);
+				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf);
 				break;
 		}
 	}
@@ -145,6 +150,10 @@ static void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf, const
 
 void Renderer::render()
 {
+	mNumVisLeaves = 0;
+	mNumFrustumCulled = 0;
+	mNumPolysDrawn = 0;
+
 	if(mUpdateFrustum) {
 		mFrustum = mStartFrustum.rotateY(mPitch);
 		mFrustum = mFrustum.rotateZ(mYaw);
@@ -160,6 +169,6 @@ void Renderer::render()
 	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mPosition);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	renderNode(mMap->rootNode(), cameraLeaf, mFrustum, mFrustumCull);
+	renderNode(mMap->rootNode(), cameraLeaf);
 	glPopMatrix();
 }

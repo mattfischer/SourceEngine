@@ -21,7 +21,16 @@ public:
 	void frustumCull(bool cull) { mFrustumCull = cull; }
 	void updateFrustum(bool update) { mUpdateFrustum = update; }
 
+	int numFrustumCulled() { return mNumFrustumCulled; }
+	int numPolysDrawn() { return mNumPolysDrawn; }
+	int numVisLeaves() { return mNumVisLeaves; }
+
 private:
+
+	void renderFace(const Map::Face &face);
+	void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf);
+	void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf);
+
 	Map *mMap;
 
 	Geo::Vector mPosition;
@@ -31,6 +40,9 @@ private:
 	Geo::Frustum mFrustum;
 	bool mFrustumCull;
 	bool mUpdateFrustum;
+	int mNumPolysDrawn;
+	int mNumFrustumCulled;
+	int mNumVisLeaves;
 };
 
 #endif

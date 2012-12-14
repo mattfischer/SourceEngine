@@ -6,6 +6,7 @@
 #include "Renderer.hpp"
 #include "File/VPKReaderFactory.hpp"
 #include "File/MultiReaderFactory.hpp"
+#include "Console.hpp"
 
 HWND hWnd;
 HDC hDC;
@@ -91,6 +92,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 	hWnd = CreateWindowEx(0, "SourceEngine", "Source Engine", WS_VISIBLE | WS_POPUP, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, NULL, NULL, hInst, NULL);
 
+	Console::instance();
+
 	DEVMODE dm;
 	dm.dmSize = sizeof(DEVMODE);
 	dm.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT | DM_BITSPERPEL;
@@ -103,6 +106,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 	DWORD clock = GetTickCount();
 	ShowCursor(FALSE);
 	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	DWORD fpsClock = GetTickCount();
+	int frames = 0;
 	while(1) {
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -115,32 +120,43 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		renderer->render();
 		SwapBuffers(hDC);
+
+		frames++;
+		if(GetTickCount() > fpsClock + 1000) {
+			Console::instance()->clear();
+			Console::instance()->printf("FPS: %i", frames);
+			Console::instance()->printf("NumPolysDrawn: %i", renderer->numPolysDrawn());
+			Console::instance()->printf("NumFrustumCulled: %i", renderer->numFrustumCulled());
+			Console::instance()->printf("NumVisLeaves: %i", renderer->numVisLeaves());
+			frames = 0;
+			fpsClock = GetTickCount();
+		}
+
 		DWORD nextClock = GetTickCount();
 		int elapsed = nextClock - clock;
 
 		POINT point;
 		GetCursorPos(&point);
-		float mouseScale = 0.1f;
-		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2) * elapsed * mouseScale, ((int)point.y - SCREEN_HEIGHT/2) * elapsed * mouseScale);
+		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2), ((int)point.y - SCREEN_HEIGHT/2));
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
 
 		float moveScale = 0.1f;
 		if(KEY_DOWN(VK_UP)) {
-			renderer->move(elapsed * moveScale);
+			renderer->move(1);
 		}
 
 		if(KEY_DOWN(VK_DOWN)) {
-			renderer->move(-elapsed * moveScale);
+			renderer->move(-1);
 		}
 
 		if(KEY_DOWN('A')) {
-			renderer->rise(elapsed * moveScale);
+			renderer->rise(1);
 		}
 
 		if(KEY_DOWN('Z')) {
-			renderer->rise(-elapsed * moveScale);
+			renderer->rise(-1);
 		}
 
 		if(KEY_DOWN('C')) {
