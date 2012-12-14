@@ -172,6 +172,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			renderer->updateFrustum(true);
 		}
 
+		if(KEY_DOWN('T')) {
+			renderer->texture(false);
+		} else {
+			renderer->texture(true);
+		}
+
 		if(KEY_DOWN(VK_ESCAPE)) {
 			break;
 		}

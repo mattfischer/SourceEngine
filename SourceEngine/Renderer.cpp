@@ -94,8 +94,14 @@ void Renderer::renderFace(const Map::Face &face)
 		return;
 	}
 
-	glBindTexture(GL_TEXTURE_2D, face.texture->tex);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	if(mTexture) {
+		glBindTexture(GL_TEXTURE_2D, face.texture->tex);
+		glColor3f(1.0f, 1.0f, 1.0f);
+	} else {
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glColor3f(face.gray, face.gray, face.gray);
+	}
+
 	glBegin(GL_POLYGON);
 	for(int j=0; j<face.numVertices; j++) {
 		Geo::Vector &vertex = face.vertices[j];
@@ -135,10 +141,10 @@ void Renderer::renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf)
 
 void Renderer::renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf)
 {
-	/*if(mFrustumCull && mFrustum.boxOutside(node->bbox)) {
+	if(mFrustumCull && mFrustum.boxOutside(node->bbox)) {
 		mNumFrustumCulled++;
 		return;
-	}*/
+	}
 
 	for(int i=0; i<2; i++) {
 		int start = node->plane.pointInFront(mPosition) ? 0 : 1;

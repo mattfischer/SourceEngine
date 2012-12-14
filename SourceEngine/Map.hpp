@@ -24,6 +24,7 @@ public:
 
 	struct Face {
 		int numVertices;
+		float gray;
 		Geo::Plane plane;
 		Geo::Vector *vertices;
 		float textureVertices[2][4];

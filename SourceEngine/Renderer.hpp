@@ -20,6 +20,7 @@ public:
 
 	void frustumCull(bool cull) { mFrustumCull = cull; }
 	void updateFrustum(bool update) { mUpdateFrustum = update; }
+	void texture(bool texture) { mTexture = texture; }
 
 	int numFrustumCulled() { return mNumFrustumCulled; }
 	int numPolysDrawn() { return mNumPolysDrawn; }
@@ -41,6 +42,7 @@ private:
 	Geo::Frustum mFrustum;
 	bool mFrustumCull;
 	bool mUpdateFrustum;
+	bool mTexture;
 	int mNumPolysDrawn;
 	int mNumFrustumCulled;
 	int mNumVisLeaves;
