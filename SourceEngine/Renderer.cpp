@@ -89,6 +89,11 @@ const Map::Leaf *findCameraLeaf(Map *map, const Geo::Vector &position)
 
 void Renderer::renderFace(const Map::Face &face)
 {
+	if(face.plane.normal() * (face.vertices[0] - mPosition)> 0) {
+		mNumFacesCulled++;
+		return;
+	}
+
 	glBindTexture(GL_TEXTURE_2D, face.texture->tex);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
@@ -153,6 +158,7 @@ void Renderer::render()
 	mNumVisLeaves = 0;
 	mNumFrustumCulled = 0;
 	mNumPolysDrawn = 0;
+	mNumFacesCulled = 0;
 
 	if(mUpdateFrustum) {
 		mFrustum = mStartFrustum.rotateY(mPitch);

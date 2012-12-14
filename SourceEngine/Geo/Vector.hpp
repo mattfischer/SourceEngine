@@ -29,6 +29,10 @@ public:
 		return Vector(mX + other.mX, mY + other.mY, mZ + other.mZ);
 	}
 
+	Vector operator-(const Vector &other) const {
+		return Vector(mX - other.mX, mY - other.mY, mZ - other.mZ);
+	}
+
 private:
 	float mX;
 	float mY;

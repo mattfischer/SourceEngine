@@ -48,6 +48,8 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			}
 		}
 
+		const File::BSP::Plane bspPlane = mBSP->plane(bspFace.planeNum);
+		face.plane = Geo::Plane(Geo::Vector(bspPlane.normal.x, bspPlane.normal.y, bspPlane.normal.z), bspPlane.dist);
 		face.texture = &mTextures[texInfo.texdata];
 		face.numVertices = bspFace.numEdges;
 		face.vertices = new Geo::Vector[face.numVertices];

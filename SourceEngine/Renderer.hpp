@@ -24,6 +24,7 @@ public:
 	int numFrustumCulled() { return mNumFrustumCulled; }
 	int numPolysDrawn() { return mNumPolysDrawn; }
 	int numVisLeaves() { return mNumVisLeaves; }
+	int numFacesCulled() { return mNumFacesCulled; }
 
 private:
 
@@ -43,6 +44,8 @@ private:
 	int mNumPolysDrawn;
 	int mNumFrustumCulled;
 	int mNumVisLeaves;
+	int mNumFacesCulled;
+	Geo::Vector mViewVector;
 };
 
 #endif

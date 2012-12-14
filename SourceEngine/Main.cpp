@@ -128,6 +128,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			Console::instance()->printf("NumPolysDrawn: %i", renderer->numPolysDrawn());
 			Console::instance()->printf("NumFrustumCulled: %i", renderer->numFrustumCulled());
 			Console::instance()->printf("NumVisLeaves: %i", renderer->numVisLeaves());
+			Console::instance()->printf("NumFacesCulled: %i", renderer->numFacesCulled());
 			frames = 0;
 			fpsClock = GetTickCount();
 		}

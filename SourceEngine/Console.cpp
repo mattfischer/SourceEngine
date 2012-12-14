@@ -27,6 +27,15 @@ Console::Console()
 void Console::clear()
 {
 	mStart = 0;
+	RECT rect;
+	rect.left = 0;
+	rect.right = WIDTH;
+	rect.top = 0;
+	rect.bottom = HEIGHT;
+	HDC hDC = GetDC(mHWnd);
+	HBRUSH br = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	FillRect(hDC, &rect, br);
+	ReleaseDC(mHWnd, hDC);
 }
 
 void Console::printf(const char *fmt, ...)
