@@ -141,13 +141,16 @@ void Renderer::renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf)
 	}*/
 
 	for(int i=0; i<2; i++) {
-		switch(node->children[i]->type) {
+		int start = node->plane.pointInFront(mPosition) ? 0 : 1;
+		int j = (i + start) % 2;
+
+		switch(node->children[j]->type) {
 			case Map::BSPBase::TypeNode:
-				renderNode((Map::Node*)node->children[i], cameraLeaf);
+				renderNode((Map::Node*)node->children[j], cameraLeaf);
 				break;
 
 			case Map::BSPBase::TypeLeaf:
-				renderLeaf((Map::Leaf*)node->children[i], cameraLeaf);
+				renderLeaf((Map::Leaf*)node->children[j], cameraLeaf);
 				break;
 		}
 	}
