@@ -13,20 +13,25 @@ std::string uppercase(const std::string &str)
 
 std::vector<std::string> splitLines(const std::string &string)
 {
+	return split(string, "\r\n");
+}
+
+std::vector<std::string> split(const std::string &string, const char *chars)
+{
 	std::vector<std::string> strings;
 	size_t start = 0;
 	size_t end = 0;
 	while(end != string.npos) {
-		end = string.find_first_of("\r\n", start);
-		std::string line;
+		end = string.find_first_of(chars, start);
+		std::string substr;
 		if(end == string.npos) {
-			line = string.substr(start);
+			substr = string.substr(start);
 		} else {
-			line = string.substr(start, end - start);
+			substr = string.substr(start, end - start);
 		}
 
-		if(line != "") {
-			strings.push_back(line);
+		if(substr != "") {
+			strings.push_back(substr);
 		}
 		start = end + 1;
 	}

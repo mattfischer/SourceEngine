@@ -157,6 +157,14 @@ BSP::BSP(IReader *reader)
 	readLump(reader, visData, visDataLength, header, LUMP_VISIBILITY);
 	parseVisData(visData, visDataLength);
 	delete[] visData;
+
+	Lump &entityLump = header.lumps[LUMP_ENTITIES];
+	mEntityKeyValue = new KeyValue(reader, entityLump.offset, entityLump.length);
+	mNumEntities = mEntityKeyValue->numSections();
+	mEntities = new Entity[mNumEntities];
+	for(int i=0; i<mNumEntities; i++) {
+		mEntities[i].section = &mEntityKeyValue->section(i);
+	}
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)

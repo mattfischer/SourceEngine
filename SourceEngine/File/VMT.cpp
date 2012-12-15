@@ -20,7 +20,7 @@ VMT *VMT::open(IReaderFactory *factory, const std::string &name)
 }
 
 VMT::VMT(IReader *reader)
-: mKeyValue(reader, reader->size())
+: mKeyValue(reader, 0, reader->size())
 {
 }
 

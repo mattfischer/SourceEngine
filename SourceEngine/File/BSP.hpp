@@ -2,6 +2,7 @@
 #define FILE_BSP_HPP
 
 #include "File/IReaderFactory.hpp"
+#include "File/KeyValue.hpp"
 
 #include <string>
 
@@ -95,6 +96,10 @@ public:
 		int view_height;
 	};
 
+	struct Entity {
+		const KeyValue::Section *section;
+	};
+
 	BSP(IReader *reader);
 
 	int numModels() { return mNumModels; }
@@ -135,6 +140,9 @@ public:
 
 	int numClusters() { return mNumClusters; }
 	bool clusterVisibleFrom(int cameraCluster, int cluster) { return mVisData[cameraCluster][cluster]; }
+
+	int numEntities() { return mNumEntities; }
+	const Entity &entity(int entity) { return mEntities[entity]; }
 
 	static BSP *open(IReaderFactory *factory, const std::string &name);
 
@@ -177,6 +185,10 @@ private:
 
 	bool **mVisData;
 	int mNumClusters;
+
+	KeyValue *mEntityKeyValue;
+	Entity *mEntities;
+	int mNumEntities;
 
 	void parseVisData(unsigned char *visData, int visDataLength);
 };

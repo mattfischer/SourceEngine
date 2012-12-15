@@ -13,7 +13,7 @@ namespace File {
 
 class KeyValue {
 public:
-	KeyValue(IReader *reader, int length);
+	KeyValue(IReader *reader, int offset, int length);
 
 	class Section {
 	public:

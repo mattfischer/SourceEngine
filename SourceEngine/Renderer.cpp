@@ -21,9 +21,27 @@ Renderer::Renderer(Map *map, int width, int height)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
-	mPosition = Geo::Vector(-8674, 1773, 37);
-	mYaw = -90;
-	mPitch = 0;
+
+	for(int i=0; i<mMap->bsp()->numEntities(); i++) {
+		const File::BSP::Entity &entity = mMap->bsp()->entity(i);
+		if(entity.section->hasParameter("classname") && entity.section->parameter("classname") == "info_player_start") {
+			const std::string &position = entity.section->parameter("origin");
+			std::vector<std::string> posParts = StringUtils::split(position, " ");
+			float x = atof(posParts[0].c_str());
+			float y = atof(posParts[1].c_str());
+			float z = atof(posParts[2].c_str());
+			mPosition = Geo::Vector(x, y, z + 60);
+
+			const std::string &rotation = entity.section->parameter("angles");
+			std::vector<std::string> rotParts = StringUtils::split(rotation, " ");
+			float pitch = atof(rotParts[0].c_str());
+			float yaw = atof(rotParts[1].c_str());
+			float roll = atof(rotParts[2].c_str());
+
+			mPitch = pitch;
+			mYaw = yaw;
+		}
+	}
 
 	mStartFrustum = Geo::Frustum(60, (float)width / (float)height);
 

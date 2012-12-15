@@ -7,6 +7,7 @@
 namespace StringUtils {
 
 std::string uppercase(const std::string &string);
+std::vector<std::string> split(const std::string &string, const char *chars);
 std::vector<std::string> splitLines(const std::string &string);
 std::string trimSpaces(const std::string &string);
 

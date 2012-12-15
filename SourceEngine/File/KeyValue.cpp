@@ -4,9 +4,10 @@
 
 namespace File {
 
-KeyValue::KeyValue(IReader *reader, int length)
+KeyValue::KeyValue(IReader *reader, int offset, int length)
 {
 	char *buffer = new char[length + 1];
+	reader->seek(offset);
 	reader->read(buffer, length);
 	buffer[length] = '\0';
 
