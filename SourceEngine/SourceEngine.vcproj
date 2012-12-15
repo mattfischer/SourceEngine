@@ -201,6 +201,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\File\KeyValue.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\File\MultiReaderFactory.cpp"
 					>
 				</File>
@@ -272,6 +276,10 @@
 				</File>
 				<File
 					RelativePath=".\File\IReaderFactory.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\KeyValue.hpp"
 					>
 				</File>
 				<File
