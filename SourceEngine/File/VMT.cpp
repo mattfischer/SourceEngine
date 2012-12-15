@@ -29,6 +29,11 @@ const std::string &VMT::shader()
 	return mKeyValue.section(0).title();
 }
 
+bool VMT::hasParameter(const std::string &parameter)
+{
+	return mKeyValue.section(0).hasParameter(parameter);
+}
+
 const std::string &VMT::parameter(const std::string &parameter)
 {
 	return mKeyValue.section(0).parameter(parameter);

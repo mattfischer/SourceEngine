@@ -55,7 +55,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				File::MultiReaderFactory *factory = new File::MultiReaderFactory();
 				factory->addFactory(new File::FileReaderFactory("portal2"));
 				factory->addFactory(new File::VPKReaderFactory("portal2/pak01_dir.vpk"));
-				Map *map = new Map(factory, "sp_a1_intro1");
+				Map *map = new Map(factory, "sp_a1_intro3");
 				renderer = new Renderer(map, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 				return 0;
@@ -144,19 +144,27 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
 
 		float moveScale = 0.1f;
-		if(KEY_DOWN(VK_UP)) {
+		if(KEY_DOWN('W')) {
 			renderer->move(1);
 		}
 
-		if(KEY_DOWN(VK_DOWN)) {
+		if(KEY_DOWN('S')) {
 			renderer->move(-1);
 		}
 
 		if(KEY_DOWN('A')) {
-			renderer->rise(1);
+			renderer->strafe(-1);
+		}
+
+		if(KEY_DOWN('D')) {
+			renderer->strafe(1);
 		}
 
 		if(KEY_DOWN('Z')) {
+			renderer->rise(1);
+		}
+
+		if(KEY_DOWN('X')) {
 			renderer->rise(-1);
 		}
 

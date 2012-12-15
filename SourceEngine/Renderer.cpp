@@ -79,6 +79,15 @@ void Renderer::move(int amount)
 	mPosition = mPosition + speed * amount * delta;
 };
 
+void Renderer::strafe(int amount)
+{
+	float speed = 30;
+	float angleRad = (mYaw - 90) * 3.14f / 180;
+
+	Geo::Vector delta(cosf(angleRad), sinf(angleRad), 0);
+	mPosition = mPosition + speed * amount * delta;
+};
+
 void Renderer::rise(int amount)
 {
 	float speed = 30;

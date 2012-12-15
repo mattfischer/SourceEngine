@@ -16,6 +16,7 @@ public:
 
 	void rotate(int yaw, int pitch);
 	void move(int amount);
+	void strafe(int amount);
 	void rise(int amount);
 
 	void frustumCull(bool cull) { mFrustumCull = cull; }

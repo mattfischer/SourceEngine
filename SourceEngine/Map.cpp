@@ -16,7 +16,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 		mTextures[i].vtf = 0;
 		File::VMT *vmt = File::VMT::open(factory, materialFilename);
-		if(vmt) {
+		if(vmt && vmt->hasParameter("$basetexture")) {
 			const std::string &textureFilename = vmt->parameter("$basetexture");
 			File::VTF *vtf = File::VTF::open(factory, textureFilename);
 			delete vmt;
