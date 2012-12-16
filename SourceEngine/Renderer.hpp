@@ -22,6 +22,7 @@ public:
 	void frustumCull(bool cull) { mFrustumCull = cull; }
 	void updateFrustum(bool update) { mUpdateFrustum = update; }
 	void texture(bool texture) { mTexture = texture; }
+	void light(bool light) { mLight = light; }
 
 	int numFrustumCulled() { return mNumFrustumCulled; }
 	int numPolysDrawn() { return mNumPolysDrawn; }
@@ -44,6 +45,7 @@ private:
 	bool mFrustumCull;
 	bool mUpdateFrustum;
 	bool mTexture;
+	bool mLight;
 	int mNumPolysDrawn;
 	int mNumFrustumCulled;
 	int mNumVisLeaves;

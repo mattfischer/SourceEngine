@@ -29,6 +29,12 @@ public:
 		Geo::Vector *vertices;
 		float textureVertices[2][4];
 		Texture *texture;
+		GLuint lightMap;
+		float lightMapVertices[2][4];
+		float lightMapWidth;
+		float lightMapHeight;
+		float lightMapMinU;
+		float lightMapMinV;
 	};
 
 	struct BSPBase {

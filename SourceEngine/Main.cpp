@@ -160,15 +160,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			renderer->strafe(1);
 		}
 
-		if(KEY_DOWN('Z')) {
-			renderer->rise(1);
-		}
-
-		if(KEY_DOWN('X')) {
+		if(KEY_DOWN('C')) {
 			renderer->rise(-1);
 		}
 
-		if(KEY_DOWN('C')) {
+		if(KEY_DOWN('X')) {
+			renderer->rise(1);
+		}
+
+		if(KEY_DOWN('F')) {
 			renderer->frustumCull(false);
 		} else {
 			renderer->frustumCull(true);
@@ -184,6 +184,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			renderer->texture(false);
 		} else {
 			renderer->texture(true);
+		}
+
+		if(KEY_DOWN('L')) {
+			renderer->light(false);
+		} else {
+			renderer->light(true);
 		}
 
 		if(KEY_DOWN(VK_ESCAPE)) {

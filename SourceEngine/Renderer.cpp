@@ -21,7 +21,9 @@ Renderer::Renderer(Map *map, int width, int height)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
 
+	glDepthFunc(GL_LEQUAL);
 	for(int i=0; i<mMap->bsp()->numEntities(); i++) {
 		const File::BSP::Entity &entity = mMap->bsp()->entity(i);
 		if(entity.section->hasParameter("classname") && entity.section->parameter("classname") == "info_player_start") {
@@ -47,6 +49,7 @@ Renderer::Renderer(Map *map, int width, int height)
 
 	mFrustumCull = false;
 	mUpdateFrustum = true;
+	mLight = true;
 }
 
 void Renderer::rotate(int yaw, int pitch)
@@ -121,6 +124,7 @@ void Renderer::renderFace(const Map::Face &face)
 		return;
 	}
 
+	glBlendFunc(GL_ONE, GL_ZERO);
 	if(mTexture) {
 		glBindTexture(GL_TEXTURE_2D, face.texture->tex);
 		glColor3f(1.0f, 1.0f, 1.0f);
@@ -138,10 +142,33 @@ void Renderer::renderFace(const Map::Face &face)
 		if(face.texture->vtf) {
 			glTexCoord2f(s / face.texture->vtf->width(), t / face.texture->vtf->height());
 		}
+
 		glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
 	}
-	mNumPolysDrawn++;
 	glEnd();
+
+	if(mLight) {
+		glBindTexture(GL_TEXTURE_2D, face.lightMap);
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+		glBegin(GL_POLYGON);
+		for(int j=0; j<face.numVertices; j++) {
+			Geo::Vector &vertex = face.vertices[j];
+
+			float s = face.lightMapVertices[0][0] * vertex.x() + face.lightMapVertices[0][1] * vertex.y() + face.lightMapVertices[0][2] * vertex.z() + face.lightMapVertices[0][3];
+			float t = face.lightMapVertices[1][0] * vertex.x() + face.lightMapVertices[1][1] * vertex.y() + face.lightMapVertices[1][2] * vertex.z() + face.lightMapVertices[1][3];
+
+			s -= face.lightMapMinU;
+			t -= face.lightMapMinV;
+			glTexCoord2f(s / face.lightMapWidth, t / face.lightMapHeight);
+
+			glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
+		}
+		glEnd();
+	}
+
+	mNumPolysDrawn++;
 }
 
 void Renderer::renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf)
