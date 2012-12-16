@@ -144,6 +144,8 @@ public:
 	int numEntities() { return mNumEntities; }
 	const Entity &entity(int entity) { return mEntities[entity]; }
 
+	const unsigned char *lighting(int offset) { return mLighting + offset; }
+
 	static BSP *open(IReaderFactory *factory, const std::string &name);
 
 private:
@@ -189,6 +191,8 @@ private:
 	KeyValue *mEntityKeyValue;
 	Entity *mEntities;
 	int mNumEntities;
+
+	unsigned char *mLighting;
 
 	void parseVisData(unsigned char *visData, int visDataLength);
 };

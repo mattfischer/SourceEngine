@@ -130,7 +130,7 @@ BSP::BSP(IReader *reader)
 	readLump(reader, mLeaves, mNumLeaves, header, LUMP_LEAFS);
 	readLump(reader, mEdges, mNumEdges, header, LUMP_EDGES);
 	readLump(reader, mSurfEdges, mNumSurfEdges, header, LUMP_SURFEDGES);
-	readLump(reader, mFaces, mNumFaces, header, LUMP_FACES);
+	readLump(reader, mFaces, mNumFaces, header, LUMP_FACES_HDR);
 	readLump(reader, mModels, mNumModels, header, LUMP_MODELS);
 	readLump(reader, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
 	readLump(reader, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
@@ -165,6 +165,11 @@ BSP::BSP(IReader *reader)
 	for(int i=0; i<mNumEntities; i++) {
 		mEntities[i].section = &mEntityKeyValue->section(i);
 	}
+
+	Lump &lightingLump = header.lumps[LUMP_LIGHTING_HDR];
+	mLighting = new unsigned char[lightingLump.length];
+	reader->seek(lightingLump.offset);
+	reader->read((char*)mLighting, lightingLump.length);
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)
