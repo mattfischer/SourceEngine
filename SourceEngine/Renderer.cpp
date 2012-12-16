@@ -17,7 +17,7 @@ Renderer::Renderer(Map *map, int width, int height)
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glLoadIdentity();
 	float scale = 10;
-	gluPerspective(60, (float)width / (float)height, 50, 10000);
+	gluPerspective(70, (float)width / (float)height, 50, 10000);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
@@ -45,7 +45,7 @@ Renderer::Renderer(Map *map, int width, int height)
 		}
 	}
 
-	mStartFrustum = Geo::Frustum(60, (float)width / (float)height);
+	mStartFrustum = Geo::Frustum(70, (float)width / (float)height);
 
 	mFrustumCull = false;
 	mUpdateFrustum = true;
