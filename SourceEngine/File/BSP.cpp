@@ -95,7 +95,7 @@ struct Header {
     int revision;
 };
 
-template <typename T> void readLump(IReader *reader, T *&list, int &num, const Header &header, int lumpNum)
+template <typename T> void readLump(IReader *reader, T *&list, size_t &num, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
 
@@ -137,15 +137,15 @@ BSP::BSP(IReader *reader)
 	readLump(reader, mLeafFaces, mNumLeafFaces, header, LUMP_LEAFFACES);
 
 	int *stringTable;
-	int stringTableLength;
+	unsigned int stringTableLength;
 	readLump(reader, stringTable, stringTableLength, header, LUMP_TEXDATA_STRING_TABLE);
 
 	char *stringData;
-	int stringDataLength;
+	unsigned int stringDataLength;
 	readLump(reader, stringData, stringDataLength, header, LUMP_TEXDATA_STRING_DATA);
 
 	mTexDataStringTable = new std::string[stringTableLength];
-	for(int i=0; i<stringTableLength; i++) {
+	for(unsigned int i=0; i<stringTableLength; i++) {
 		mTexDataStringTable[i] = std::string(&stringData[stringTable[i]]);
 	}
 
@@ -153,7 +153,7 @@ BSP::BSP(IReader *reader)
 	delete[] stringTable;
 
 	unsigned char *visData;
-	int visDataLength;
+	unsigned int visDataLength;
 	readLump(reader, visData, visDataLength, header, LUMP_VISIBILITY);
 	parseVisData(visData, visDataLength);
 	delete[] visData;
@@ -162,7 +162,7 @@ BSP::BSP(IReader *reader)
 	mEntityKeyValue = new KeyValue(reader, entityLump.offset, entityLump.length);
 	mNumEntities = mEntityKeyValue->numSections();
 	mEntities = new Entity[mNumEntities];
-	for(int i=0; i<mNumEntities; i++) {
+	for(unsigned int i=0; i<mNumEntities; i++) {
 		mEntities[i].section = &mEntityKeyValue->section(i);
 	}
 
@@ -178,11 +178,11 @@ void BSP::parseVisData(unsigned char *visData, int visDataLength)
 	int *offsets = (int*)visData + 1;
 
 	mVisData = new bool*[mNumClusters];
-	for(int i=0; i<mNumClusters; i++) {
+	for(unsigned int i=0; i<mNumClusters; i++) {
 		int offset = offsets[i*2];
 
 		mVisData[i] = new bool[mNumClusters];
-		int cluster = 0;
+		unsigned int cluster = 0;
 		while(cluster < mNumClusters) {
 			unsigned char byte = visData[offset];
 			if(byte == 0) {

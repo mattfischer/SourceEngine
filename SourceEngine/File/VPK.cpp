@@ -87,14 +87,14 @@ VPK::VPK(const std::string &filename)
 		if(ext == "") {
 			break;
 		}
-		PathMap &pathMap = mDirectory[ext];
+		PathMap &pathMap = mDirectory.map[ext];
 
 		while(1) {
 			std::string path = StringUtils::uppercase(readString(file));
 			if(path == "") {
 				break;
 			}
-			FileMap &fileMap = pathMap[path];
+			FileMap &fileMap = pathMap.map[path];
 
 			while(1) {
 				std::string filename = StringUtils::uppercase(readString(file));
@@ -102,7 +102,7 @@ VPK::VPK(const std::string &filename)
 					break;
 				}
 				list << path << "/" << filename << "." << ext << std::endl;
-				FileInfo &info = fileMap[filename];
+				FileInfo &info = fileMap.map[filename];
 
 				DirectoryEntry entry;
 				file.read((char*)&entry, sizeof(entry));
@@ -154,17 +154,17 @@ bool VPK::exists(const std::string &name)
 	std::string ext, path, filename;
 	splitPath(name, ext, path, filename);
 
-	if(mDirectory.find(ext) == mDirectory.end()) {
+	if(mDirectory.map.find(ext) == mDirectory.map.end()) {
 		return false;
 	}
 
-	PathMap &pathMap = mDirectory[ext];
-	if(pathMap.find(path) == pathMap.end()) {
+	PathMap &pathMap = mDirectory.map[ext];
+	if(pathMap.map.find(path) == pathMap.map.end()) {
 		return false;
 	}
 
-	FileMap &fileMap = pathMap[path];
-	if(fileMap.find(filename) == fileMap.end()) {
+	FileMap &fileMap = pathMap.map[path];
+	if(fileMap.map.find(filename) == fileMap.map.end()) {
 		return false;
 	}
 
@@ -178,7 +178,7 @@ VPK::FileInfo &VPK::lookup(const std::string &name)
 		std::string ext, path, filename;
 		splitPath(name, ext, path, filename);
 
-		return mDirectory[ext][path][filename];
+		return mDirectory.map[ext].map[path].map[filename];
 	} else {
 		return emptyInfo;
 	}

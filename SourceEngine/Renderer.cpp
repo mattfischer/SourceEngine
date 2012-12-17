@@ -24,21 +24,21 @@ Renderer::Renderer(Map *map, int width, int height)
 	glEnable(GL_BLEND);
 
 	glDepthFunc(GL_LEQUAL);
-	for(int i=0; i<mMap->bsp()->numEntities(); i++) {
+	for(unsigned int i=0; i<mMap->bsp()->numEntities(); i++) {
 		const File::BSP::Entity &entity = mMap->bsp()->entity(i);
 		if(entity.section->hasParameter("classname") && entity.section->parameter("classname") == "info_player_start") {
 			const std::string &position = entity.section->parameter("origin");
 			std::vector<std::string> posParts = StringUtils::split(position, " ");
-			float x = atof(posParts[0].c_str());
-			float y = atof(posParts[1].c_str());
-			float z = atof(posParts[2].c_str());
+			float x = (float)atof(posParts[0].c_str());
+			float y = (float)atof(posParts[1].c_str());
+			float z = (float)atof(posParts[2].c_str());
 			mPosition = Geo::Point(x, y, z + 60);
 
 			const std::string &rotation = entity.section->parameter("angles");
 			std::vector<std::string> rotParts = StringUtils::split(rotation, " ");
-			float pitch = atof(rotParts[0].c_str());
-			float yaw = atof(rotParts[1].c_str());
-			float roll = atof(rotParts[2].c_str());
+			float pitch = (float)atof(rotParts[0].c_str());
+			float yaw = (float)atof(rotParts[1].c_str());
+			float roll = (float)atof(rotParts[2].c_str());
 
 			mPitch = pitch;
 			mYaw = yaw;

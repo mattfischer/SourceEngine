@@ -24,9 +24,18 @@ public:
 	std::string getArchiveName(unsigned short index, int &startOffset);
 
 private:
-	typedef std::map<std::string, FileInfo> FileMap;
-	typedef std::map<std::string, FileMap> PathMap;
-	typedef std::map<std::string, PathMap> ExtMap;
+	struct FileMap {
+		std::map<std::string, FileInfo> map;
+	};
+
+	struct PathMap {
+		std::map<std::string, FileMap> map;
+	};
+
+	struct ExtMap {
+		std::map<std::string, PathMap> map;
+	};
+
 	ExtMap mDirectory;
 	std::string mFilename;
 	int mDataStart;

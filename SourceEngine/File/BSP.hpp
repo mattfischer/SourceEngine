@@ -102,46 +102,46 @@ public:
 
 	BSP(IReader *reader);
 
-	int numModels() { return mNumModels; }
+	size_t numModels() { return mNumModels; }
 	const Model &model(int model) { return mModels[model]; }
 
-	int numFaces() { return mNumFaces; }
+	size_t numFaces() { return mNumFaces; }
 	const Face &face(int face) { return mFaces[face]; }
 
-	int numTexInfos() { return mNumTexInfos; }
+	size_t numTexInfos() { return mNumTexInfos; }
 	const TexInfo &texInfo(int texInfo) { return mTexInfos[texInfo]; }
 
-	int numTexDatas() { return mNumTexDatas; }
+	size_t numTexDatas() { return mNumTexDatas; }
 	const TexData &texData(int texData) { return mTexDatas[texData]; }
 
-	int numEdges() { return mNumEdges; }
+	size_t numEdges() { return mNumEdges; }
 	const Edge &edge(int edge) { return mEdges[edge]; }
 
-	int numVertices() { return mNumVertices; }
+	size_t numVertices() { return mNumVertices; }
 	const Vector &vertex(int vertex) { return mVertices[vertex]; }
 
-	int numSurfEdges() { return mNumSurfEdges; }
+	size_t numSurfEdges() { return mNumSurfEdges; }
 	const int surfEdge(int surfEdge) { return mSurfEdges[surfEdge]; }
 
-	int numTexDataStrings() { return mNumTexDataStrings; }
+	size_t numTexDataStrings() { return mNumTexDataStrings; }
 	const std::string &texDataString(int texDataString) { return mTexDataStringTable[texDataString]; }
 
-	int numNodes() { return mNumNodes; }
+	size_t numNodes() { return mNumNodes; }
 	const Node &node(int node) { return mNodes[node]; }
 
-	int numLeaves() { return mNumLeaves; }
+	size_t numLeaves() { return mNumLeaves; }
 	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
 
-	int numPlanes() { return mNumPlanes; }
+	size_t numPlanes() { return mNumPlanes; }
 	const Plane &plane(int plane) { return mPlanes[plane]; }
 
-	int numLeafFaces() { return mNumLeafFaces; }
+	size_t numLeafFaces() { return mNumLeafFaces; }
 	const unsigned short leafFace(int leafFace) { return mLeafFaces[leafFace]; }
 
-	int numClusters() { return mNumClusters; }
+	size_t numClusters() { return mNumClusters; }
 	bool clusterVisibleFrom(int cameraCluster, int cluster) { return mVisData[cameraCluster][cluster]; }
 
-	int numEntities() { return mNumEntities; }
+	size_t numEntities() { return mNumEntities; }
 	const Entity &entity(int entity) { return mEntities[entity]; }
 
 	const unsigned char *lighting(int offset) { return mLighting + offset; }
@@ -149,48 +149,48 @@ public:
 	static BSP *open(IReaderFactory *factory, const std::string &name);
 
 private:
-	int mNumModels;
+	size_t mNumModels;
 	Model *mModels;
 
-	int mNumFaces;
+	size_t mNumFaces;
 	Face *mFaces;
 
-	int mNumTexInfos;
+	size_t mNumTexInfos;
 	TexInfo *mTexInfos;
 
-	int mNumTexDatas;
+	size_t mNumTexDatas;
 	TexData *mTexDatas;
 
-	int mNumEdges;
+	size_t mNumEdges;
 	Edge *mEdges;
 
-	int mNumVertices;
+	size_t mNumVertices;
 	Vector *mVertices;
 
-	int mNumSurfEdges;
+	size_t mNumSurfEdges;
 	int *mSurfEdges;
 
-	int mNumTexDataStrings;
+	size_t mNumTexDataStrings;
 	std::string *mTexDataStringTable;
 
-	int mNumNodes;
+	size_t mNumNodes;
 	Node *mNodes;
 
-	int mNumLeaves;
+	size_t mNumLeaves;
 	Leaf *mLeaves;
 
-	int mNumPlanes;
+	size_t mNumPlanes;
 	Plane *mPlanes;
 
-	int mNumLeafFaces;
+	size_t mNumLeafFaces;
 	unsigned short *mLeafFaces;
 
 	bool **mVisData;
-	int mNumClusters;
+	size_t mNumClusters;
 
 	KeyValue *mEntityKeyValue;
 	Entity *mEntities;
-	int mNumEntities;
+	size_t mNumEntities;
 
 	unsigned char *mLighting;
 

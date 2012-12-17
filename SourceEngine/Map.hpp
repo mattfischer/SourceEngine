@@ -31,10 +31,10 @@ public:
 		Texture *texture;
 		GLuint lightMap;
 		float lightMapVertices[2][4];
-		float lightMapWidth;
-		float lightMapHeight;
-		float lightMapMinU;
-		float lightMapMinV;
+		int lightMapWidth;
+		int lightMapHeight;
+		int lightMapMinU;
+		int lightMapMinV;
 	};
 
 	struct BSPBase {
@@ -66,7 +66,7 @@ public:
 	};
 
 	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
-	int numLeaves() { return mNumLeaves; }
+	size_t numLeaves() { return mNumLeaves; }
 
 	Node *rootNode();
 	File::BSP *bsp() { return mBSP; }
@@ -75,16 +75,16 @@ private:
 	File::BSP *mBSP;
 
 	Face *mFaces;
-	int mNumFaces;
+	size_t mNumFaces;
 
 	Texture *mTextures;
-	int mNumTextures;
+	size_t mNumTextures;
 
 	Node *mNodes;
-	int mNumNodes;
+	size_t mNumNodes;
 
 	Leaf *mLeaves;
-	int mNumLeaves;
+	size_t mNumLeaves;
 };
 
 #endif

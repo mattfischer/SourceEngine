@@ -45,7 +45,7 @@ void Console::printf(const char *fmt, ...)
 
 	va_start(va, fmt);
 
-	vsprintf(buffer, fmt, va);
+	vsprintf_s(buffer, sizeof(buffer), fmt, va);
 
 	RECT rect;
 	rect.left = 0;

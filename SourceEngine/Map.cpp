@@ -12,7 +12,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 	mNumTextures = mBSP->numTexDatas();
 	mTextures = new Texture[mNumTextures];
-	for(int i=0; i<mNumTextures; i++) {
+	for(unsigned int i=0; i<mNumTextures; i++) {
 		const File::BSP::TexData &texData = mBSP->texData(i);
 		const std::string &materialFilename = mBSP->texDataString(texData.nameStringTableID);
 
@@ -39,7 +39,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 	mNumFaces = mBSP->numFaces();
 	mFaces = new Face[mNumFaces];
-	for(int i=0; i<mNumFaces; i++) {
+	for(unsigned int i=0; i<mNumFaces; i++) {
 		const File::BSP::Face &bspFace = mBSP->face(i);
 		const File::BSP::TexInfo &texInfo = mBSP->texInfo(bspFace.texInfo);
 		Face &face = mFaces[i];
@@ -123,7 +123,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 	mNumLeaves = mBSP->numLeaves();
 	mLeaves = new Leaf[mNumLeaves];
-	for(int i=0; i<mNumLeaves; i++) {
+	for(unsigned int i=0; i<mNumLeaves; i++) {
 		const File::BSP::Leaf &bspLeaf = mBSP->leaf(i);
 		Leaf &leaf = mLeaves[i];
 
@@ -142,7 +142,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			leaf.visibleLeaves = 0;
 		} else {
 			leaf.visibleLeaves = new bool[mBSP->numClusters()];
-			for(int j=0; j<mBSP->numClusters(); j++) {
+			for(unsigned int j=0; j<mBSP->numClusters(); j++) {
 				leaf.visibleLeaves[j] = mBSP->clusterVisibleFrom(bspLeaf.cluster, j);
 			}
 		}
@@ -150,7 +150,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 
 	mNumNodes = mBSP->numNodes();
 	mNodes = new Node[mNumNodes];
-	for(int i=0; i<mNumNodes; i++) {
+	for(unsigned int i=0; i<mNumNodes; i++) {
 		const File::BSP::Node &bspNode = mBSP->node(i);
 		Node &node = mNodes[i];
 
