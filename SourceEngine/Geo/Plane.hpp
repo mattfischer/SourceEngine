@@ -3,6 +3,7 @@
 
 #include "Geo/Vector.hpp"
 #include "Geo/Point.hpp"
+#include "Geo/Transformation.hpp"
 
 namespace Geo {
 
@@ -32,6 +33,13 @@ public:
 		mElements[3] = -distance;
 	}
 
+	Plane(const float elements[4])
+	{
+		for(int i=0; i<4; i++) {
+			mElements[i] = elements[i];
+		}
+	}
+
 	Plane(const Plane &other)
 	{
 		for(int i=0; i<4; i++) {
@@ -48,6 +56,8 @@ public:
 		return *this;
 	}
 
+	float operator() (int n) const { return mElements[n]; }
+
 	Vector normal() const { return Vector(mElements[0], mElements[1], mElements[2]); }
 	float distance() const { return -mElements[3]; }
 
@@ -59,6 +69,25 @@ public:
 private:
 	float mElements[4];
 };
+
+static Plane operator*(const Plane &plane, const Matrix &matrix)
+{
+	float elements[4];
+
+	for(int i=0; i<4; i++) {
+		elements[i] = 0;
+		for(int j=0; j<4; j++) {
+			elements[i] += plane(j) * matrix(j, i);
+		}
+	}
+
+	return Plane(elements);
+}
+
+static Plane operator*(const Plane &plane, const Transformation &transformation)
+{
+	return plane * transformation.inverse();
+}
 
 }
 #endif

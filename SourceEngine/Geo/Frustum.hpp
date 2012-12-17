@@ -3,6 +3,7 @@
 
 #include "Geo/Plane.hpp"
 #include "Geo/Box.hpp"
+#include "Geo/Transformation.hpp"
 
 namespace Geo {
 
@@ -10,17 +11,30 @@ class Frustum {
 public:
 	Frustum() {}
 	Frustum(float hfov, float aspectRatio);
-	Frustum(const Plane planes[4]);
+	Frustum(const Plane planes[4])
+	{
+		for(int i=0; i<4; i++) {
+			mPlanes[i] = planes[i];
+		}
+	}
 
-	Frustum rotateY(float angle);
-	Frustum rotateZ(float angle);
-	Frustum translate(const Vector &disp);
+	const Plane &plane(int n) const { return mPlanes[n]; }
 
 	bool boxOutside(const Box &box) const;
 
 private:
 	Plane mPlanes[4];
 };
+
+static Frustum operator*(const Frustum &frustum, const Transformation &transformation)
+{
+	Plane planes[4];
+	for(int i=0; i<4; i++) {
+		planes[i] = frustum.plane(i) * transformation;
+	}
+
+	return Frustum(planes);
+}
 
 }
 #endif

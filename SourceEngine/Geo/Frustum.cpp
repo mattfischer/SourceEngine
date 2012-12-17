@@ -19,56 +19,6 @@ Frustum::Frustum(float hfov, float aspectRatio)
 	mPlanes[3] = Plane(Vector(sinf(vFovRad), 0, -cosf(vFovRad)), 0);
 }
 
-Frustum::Frustum(const Plane planes[4])
-{
-	for(int i=0; i<4; i++) {
-		mPlanes[i] = planes[i];
-	}
-}
-
-Frustum Frustum::rotateY(float angle)
-{
-	float anglef = angle * 3.14f / 180.0f;
-	float cos = cosf(anglef);
-	float sin = sinf(anglef);
-	Plane planes[4];
-
-	for(int i=0; i<4; i++) {
-		const Vector &normal = mPlanes[i].normal();
-		const Vector newNormal(normal.x() * cos + normal.z() * sin, normal.y(), normal.z() * cos - normal.x() * sin);
-		planes[i] = Plane(newNormal, mPlanes[i].distance());
-	}
-
-	return Frustum(planes);
-}
-
-Frustum Frustum::rotateZ(float angle)
-{
-	float anglef = angle * 3.14f / 180.0f;
-	float cos = cosf(anglef);
-	float sin = sinf(anglef);
-	Plane planes[4];
-
-	for(int i=0; i<4; i++) {
-		const Vector &normal = mPlanes[i].normal();
-		const Vector newNormal(normal.x() * cos - normal.y() * sin, normal.x() * sin + normal.y() * cos, normal.z());
-		planes[i] = Plane(newNormal, mPlanes[i].distance());
-	}
-
-	return Frustum(planes);
-}
-
-Frustum Frustum::translate(const Vector &disp)
-{
-	Plane planes[4];
-	for(int i=0; i<4; i++) {
-		float distance = mPlanes[i].distance() + disp * mPlanes[i].normal();
-		planes[i] = Plane(mPlanes[i].normal(), distance);
-	}
-
-	return Frustum(planes);
-}
-
 bool Frustum::boxOutside(const Box &box) const
 {
 	bool outside;

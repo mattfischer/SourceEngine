@@ -3,11 +3,11 @@
 #include "File/VMT.hpp"
 #include "File/VTF.hpp"
 
+#include "Geo/Transformation.hpp"
+
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-
-#include <math.h>
 
 Renderer::Renderer(Map *map, int width, int height)
 {
@@ -76,18 +76,18 @@ void Renderer::rotate(int yaw, int pitch)
 void Renderer::move(int amount)
 {
 	float speed = 30;
-	float angleRad = mYaw * 3.14f / 180;
 
-	Geo::Vector delta(cosf(angleRad), sinf(angleRad), 0);
+	Geo::Vector delta(1, 0, 0);
+	delta = Geo::Transformation::rotateZ(mYaw) * delta;
 	mPosition = mPosition + speed * amount * delta;
 };
 
 void Renderer::strafe(int amount)
 {
 	float speed = 30;
-	float angleRad = (mYaw - 90) * 3.14f / 180;
 
-	Geo::Vector delta(cosf(angleRad), sinf(angleRad), 0);
+	Geo::Vector delta(0, -1, 0);
+	delta = Geo::Transformation::rotateZ(mYaw) * delta;
 	mPosition = mPosition + speed * amount * delta;
 };
 
@@ -224,14 +224,16 @@ void Renderer::render()
 	mNumFacesCulled = 0;
 
 	if(mUpdateFrustum) {
-		mFrustum = mStartFrustum.rotateY(mPitch);
-		mFrustum = mFrustum.rotateZ(mYaw);
-		mFrustum = mFrustum.translate(mPosition);
+		Geo::Transformation transformation = Geo::Transformation::translate(mPosition);
+		transformation = transformation * Geo::Transformation::rotateZ(mYaw);
+		transformation = transformation * Geo::Transformation::rotateY(-mPitch);
+
+		mFrustum = mStartFrustum * transformation;
 	}
 
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
-	glRotatef(mPitch, 1, 0, 0);
+	glRotatef(-mPitch, 1, 0, 0);
 	glRotatef(-mYaw, 0, 1, 0);
 	glTranslatef(mPosition.y(), -mPosition.z(), mPosition.x());
 

@@ -138,7 +138,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		POINT point;
 		GetCursorPos(&point);
-		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2), ((int)point.y - SCREEN_HEIGHT/2));
+		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2), -((int)point.y - SCREEN_HEIGHT/2));
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)

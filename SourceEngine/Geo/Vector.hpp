@@ -1,6 +1,9 @@
 #ifndef GEO_VECTOR_HPP
 #define GEO_VECTOR_HPP
 
+#include "Geo/Matrix.hpp"
+#include "Geo/Transformation.hpp"
+
 namespace Geo {
 
 class Vector {
@@ -19,6 +22,13 @@ public:
 		mElements[2] = z;
 	}
 
+	Vector(const float elements[3])
+	{
+		for(int i=0; i<3; i++) {
+			mElements[i] = elements[i];
+		}
+	}
+
 	Vector(const Vector &other)
 	{
 		for(int i=0; i<3; i++) {
@@ -35,6 +45,7 @@ public:
 		return *this;
 	}
 
+	float operator() (int n) const { return mElements[n]; }
 	float x() const { return mElements[0]; }
 	float y() const { return mElements[1]; }
 	float z() const { return mElements[2]; }
@@ -66,6 +77,25 @@ private:
 static Vector operator*(float a, const Vector &vector)
 {
 	return vector * a;
+}
+
+static Vector operator*(const Matrix &matrix, const Vector &point)
+{
+	float elements[3];
+
+	for(int i=0; i<3; i++) {
+		elements[i] = 0;
+		for(int j=0; j<3; j++) {
+			elements[i] += matrix(i, j) * point(j);
+		}
+	}
+
+	return Vector(elements);
+}
+
+static Vector operator*(const Transformation &transformation, const Vector &vector)
+{
+	return transformation.matrix() * vector;
 }
 
 }

@@ -232,6 +232,10 @@
 					RelativePath=".\Geo\Frustum.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Geo\Transformation.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -315,11 +319,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Geo\Matrix.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Plane.hpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Geo\Point.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Geo\Transformation.hpp"
 					>
 				</File>
 				<File

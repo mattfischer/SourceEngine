@@ -2,6 +2,8 @@
 #define GEO_POINT_HPP
 
 #include "Geo/Vector.hpp"
+#include "Geo/Matrix.hpp"
+#include "Geo/Transformation.hpp"
 
 namespace Geo {
 
@@ -19,6 +21,13 @@ public:
 		mElements[0] = x;
 		mElements[1] = y;
 		mElements[2] = z;
+	}
+
+	Point(const float elements[3])
+	{
+		for(int i=0; i<3; i++) {
+			mElements[i] = elements[i];
+		}
 	}
 
 	Point(const Point &other)
@@ -42,6 +51,7 @@ public:
 		return Vector(x(), y(), z());
 	}
 
+	float operator() (int n) const { return mElements[n]; }
 	float x() const { return mElements[0]; }
 	float y() const { return mElements[1]; }
 	float z() const { return mElements[2]; }
@@ -63,6 +73,25 @@ private:
 static Point operator+(const Vector &vector, const Point &point)
 {
 	return point + vector;
+}
+
+static Point operator*(const Matrix &matrix, const Point &point)
+{
+	float elements[3];
+
+	for(int i=0; i<3; i++) {
+		elements[i] = matrix(i, 3);
+		for(int j=0; j<3; j++) {
+			elements[i] += matrix(i, j) * point(j);
+		}
+	}
+
+	return Point(elements);
+}
+
+static Point operator*(const Transformation &transformation, const Point &point)
+{
+	return transformation.matrix() * point;
 }
 
 }
