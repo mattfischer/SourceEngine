@@ -1,5 +1,7 @@
 #include "Geo/Frustum.hpp"
 
+#include "Geo/Point.hpp"
+
 #include <math.h>
 
 namespace Geo {
@@ -79,7 +81,7 @@ bool Frustum::boxOutside(const Box &box) const
 			float y = (j&2) ? box.minPoint().y() : box.maxPoint().y();
 			float z = (j&4) ? box.minPoint().z() : box.maxPoint().z();
 
-			Vector point(x, y, z);
+			Point point(x, y, z);
 			if(mPlanes[i].pointInFront(point)) {
 				outside = false;
 				break;

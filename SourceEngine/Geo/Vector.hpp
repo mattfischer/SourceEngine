@@ -6,41 +6,66 @@ namespace Geo {
 class Vector {
 public:
 	Vector()
-		: mX(0), mY(0), mZ(0)
-	{}
+	{
+		mElements[0] = 0;
+		mElements[1] = 0;
+		mElements[2] = 0;
+	}
 
 	Vector(float x, float y, float z)
-		: mX(x), mY(y), mZ(z)
-	{}
-
-	float x() const { return mX; }
-	float y() const { return mY; }
-	float z() const { return mZ; }
-
-	float operator*(const Vector &other) const {
-		return mX * other.mX + mY * other.mY + mZ * other.mZ;
+	{
+		mElements[0] = x;
+		mElements[1] = y;
+		mElements[2] = z;
 	}
 
-	Vector operator*(float a) const {
-		return Vector(mX * a, mY * a, mZ * a);
+	Vector(const Vector &other)
+	{
+		for(int i=0; i<3; i++) {
+			mElements[i] = other.mElements[i];
+		}
 	}
 
-	Vector operator+(const Vector &other) const {
-		return Vector(mX + other.mX, mY + other.mY, mZ + other.mZ);
+	Vector &operator=(const Vector &other)
+	{
+		for(int i=0; i<3; i++) {
+			mElements[i] = other.mElements[i];
+		}
+
+		return *this;
 	}
 
-	Vector operator-(const Vector &other) const {
-		return Vector(mX - other.mX, mY - other.mY, mZ - other.mZ);
+	float x() const { return mElements[0]; }
+	float y() const { return mElements[1]; }
+	float z() const { return mElements[2]; }
+
+	Vector operator+(const Vector &other) const
+	{
+		return Vector(x() + other.x(), y() + other.y(), z() + other.z());
+	}
+
+	Vector operator-(const Vector &other) const
+	{
+		return Vector(x() - other.x(), y() - other.y(), z() - other.z());
+	}
+
+	Vector operator*(float a) const
+	{
+		return Vector(x() * a, y() * a, z() * a);
+	}
+
+	float operator*(const Vector &other) const
+	{
+		return x() * other.x() + y() * other.y() + z() * other.z();
 	}
 
 private:
-	float mX;
-	float mY;
-	float mZ;
+	float mElements[3];
 };
 
-static Vector operator*(float a, const Vector &other) {
-	return other * a;
+static Vector operator*(float a, const Vector &vector)
+{
+	return vector * a;
 }
 
 }

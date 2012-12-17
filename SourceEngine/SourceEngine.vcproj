@@ -319,6 +319,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Geo\Point.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Vector.hpp"
 					>
 				</File>

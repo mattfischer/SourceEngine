@@ -3,7 +3,7 @@
 
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
-#include "Geo/Vector.hpp"
+#include "Geo/Point.hpp"
 #include "Geo/Frustum.hpp"
 
 #include "Map.hpp"
@@ -37,7 +37,7 @@ private:
 
 	Map *mMap;
 
-	Geo::Vector mPosition;
+	Geo::Point mPosition;
 	float mYaw;
 	float mPitch;
 	Geo::Frustum mStartFrustum;

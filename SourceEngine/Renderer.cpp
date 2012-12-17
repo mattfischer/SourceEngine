@@ -32,7 +32,7 @@ Renderer::Renderer(Map *map, int width, int height)
 			float x = atof(posParts[0].c_str());
 			float y = atof(posParts[1].c_str());
 			float z = atof(posParts[2].c_str());
-			mPosition = Geo::Vector(x, y, z + 60);
+			mPosition = Geo::Point(x, y, z + 60);
 
 			const std::string &rotation = entity.section->parameter("angles");
 			std::vector<std::string> rotParts = StringUtils::split(rotation, " ");
@@ -98,7 +98,7 @@ void Renderer::rise(int amount)
 	mPosition = mPosition + speed * amount * Geo::Vector(0, 0, 1);
 };
 
-const Map::Leaf *findCameraLeaf(Map *map, const Geo::Vector &position)
+const Map::Leaf *findCameraLeaf(Map *map, const Geo::Point &position)
 {
 	Map::BSPBase *cursor = map->rootNode();
 	while(cursor->type == Map::BSPBase::TypeNode) {
@@ -135,7 +135,7 @@ void Renderer::renderFace(const Map::Face &face)
 
 	glBegin(GL_POLYGON);
 	for(int j=0; j<face.numVertices; j++) {
-		Geo::Vector &vertex = face.vertices[j];
+		Geo::Point &vertex = face.vertices[j];
 		float s = face.textureVertices[0][0] * vertex.x() + face.textureVertices[0][1] * vertex.y() + face.textureVertices[0][2] * vertex.z() + face.textureVertices[0][3];
 		float t = face.textureVertices[1][0] * vertex.x() + face.textureVertices[1][1] * vertex.y() + face.textureVertices[1][2] * vertex.z() + face.textureVertices[1][3];
 
@@ -154,7 +154,7 @@ void Renderer::renderFace(const Map::Face &face)
 		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 		glBegin(GL_POLYGON);
 		for(int j=0; j<face.numVertices; j++) {
-			Geo::Vector &vertex = face.vertices[j];
+			Geo::Point &vertex = face.vertices[j];
 
 			float s = face.lightMapVertices[0][0] * vertex.x() + face.lightMapVertices[0][1] * vertex.y() + face.lightMapVertices[0][2] * vertex.z() + face.lightMapVertices[0][3];
 			float t = face.lightMapVertices[1][0] * vertex.x() + face.lightMapVertices[1][1] * vertex.y() + face.lightMapVertices[1][2] * vertex.z() + face.lightMapVertices[1][3];

@@ -105,7 +105,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		face.texture = &mTextures[texInfo.texdata];
 		face.gray = (rand() % 255) / 255.0f;
 		face.numVertices = bspFace.numEdges;
-		face.vertices = new Geo::Vector[face.numVertices];
+		face.vertices = new Geo::Point[face.numVertices];
 
 		for(int j=0; j<face.numVertices; j++) {
 			int surfEdge = mBSP->surfEdge(bspFace.firstEdge + j);
@@ -117,7 +117,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			}
 			const File::BSP::Vector &bspVector = mBSP->vertex(vertex);
 
-			face.vertices[j] = Geo::Vector(bspVector.x, bspVector.y, bspVector.z);
+			face.vertices[j] = Geo::Point(bspVector.x, bspVector.y, bspVector.z);
 		}
 	}
 

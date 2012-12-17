@@ -4,7 +4,7 @@
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
 #include "File/VTF.hpp"
-#include "Geo/Vector.hpp"
+#include "Geo/Point.hpp"
 #include "Geo/Plane.hpp"
 #include "Geo/Box.hpp"
 
@@ -26,7 +26,7 @@ public:
 		int numVertices;
 		float gray;
 		Geo::Plane plane;
-		Geo::Vector *vertices;
+		Geo::Point *vertices;
 		float textureVertices[2][4];
 		Texture *texture;
 		GLuint lightMap;
