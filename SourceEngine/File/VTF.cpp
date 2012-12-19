@@ -26,23 +26,6 @@ struct Header
 };
 #pragma pack(pop)
 
-unsigned short interp565(unsigned short a, unsigned short b, int num, int den)
-{
-	unsigned short ra = 0x1f & (a >> 11);
-	unsigned short rb = 0x1f & (b >> 11);
-	unsigned short _r = ra * num / den + (den - num) * rb / den;
-
-	unsigned short ga = 0x3f & (a >> 5);
-	unsigned short gb = 0x3f & (b >> 5);
-	unsigned short _g = ga * num / den + (den - num) * gb / den;
-
-	unsigned short ba = 0x1f & a;
-	unsigned short bb = 0x1f & b;
-	unsigned short _b = ba * num / den + (den - num) * bb / den;
-
-	return (_r << 11) | (_g << 5) | _b;
-}
-
 unsigned int unpack565(unsigned short c)
 {
 	unsigned int clong = c;
@@ -88,7 +71,7 @@ unsigned char *readDXT(IReader *reader, int width, int height, int n)
 	}
 
 	unsigned char *src = new unsigned char[srcSize];
-	reader->read((char*)src, srcSize);
+	reader->read(src, srcSize);
 
 	unsigned int *dst = new unsigned int[width * height];
 
@@ -158,7 +141,7 @@ VTF::VTF(IReader *reader)
 {
 	Header header;
 
-	reader->read((char*)&header, sizeof(header));
+	reader->read(&header, sizeof(header));
 	reader->seek(header.headerSize);
 
 	mWidth = header.width;

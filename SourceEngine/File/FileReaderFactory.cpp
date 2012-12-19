@@ -18,9 +18,9 @@ public:
 
 	virtual ~FileReader() {}
 
-	virtual void FileReader::read(char *buffer, int size)
+	virtual void FileReader::read(void *buffer, int size)
 	{
-		mFile.read(buffer, size);
+		mFile.read((char*)buffer, size);
 	}
 
 	virtual void FileReader::seek(int pos)

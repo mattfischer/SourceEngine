@@ -207,6 +207,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\File\MDL.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\File\MultiReaderFactory.cpp"
 					>
 				</File>
@@ -286,6 +290,10 @@
 				</File>
 				<File
 					RelativePath=".\File\KeyValue.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\MDL.hpp"
 					>
 				</File>
 				<File

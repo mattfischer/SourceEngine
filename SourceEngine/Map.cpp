@@ -1,6 +1,7 @@
 #include "Map.hpp"
 
 #include "File/VMT.hpp"
+#include "File/MDL.hpp"
 
 #include <math.h>
 
@@ -167,6 +168,20 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 				node.children[j] = &mNodes[child];
 			} else {
 				node.children[j] = &mLeaves[-child - 1];
+			}
+		}
+	}
+
+	for(unsigned int i=0; i<mBSP->numEntities(); i++) {
+		const File::BSP::Entity &entity = mBSP->entity(i);
+
+		if(entity.section->hasParameter("model")) {
+			const std::string &model = entity.section->parameter("model");
+			if(model[0] != '*') {
+				File::MDL *mdl = File::MDL::open(factory, model);
+				if(mdl) {
+					delete mdl;
+				}
 			}
 		}
 	}

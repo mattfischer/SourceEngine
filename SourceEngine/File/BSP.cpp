@@ -102,7 +102,7 @@ template <typename T> void readLump(IReader *reader, T *&list, size_t &num, cons
 	num = lump.length / sizeof(T);
 	list = new T[num];
 	reader->seek(lump.offset);
-	reader->read((char*)list, lump.length);
+	reader->read(list, lump.length);
 }
 
 BSP *BSP::open(IReaderFactory *factory, const std::string &name)
@@ -122,7 +122,7 @@ BSP *BSP::open(IReaderFactory *factory, const std::string &name)
 BSP::BSP(IReader *reader)
 {
     Header header;
-    reader->read((char*)&header, sizeof(header));
+    reader->read(&header, sizeof(header));
 
 	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
 	readLump(reader, mPlanes, mNumPlanes, header, LUMP_PLANES);
@@ -169,7 +169,7 @@ BSP::BSP(IReader *reader)
 	Lump &lightingLump = header.lumps[LUMP_LIGHTING_HDR];
 	mLighting = new unsigned char[lightingLump.length];
 	reader->seek(lightingLump.offset);
-	reader->read((char*)mLighting, lightingLump.length);
+	reader->read(mLighting, lightingLump.length);
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)

@@ -19,7 +19,7 @@ public:
 
 	virtual ~VPKReader() {}
 
-	virtual void read(char *buffer, int size)
+	virtual void read(void *buffer, int size)
 	{
 		int bytesRead = 0;
 		if(mPointer < mFileInfo.preloadBytes) {
@@ -34,7 +34,7 @@ public:
 			mFile.open(filename.c_str(), std::ios_base::in | std::ios_base::binary);
 		}
 		mFile.seekg(mDataStart + mFileInfo.entryOffset + mPointer - mFileInfo.preloadBytes);
-		mFile.read(buffer + bytesRead, size - bytesRead);
+		mFile.read((char*)buffer + bytesRead, size - bytesRead);
 		mPointer += size;
 	}
 
