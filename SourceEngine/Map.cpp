@@ -2,6 +2,7 @@
 
 #include "File/VMT.hpp"
 #include "File/MDL.hpp"
+#include "File/VVD.hpp"
 
 #include <math.h>
 
@@ -181,6 +182,14 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 				File::MDL *mdl = File::MDL::open(factory, model);
 				if(mdl) {
 					delete mdl;
+				}
+
+				size_t pos = model.find(".mdl");
+				std::string vertices = model;
+				vertices.replace(pos, 4, ".vvd");
+				File::VVD *vvd = File::VVD::open(factory, vertices);
+				if(vvd) {
+					delete vvd;
 				}
 			}
 		}

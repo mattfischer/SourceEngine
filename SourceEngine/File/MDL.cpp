@@ -164,6 +164,8 @@ MDL::MDL(IReader *reader)
 	for(unsigned int i=0; i<mNumSkinZones * mNumSkinFamilies; i++) {
 		mSkins[i] = skinTable[i];
 	}
+
+	delete[] data;
 }
 
 MDL *MDL::open(IReaderFactory *factory, const std::string &name)

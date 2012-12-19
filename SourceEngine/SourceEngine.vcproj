@@ -230,6 +230,10 @@
 					RelativePath=".\File\VTF.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\File\VVD.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Geo"
@@ -314,6 +318,10 @@
 				</File>
 				<File
 					RelativePath=".\File\VTF.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VVD.hpp"
 					>
 				</File>
 			</Filter>
