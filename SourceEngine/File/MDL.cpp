@@ -126,11 +126,44 @@ struct Header
 	int		unused;
 };
 
+struct Texture {
+	int	nameOffset;
+	int	flags;
+	int	used;
+	int	unused;
+
+	int	material;
+	int	clientMaterial;
+
+	int	unused2[10];
+};
+
 MDL::MDL(IReader *reader)
 {
+	char *data = new char[reader->size()];
+	reader->read(data, reader->size());
+
 	Header header;
 
-	reader->read(&header, sizeof(header));
+	memcpy(&header, data, sizeof(header));
+
+	mNumTextures = header.textureCount;
+	mTextures = new std::string[mNumTextures];
+	for(unsigned int i=0; i<mNumTextures; i++) {
+		Texture texture;
+		char *texturePointer = data + header.textureOffset + i * sizeof(Texture);
+		memcpy(&texture, texturePointer, sizeof(Texture));
+		char *name = texturePointer + texture.nameOffset;
+		mTextures[i] = std::string(name);
+	}
+
+	mNumSkinZones = header.skinReferenceCount;
+	mNumSkinFamilies = header.skinReferenceFamilyCount;
+	mSkins = new unsigned int[mNumSkinZones * mNumSkinFamilies];
+	unsigned short *skinTable = (unsigned short*)(data + header.skinReferenceIndex);
+	for(unsigned int i=0; i<mNumSkinZones * mNumSkinFamilies; i++) {
+		mSkins[i] = skinTable[i];
+	}
 }
 
 MDL *MDL::open(IReaderFactory *factory, const std::string &name)
