@@ -16,47 +16,43 @@ struct VVDHeader {
 	int	tangentDataStart;
 };
 
-struct Vector {
-	float x;
-	float y;
-	float z;
-};
-
-struct Vector2D {
-	float u;
-	float v;
-};
-
-#define MAX_NUM_BONES_PER_VERT 3
-
-struct BoneWeight
-{
-	float	weight[MAX_NUM_BONES_PER_VERT];
-	char	bone[MAX_NUM_BONES_PER_VERT];
-	unsigned char numBones;
-};
-
-struct Vertex
-{
-	BoneWeight boneWeights;
-	Vector position;
-	Vector normal;
-	Vector2D texCoord;
+struct Fixup {
+	int lod;
+	int sourceVertexID;
+	int numVertices;
 };
 
 VVD::VVD(IReader *reader)
 {
-	VVDHeader header;
+	char *data = new char[reader->size()];
+	reader->read(data, reader->size());
 
-	reader->read(&header, sizeof(header));
+	VVDHeader *header = (VVDHeader*)data;
+	Vertex *vertices = (Vertex*)(data + header->vertexDataStart);
+	Fixup *fixups = (Fixup*)(data + header->fixupTableStart);
 
-	if(header.numFixups == 0) {
-		Vertex *vertices = new Vertex[header.numLODVertexes[0]];
-		reader->seek(header.vertexDataStart);
-		reader->read(vertices, header.numLODVertexes[0] * sizeof(Vertex));
-	} else {
-		// TODO: Handle fixups
+	mNumLods = header->numLODs;
+	mLods = new Lod[mNumLods];
+	for(int lod=0; lod<mNumLods; lod++) {
+		mLods[lod].numVertices = header->numLODVertexes[lod];
+		mLods[lod].vertices = new Vertex[mLods[lod].numVertices];
+		if(header->numFixups == 0) {
+			for(int v=0; v<mLods[lod].numVertices; v++) {
+				mLods[lod].vertices[v] = vertices[v];
+			}
+		} else {
+			int v = 0;
+			for(int i=0; i<header->numFixups; i++) {
+				if(fixups[i].lod <= lod) {
+					for(int j=0; j<fixups[i].numVertices; j++) {
+						mLods[lod].vertices[v++] = vertices[fixups[i].sourceVertexID + j];
+					}
+				}
+			}
+		}
 	}
+
+	delete[] data;
 }
 
 VVD *VVD::open(IReaderFactory *factory, const std::string &name)

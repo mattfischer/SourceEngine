@@ -153,6 +153,8 @@ VTX::VTX(IReader *reader)
 		BodyPartHeader *bph = (BodyPartHeader*)((char*)header + header->bodyPartOffset + i * sizeof(BodyPartHeader));
 		parseBodyPart(&mBodyParts[i], bph);
 	}
+
+	delete[] data;
 }
 
 VTX *VTX::open(IReaderFactory *factory, const std::string &name)
