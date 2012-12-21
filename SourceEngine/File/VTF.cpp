@@ -3,7 +3,7 @@
 namespace File {
 
 #pragma pack(push, 1)
-struct Header
+struct VTFHeader
 {
 	char			signature[4];
 	unsigned int	version[2];
@@ -139,7 +139,7 @@ VTF *VTF::open(IReaderFactory *factory, const std::string &name)
 
 VTF::VTF(IReader *reader)
 {
-	Header header;
+	VTFHeader header;
 
 	reader->read(&header, sizeof(header));
 	reader->seek(header.headerSize);

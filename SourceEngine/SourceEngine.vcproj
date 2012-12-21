@@ -231,6 +231,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\File\VTX.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\File\VVD.cpp"
 					>
 				</File>
@@ -318,6 +322,10 @@
 				</File>
 				<File
 					RelativePath=".\File\VTF.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\VTX.hpp"
 					>
 				</File>
 				<File

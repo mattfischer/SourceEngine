@@ -4,7 +4,7 @@ namespace File {
 
 #define MAX_NUM_LODS 8
 
-struct Header {
+struct VVDHeader {
 	int	id;
 	int	version;
 	long	checksum;
@@ -46,7 +46,7 @@ struct Vertex
 
 VVD::VVD(IReader *reader)
 {
-	Header header;
+	VVDHeader header;
 
 	reader->read(&header, sizeof(header));
 

@@ -3,6 +3,7 @@
 #include "File/VMT.hpp"
 #include "File/MDL.hpp"
 #include "File/VVD.hpp"
+#include "File/VTX.hpp"
 
 #include <math.h>
 
@@ -190,6 +191,13 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 				File::VVD *vvd = File::VVD::open(factory, vertices);
 				if(vvd) {
 					delete vvd;
+				}
+
+				std::string mesh = model;
+				mesh.replace(pos, 4, ".vtx");
+				File::VTX *vtx = File::VTX::open(factory, mesh);
+				if(vtx) {
+					delete vtx;
 				}
 			}
 		}
