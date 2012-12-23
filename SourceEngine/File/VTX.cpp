@@ -81,6 +81,7 @@ struct Vertex {
 
 static void parseStrip(VTX::Strip *strip, StripHeader *header, Vertex *vertices, unsigned short *indices)
 {
+	strip->flags = header->flags;
 	strip->numVertices = header->numIndices;
 	strip->vertices = new int[strip->numVertices];
 	for(int i=0; i<strip->numVertices; i++) {

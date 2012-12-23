@@ -13,6 +13,7 @@ public:
 	struct Strip {
 		int numVertices;
 		int *vertices;
+		int flags;
 	};
 
 	struct StripGroup {
@@ -41,6 +42,9 @@ public:
 	};
 
 	VTX(IReader *reader);
+
+	int numBodyParts() { return mNumBodyParts; }
+	const BodyPart &bodyPart(int bodyPart) { return mBodyParts[bodyPart]; }
 
 	static VTX *open(IReaderFactory *factory, const std::string &name);
 

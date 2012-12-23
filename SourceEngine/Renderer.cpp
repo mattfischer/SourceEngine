@@ -216,6 +216,46 @@ void Renderer::renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf)
 	}
 }
 
+void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
+{
+	if(model.mdl == 0 || model.vtx == 0 || model.vvd == 0) {
+		return;
+	}
+
+	glPushMatrix();
+	glTranslatef(-position.y(), position.z(), -position.x());
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glColor4f(0.75f, 0.75f, 0.75f, 1.0f);
+
+	for(int b=0; b<model.vtx->numBodyParts(); b++) {
+		const File::VTX::BodyPart &bodyPart = model.vtx->bodyPart(b);
+		for(int m=0; m<bodyPart.numModels; m++) {
+			File::VTX::Lod &lod = bodyPart.models[m].lods[0];
+			for(int me=0; me<lod.numMeshes; me++) {
+				File::VTX::Mesh &mesh = lod.meshes[me];
+				for(int sg=0; sg<mesh.numStripGroups; sg++) {
+					File::VTX::StripGroup &stripGroup = mesh.stripGroups[sg];
+					for(int s=0; s<stripGroup.numStrips; s++) {
+						File::VTX::Strip &strip = stripGroup.strips[s];
+						if(strip.flags == 0x1) {
+							glBegin(GL_TRIANGLE_STRIP);
+						} else {
+							glBegin(GL_TRIANGLES);
+						}
+
+						for(int v=0; v<strip.numVertices; v++) {
+							File::VVD::Vertex &vertex = model.vvd->lod(0).vertices[strip.vertices[v]];
+							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
+						}
+						glEnd();
+					}
+				}
+			}
+		}
+	}
+	glPopMatrix();
+}
+
 void Renderer::render()
 {
 	mNumVisLeaves = 0;
@@ -240,6 +280,15 @@ void Renderer::render()
 	const Map::Leaf *cameraLeaf = findCameraLeaf(mMap, mPosition);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	renderNode(mMap->rootNode(), cameraLeaf);
+
+	for(unsigned int i=0; i<mMap->numEntities(); i++) {
+		const Map::Entity &entity = mMap->entity(i);
+		if(entity.model) {
+			renderModel(*entity.model, entity.position);
+		}
+	}
+
 	glPopMatrix();
 }

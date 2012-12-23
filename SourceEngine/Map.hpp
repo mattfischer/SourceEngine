@@ -4,6 +4,9 @@
 #include "File/IReaderFactory.hpp"
 #include "File/BSP.hpp"
 #include "File/VTF.hpp"
+#include "File/VVD.hpp"
+#include "File/MDL.hpp"
+#include "File/VTX.hpp"
 #include "Geo/Point.hpp"
 #include "Geo/Plane.hpp"
 #include "Geo/Box.hpp"
@@ -65,11 +68,25 @@ public:
 		bool *visibleLeaves;
 	};
 
+	struct Model {
+		File::MDL *mdl;
+		File::VVD *vvd;
+		File::VTX *vtx;
+	};
+
+	struct Entity {
+		Model *model;
+		Geo::Point position;
+	};
+
 	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }
 	size_t numLeaves() { return mNumLeaves; }
 
 	Node *rootNode();
 	File::BSP *bsp() { return mBSP; }
+
+	const Entity &entity(int entity) { return mEntities[entity]; }
+	size_t numEntities() { return mNumEntities; }
 
 private:
 	File::BSP *mBSP;
@@ -85,6 +102,9 @@ private:
 
 	Leaf *mLeaves;
 	size_t mNumLeaves;
+
+	Entity *mEntities;
+	size_t mNumEntities;
 };
 
 #endif

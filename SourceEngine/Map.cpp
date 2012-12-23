@@ -174,31 +174,40 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		}
 	}
 
+	mNumEntities = mBSP->numEntities();
+	mEntities = new Entity[mNumEntities];
+
 	for(unsigned int i=0; i<mBSP->numEntities(); i++) {
-		const File::BSP::Entity &entity = mBSP->entity(i);
+		const File::BSP::Entity &bspEntity = mBSP->entity(i);
+		Entity &entity = mEntities[i];
 
-		if(entity.section->hasParameter("model")) {
-			const std::string &model = entity.section->parameter("model");
-			if(model[0] != '*') {
-				File::MDL *mdl = File::MDL::open(factory, model);
-				if(mdl) {
-					delete mdl;
-				}
+		entity.model = 0;
 
-				size_t pos = model.find(".mdl");
-				std::string vertices = model;
+		if(bspEntity.section->hasParameter("origin")) {
+			const std::string &position = bspEntity.section->parameter("origin");
+			std::vector<std::string> posParts = StringUtils::split(position, " ");
+			float x = (float)atof(posParts[0].c_str());
+			float y = (float)atof(posParts[1].c_str());
+			float z = (float)atof(posParts[2].c_str());
+			entity.position = Geo::Point(x, y, z);
+		}
+
+		if(bspEntity.section->hasParameter("model")) {
+			const std::string &name = bspEntity.section->parameter("model");
+
+			if(name[0] != '*') {
+				entity.model = new Model;
+
+				entity.model->mdl = File::MDL::open(factory, name);
+
+				size_t pos = name.find(".mdl");
+				std::string vertices = name;
 				vertices.replace(pos, 4, ".vvd");
-				File::VVD *vvd = File::VVD::open(factory, vertices);
-				if(vvd) {
-					delete vvd;
-				}
+				entity.model->vvd = File::VVD::open(factory, vertices);
 
-				std::string mesh = model;
+				std::string mesh = name;
 				mesh.replace(pos, 4, ".vtx");
-				File::VTX *vtx = File::VTX::open(factory, mesh);
-				if(vtx) {
-					delete vtx;
-				}
+				entity.model->vtx = File::VTX::open(factory, mesh);
 			}
 		}
 	}
