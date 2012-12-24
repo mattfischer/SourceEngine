@@ -72,6 +72,8 @@ public:
 		File::MDL *mdl;
 		File::VVD *vvd;
 		File::VTX *vtx;
+		int numTextures;
+		Texture *textures;
 	};
 
 	struct Entity {

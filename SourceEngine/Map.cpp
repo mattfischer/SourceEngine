@@ -20,7 +20,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 		const std::string &materialFilename = mBSP->texDataString(texData.nameStringTableID);
 
 		mTextures[i].vtf = 0;
-		File::VMT *vmt = File::VMT::open(factory, materialFilename);
+		File::VMT *vmt = File::VMT::open(factory, "materials/" + materialFilename + ".vmt");
 		if(vmt && vmt->hasParameter("$basetexture")) {
 			const std::string &textureFilename = vmt->parameter("$basetexture");
 			File::VTF *vtf = File::VTF::open(factory, textureFilename);
@@ -196,18 +196,49 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			const std::string &name = bspEntity.section->parameter("model");
 
 			if(name[0] != '*') {
-				entity.model = new Model;
-
-				entity.model->mdl = File::MDL::open(factory, name);
+				File::MDL *mdl = File::MDL::open(factory, name);
 
 				size_t pos = name.find(".mdl");
 				std::string vertices = name;
 				vertices.replace(pos, 4, ".vvd");
-				entity.model->vvd = File::VVD::open(factory, vertices);
+				File::VVD *vvd = File::VVD::open(factory, vertices);
 
 				std::string mesh = name;
 				mesh.replace(pos, 4, ".vtx");
-				entity.model->vtx = File::VTX::open(factory, mesh);
+				File::VTX *vtx = File::VTX::open(factory, mesh);
+
+				if(mdl != 0 && vvd != 0 && vtx != 0) {
+					Model *model = new Model;
+					model->mdl = mdl;
+					model->vvd = vvd;
+					model->vtx = vtx;
+
+					model->numTextures = mdl->numTextures();
+					model->textures = new Texture[model->numTextures];
+					for(int j=0; j<model->numTextures; j++) {
+						File::VMT *vmt = File::VMT::open(factory, "materials/models/props/" + mdl->texture(j) + ".vmt");
+						if(vmt && vmt->hasParameter("$basetexture")) {
+							const std::string &textureFilename = vmt->parameter("$basetexture");
+
+							File::VTF *vtf = File::VTF::open(factory, textureFilename);
+							delete vmt;
+
+							model->textures[j].vtf = vtf;
+							glGenTextures(1, &model->textures[j].tex);
+							glBindTexture(GL_TEXTURE_2D, model->textures[j].tex);
+							glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+							glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST );
+							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+							glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+							for(int k=0; k<vtf->numMipMaps(); k++) {
+								glTexImage2D(GL_TEXTURE_2D, vtf->numMipMaps() - k - 1, GL_RGBA, vtf->width(k), vtf->height(k), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(k));
+							}
+						}
+					}
+
+					entity.model = model;
+				}
 			}
 		}
 	}

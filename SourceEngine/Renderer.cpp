@@ -225,7 +225,7 @@ void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
 	glPushMatrix();
 	glTranslatef(-position.y(), position.z(), -position.x());
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glColor4f(0.75f, 0.75f, 0.75f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
 
 	for(int b=0; b<model.vtx->numBodyParts(); b++) {
 		const File::VTX::BodyPart &bodyPart = model.vtx->bodyPart(b);
@@ -233,6 +233,7 @@ void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
 			File::VTX::Lod &lod = bodyPart.models[m].lods[0];
 			for(int me=0; me<lod.numMeshes; me++) {
 				File::VTX::Mesh &mesh = lod.meshes[me];
+				glBindTexture(GL_TEXTURE_2D, model.textures[model.mdl->skin(0, me)].tex);
 				for(int sg=0; sg<mesh.numStripGroups; sg++) {
 					File::VTX::StripGroup &stripGroup = mesh.stripGroups[sg];
 					for(int s=0; s<stripGroup.numStrips; s++) {
@@ -246,6 +247,7 @@ void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
 						for(int v=0; v<strip.numVertices; v++) {
 							File::VVD::Vertex &vertex = model.vvd->lod(0).vertices[strip.vertices[v]];
 							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
+							glTexCoord2f(vertex.texCoord.u, vertex.texCoord.v);
 						}
 						glEnd();
 					}

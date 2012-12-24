@@ -16,7 +16,7 @@ public:
 	bool hasParameter(const std::string &parameter);
 	const std::string &parameter(const std::string &parameter);
 
-	static VMT *open(IReaderFactory *factory, const std::string &name);
+	static VMT *open(IReaderFactory *factory, const std::string &filename);
 
 private:
 	KeyValue mKeyValue;

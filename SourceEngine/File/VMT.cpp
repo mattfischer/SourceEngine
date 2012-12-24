@@ -6,10 +6,9 @@
 
 namespace File {
 
-VMT *VMT::open(IReaderFactory *factory, const std::string &name)
+VMT *VMT::open(IReaderFactory *factory, const std::string &filename)
 {
 	VMT *ret = 0;
-	std::string filename = "materials/" + name + ".vmt";
 	IReader *reader = factory->open(filename);
 	if(reader) {
 		ret = new VMT(reader);
