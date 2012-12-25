@@ -34,7 +34,7 @@ private:
 	void renderFace(const Map::Face &face);
 	void renderLeaf(const Map::Leaf *leaf, const Map::Leaf *cameraLeaf);
 	void renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf);
-	void renderModel(const Map::Model &model, const Geo::Point &position);
+	void renderModel(const Map::Model &model, const Geo::Point &position, float pitch, float yaw, float roll);
 
 	Map *mMap;
 

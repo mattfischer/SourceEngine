@@ -192,13 +192,24 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 			entity.position = Geo::Point(x, y, z);
 		}
 
+		if(bspEntity.section->hasParameter("angles")) {
+			const std::string &angles = bspEntity.section->parameter("angles");
+			std::vector<std::string> angleParts = StringUtils::split(angles, " ");
+			float pitch = (float)atof(angleParts[0].c_str());
+			float yaw = (float)atof(angleParts[1].c_str());
+			float roll = (float)atof(angleParts[2].c_str());
+			entity.pitch = pitch;
+			entity.yaw = yaw;
+			entity.roll = roll;
+		}
+
 		if(bspEntity.section->hasParameter("model")) {
 			const std::string &name = bspEntity.section->parameter("model");
 
-			if(name[0] != '*') {
+			size_t pos = name.find(".mdl");
+			if(name[0] != '*' && pos != name.npos) {
 				File::MDL *mdl = File::MDL::open(factory, name);
 
-				size_t pos = name.find(".mdl");
 				std::string vertices = name;
 				vertices.replace(pos, 4, ".vvd");
 				File::VVD *vvd = File::VVD::open(factory, vertices);
@@ -216,7 +227,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &name)
 					model->numTextures = mdl->numTextures();
 					model->textures = new Texture[model->numTextures];
 					for(int j=0; j<model->numTextures; j++) {
-						File::VMT *vmt = File::VMT::open(factory, "materials/models/props/" + mdl->texture(j) + ".vmt");
+						File::VMT *vmt = 0; //File::VMT::open(factory, "materials/" + mdl->texture(j) + ".vmt");
 						if(vmt && vmt->hasParameter("$basetexture")) {
 							const std::string &textureFilename = vmt->parameter("$basetexture");
 

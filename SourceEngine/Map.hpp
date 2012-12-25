@@ -79,6 +79,9 @@ public:
 	struct Entity {
 		Model *model;
 		Geo::Point position;
+		float pitch;
+		float yaw;
+		float roll;
 	};
 
 	const Leaf &leaf(int leaf) { return mLeaves[leaf]; }

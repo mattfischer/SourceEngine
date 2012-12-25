@@ -216,7 +216,7 @@ void Renderer::renderNode(const Map::Node *node, const Map::Leaf *cameraLeaf)
 	}
 }
 
-void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
+void Renderer::renderModel(const Map::Model &model, const Geo::Point &position, float pitch, float yaw, float roll)
 {
 	if(model.mdl == 0 || model.vtx == 0 || model.vvd == 0) {
 		return;
@@ -224,13 +224,18 @@ void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
 
 	glPushMatrix();
 	glTranslatef(-position.y(), position.z(), -position.x());
+	glRotatef(yaw, 0, 1, 0);
+	glRotatef(pitch, 1, 0, 0);
+	glRotatef(roll, 0, 0, -1);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
+	glBlendFunc(GL_ONE, GL_ZERO);
 
 	for(int b=0; b<model.vtx->numBodyParts(); b++) {
 		const File::VTX::BodyPart &bodyPart = model.vtx->bodyPart(b);
 		for(int m=0; m<bodyPart.numModels; m++) {
-			File::VTX::Lod &lod = bodyPart.models[m].lods[0];
+			File::VTX::Lod &lod = bodyPart.models[m].lods[bodyPart.models[m].numLods - 1];
 			for(int me=0; me<lod.numMeshes; me++) {
 				File::VTX::Mesh &mesh = lod.meshes[me];
 				glBindTexture(GL_TEXTURE_2D, model.textures[model.mdl->skin(0, me)].tex);
@@ -239,13 +244,13 @@ void Renderer::renderModel(const Map::Model &model, const Geo::Point &position)
 					for(int s=0; s<stripGroup.numStrips; s++) {
 						File::VTX::Strip &strip = stripGroup.strips[s];
 						if(strip.flags == 0x1) {
-							glBegin(GL_TRIANGLE_STRIP);
-						} else {
 							glBegin(GL_TRIANGLES);
+						} else {
+							glBegin(GL_TRIANGLE_STRIP);
 						}
 
 						for(int v=0; v<strip.numVertices; v++) {
-							File::VVD::Vertex &vertex = model.vvd->lod(0).vertices[strip.vertices[v]];
+							File::VVD::Vertex &vertex = model.vvd->lod(bodyPart.models[m].numLods - 1).vertices[strip.vertices[v]];
 							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
 							glTexCoord2f(vertex.texCoord.u, vertex.texCoord.v);
 						}
@@ -288,7 +293,7 @@ void Renderer::render()
 	for(unsigned int i=0; i<mMap->numEntities(); i++) {
 		const Map::Entity &entity = mMap->entity(i);
 		if(entity.model) {
-			renderModel(*entity.model, entity.position);
+			renderModel(*entity.model, entity.position, entity.pitch, entity.yaw, entity.roll);
 		}
 	}
 
