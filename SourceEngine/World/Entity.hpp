@@ -7,6 +7,7 @@
 #include "Geo/Point.hpp"
 #include "Geo/Orientation.hpp"
 
+#include "World/ModelCache.hpp"
 #include "World/Model.hpp"
 
 #include <string>
@@ -15,7 +16,7 @@ namespace World {
 
 class Entity {
 public:
-	Entity(File::IReaderFactory *factory, File::BSP *file, int number);
+	Entity(File::BSP *file, int number, ModelCache *modelCache);
 
 	const Geo::Point &position() { return mPosition; }
 	const Geo::Orientation &orientation() { return mOrientation; }

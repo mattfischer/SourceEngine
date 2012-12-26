@@ -30,11 +30,13 @@ Map::Map(File::IReaderFactory *factory, const std::string &filename)
 
 	mBsp = new BSP(file, mFaces);
 
+	ModelCache *modelCache = new ModelCache(factory);
+
 	mNumEntities = file->numEntities();
 	mEntities = new Entity*[mNumEntities];
 
 	for(unsigned int i=0; i<mNumEntities; i++) {
-		mEntities[i] = new Entity(factory, file, i);
+		mEntities[i] = new Entity(file, i, modelCache);
 
 		if(mEntities[i]->classname() == "info_player_start") {
 			mPlayerStart = mEntities[i];

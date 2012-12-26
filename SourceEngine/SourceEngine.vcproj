@@ -306,6 +306,10 @@
 					RelativePath=".\World\Model.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\World\ModelCache.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Draw"
@@ -470,6 +474,10 @@
 				</File>
 				<File
 					RelativePath=".\World\Model.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\ModelCache.hpp"
 					>
 				</File>
 			</Filter>

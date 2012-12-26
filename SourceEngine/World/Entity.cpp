@@ -4,7 +4,7 @@
 
 namespace World {
 
-Entity::Entity(File::IReaderFactory *factory, File::BSP *file, int number)
+Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
 {
 	const File::BSP::Entity &fileEntity = file->entity(number);
 
@@ -35,22 +35,7 @@ Entity::Entity(File::IReaderFactory *factory, File::BSP *file, int number)
 	if(fileEntity.section->hasParameter("model")) {
 		const std::string &modelFilename = fileEntity.section->parameter("model");
 
-		size_t pos = modelFilename.find(".mdl");
-		if(modelFilename[0] != '*' && pos != modelFilename.npos) {
-			File::MDL *mdl = File::MDL::open(factory, modelFilename);
-
-			std::string vertices = modelFilename;
-			vertices.replace(pos, 4, ".vvd");
-			File::VVD *vvd = File::VVD::open(factory, vertices);
-
-			std::string mesh = modelFilename;
-			mesh.replace(pos, 4, ".vtx");
-			File::VTX *vtx = File::VTX::open(factory, mesh);
-
-			if(mdl && vvd && vtx) {
-				mModel = new Model(mdl, vvd, vtx, factory);
-			}
-		}
+		mModel = modelCache->open(modelFilename);
 	}
 }
 
