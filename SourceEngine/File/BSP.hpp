@@ -146,7 +146,7 @@ public:
 
 	const unsigned char *lighting(int offset) { return mLighting + offset; }
 
-	static BSP *open(IReaderFactory *factory, const std::string &name);
+	static BSP *open(IReaderFactory *factory, const std::string &filename);
 
 private:
 	size_t mNumModels;

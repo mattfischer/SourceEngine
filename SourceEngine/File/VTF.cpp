@@ -123,10 +123,9 @@ unsigned char *readDXT(IReader *reader, int width, int height, int n)
 	return (unsigned char*)dst;
 }
 
-VTF *VTF::open(IReaderFactory *factory, const std::string &name)
+VTF *VTF::open(IReaderFactory *factory, const std::string &filename)
 {
 	VTF *ret = 0;
-	std::string filename = "materials/" + name + ".vtf";
 	IReader *reader = factory->open(filename);
 
 	if(reader) {

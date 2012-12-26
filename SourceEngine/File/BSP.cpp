@@ -105,10 +105,9 @@ template <typename T> void readLump(IReader *reader, T *&list, size_t &num, cons
 	reader->read(list, lump.length);
 }
 
-BSP *BSP::open(IReaderFactory *factory, const std::string &name)
+BSP *BSP::open(IReaderFactory *factory, const std::string &filename)
 {
 	BSP *ret = 0;
-	std::string filename = "maps/" + name + ".bsp";
 	IReader *reader = factory->open(filename);
 
 	if(reader) {

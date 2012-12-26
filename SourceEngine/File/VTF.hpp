@@ -20,7 +20,7 @@ public:
 	const unsigned char *lowResData() { return mLowResData; }
 	const unsigned char *data(int mipMapLevel) { return mData[mipMapLevel]; }
 
-	static VTF *open(IReaderFactory *factory, const std::string &name);
+	static VTF *open(IReaderFactory *factory, const std::string &filename);
 
 private:
 	int mWidth;

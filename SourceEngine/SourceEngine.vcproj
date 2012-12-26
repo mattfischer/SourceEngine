@@ -180,14 +180,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Map.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Renderer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\StringUtils.cpp"
 				>
 			</File>
@@ -251,6 +243,94 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="World"
+				>
+				<File
+					RelativePath=".\World\BSP.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\World\Entity.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Face.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Map.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\World\Material.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Model.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Draw"
+				>
+				<File
+					RelativePath=".\Draw\BSPDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\FaceDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\MapDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\ModelDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\Texture.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -259,14 +339,6 @@
 			>
 			<File
 				RelativePath=".\Console.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Map.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Renderer.hpp"
 				>
 			</File>
 			<File
@@ -341,11 +413,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Geo\Coordinate.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Frustum.hpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Geo\Matrix.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Geo\Orientation.hpp"
 					>
 				</File>
 				<File
@@ -362,6 +442,58 @@
 				</File>
 				<File
 					RelativePath=".\Geo\Vector.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="World"
+				>
+				<File
+					RelativePath=".\World\BSP.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Entity.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Face.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Map.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Material.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\Model.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Draw"
+				>
+				<File
+					RelativePath=".\Draw\BSPDrawer.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\FaceDrawer.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\MapDrawer.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\ModelDrawer.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\Texture.hpp"
 					>
 				</File>
 			</Filter>

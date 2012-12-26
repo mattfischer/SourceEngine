@@ -12,7 +12,7 @@ class MDL {
 public:
 	MDL(IReader *reader);
 
-	static MDL *open(IReaderFactory *factory, const std::string &name);
+	static MDL *open(IReaderFactory *factory, const std::string &filename);
 
 	const std::string &texture(int texture) { return mTextures[texture]; }
 	unsigned int numTextures() { return mNumTextures; }

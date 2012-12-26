@@ -1,19 +1,29 @@
 #include <windows.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 
 #include "File/FileReaderFactory.hpp"
-#include "File/BSP.hpp"
-#include "Renderer.hpp"
 #include "File/VPKReaderFactory.hpp"
 #include "File/MultiReaderFactory.hpp"
+
+#include "Geo/Point.hpp"
+#include "Geo/Orientation.hpp"
+#include "Geo/Frustum.hpp"
+
+#include "World/Map.hpp"
+
+#include "Draw/MapDrawer.hpp"
+
 #include "Console.hpp"
 
 HWND hWnd;
 HDC hDC;
 HGLRC hglRC;
 
-File::BSP *bspFile;
-Renderer *renderer;
+World::Map *map;
+Draw::MapDrawer *mapDrawer;
+Geo::Point position;
+Geo::Orientation orientation;
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 800
@@ -52,11 +62,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
 
+				glMatrixMode(GL_PROJECTION_MATRIX);
+				glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+				glLoadIdentity();
+				gluPerspective(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 50, 10000);
+
+				glEnable(GL_DEPTH_TEST);
+				glEnable(GL_TEXTURE_2D);
+				glEnable(GL_BLEND);
+
+				glDepthFunc(GL_LEQUAL);
+
 				File::MultiReaderFactory *factory = new File::MultiReaderFactory();
 				factory->addFactory(new File::FileReaderFactory("portal2"));
 				factory->addFactory(new File::VPKReaderFactory("portal2/pak01_dir.vpk"));
-				Map *map = new Map(factory, "sp_a1_intro3");
-				renderer = new Renderer(map, SCREEN_WIDTH, SCREEN_HEIGHT);
+				map = new World::Map(factory, "maps/sp_a1_intro3.bsp");
+				Geo::Frustum startFrustum(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
+				mapDrawer = new Draw::MapDrawer(map, startFrustum);
+				position = map->playerStart()->position() + Geo::Vector(0, 0, 60);
+				orientation = map->playerStart()->orientation();
 
 				return 0;
 			}
@@ -118,17 +142,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			break;
 		}
 
-		renderer->render();
+		mapDrawer->draw(position, orientation);
 		SwapBuffers(hDC);
 
 		frames++;
 		if(GetTickCount() > fpsClock + 1000) {
 			Console::instance()->clear();
 			Console::instance()->printf("FPS: %i", frames);
-			Console::instance()->printf("NumPolysDrawn: %i", renderer->numPolysDrawn());
-			Console::instance()->printf("NumFrustumCulled: %i", renderer->numFrustumCulled());
-			Console::instance()->printf("NumVisLeaves: %i", renderer->numVisLeaves());
-			Console::instance()->printf("NumFacesCulled: %i", renderer->numFacesCulled());
+			Console::instance()->printf("NumPolysDrawn: %i", mapDrawer->faceDrawer()->numFacesDrawn());
+			Console::instance()->printf("NumFrustumCulled: %i", mapDrawer->bspDrawer()->numFrustumCulled());
+			Console::instance()->printf("NumVisLeaves: %i", mapDrawer->bspDrawer()->numVisLeaves());
+			Console::instance()->printf("NumFacesCulled: %i", mapDrawer->faceDrawer()->numFacesCulled());
 			frames = 0;
 			fpsClock = GetTickCount();
 		}
@@ -138,58 +162,80 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		POINT point;
 		GetCursorPos(&point);
-		renderer->rotate(-((int)point.x - SCREEN_WIDTH/2), -((int)point.y - SCREEN_HEIGHT/2));
+		float pitch = orientation.pitch();
+		float yaw = orientation.yaw();
+
+		pitch += -((int)point.y - SCREEN_HEIGHT/2);
+		yaw += -((int)point.x - SCREEN_WIDTH/2);
+
+		pitch = min(pitch, 70.0f);
+		pitch = max(pitch, -70.0f);
+
+		if(yaw > 360) { yaw -= 360; }
+		if(yaw < 0) { yaw += 360; }
+
+		orientation = Geo::Orientation(pitch, yaw, 0);
+
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
 
-		float moveScale = 0.1f;
+		float speed = 30;
 		if(KEY_DOWN('W')) {
-			renderer->move(1);
+			Geo::Vector delta(1, 0, 0);
+			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
+			position = position + speed * delta;
 		}
 
 		if(KEY_DOWN('S')) {
-			renderer->move(-1);
+			Geo::Vector delta(-1, 0, 0);
+			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
+			position = position + speed * delta;
 		}
 
 		if(KEY_DOWN('A')) {
-			renderer->strafe(-1);
+			Geo::Vector delta(0, 1, 0);
+			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
+			position = position + speed * delta;
+
 		}
 
 		if(KEY_DOWN('D')) {
-			renderer->strafe(1);
+			Geo::Vector delta(0, -1, 0);
+			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
+			position = position + speed * delta;
 		}
 
 		if(KEY_DOWN('C')) {
-			renderer->rise(-1);
+			position = position + speed * Geo::Vector(0, 0, -1);
 		}
 
 		if(KEY_DOWN('X')) {
-			renderer->rise(1);
+			position = position + speed * Geo::Vector(0, 0, 1);
 		}
 
 		if(KEY_DOWN('F')) {
-			renderer->frustumCull(false);
+			mapDrawer->bspDrawer()->setFrustumCull(false);
 		} else {
-			renderer->frustumCull(true);
+			mapDrawer->bspDrawer()->setFrustumCull(true);
 		}
 
 		if(KEY_DOWN('U')) {
-			renderer->updateFrustum(false);
+			mapDrawer->setUpdateFrustum(false);
 		} else {
-			renderer->updateFrustum(true);
+			mapDrawer->setUpdateFrustum(true);
 		}
 
 		if(KEY_DOWN('T')) {
-			renderer->texture(false);
+			mapDrawer->faceDrawer()->setDrawTextures(false);
 		} else {
-			renderer->texture(true);
+			mapDrawer->faceDrawer()->setDrawTextures(true);
 		}
 
 		if(KEY_DOWN('L')) {
-			renderer->light(false);
+			mapDrawer->faceDrawer()->setDrawLightmaps(false);
 		} else {
-			renderer->light(true);
+			mapDrawer->faceDrawer()->setDrawLightmaps(true);
 		}
 
 		if(KEY_DOWN(VK_ESCAPE)) {

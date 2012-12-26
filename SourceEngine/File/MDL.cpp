@@ -168,10 +168,10 @@ MDL::MDL(IReader *reader)
 	delete[] data;
 }
 
-MDL *MDL::open(IReaderFactory *factory, const std::string &name)
+MDL *MDL::open(IReaderFactory *factory, const std::string &filename)
 {
 	MDL *ret = 0;
-	IReader *reader = factory->open(name);
+	IReader *reader = factory->open(filename);
 
 	if(reader) {
 		ret = new MDL(reader);
