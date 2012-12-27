@@ -10,6 +10,12 @@ namespace File {
 
 class MDL {
 public:
+	struct Vector {
+		float x;
+		float y;
+		float z;
+	};
+
 	MDL(IReader *reader);
 
 	static MDL *open(IReaderFactory *factory, const std::string &filename);
@@ -21,6 +27,9 @@ public:
 	unsigned int numSkinFamilies() { return mNumSkinFamilies; }
 	unsigned int skin(int family, int zone) { return mSkins[family * mNumSkinZones + zone]; }
 
+	const Vector &hullMin() { return mHullMin; }
+	const Vector &hullMax() { return mHullMax; }
+
 private:
 	std::string *mTextures;
 	unsigned int mNumTextures;
@@ -28,6 +37,9 @@ private:
 	unsigned int mNumSkinZones;
 	unsigned int mNumSkinFamilies;
 	unsigned int *mSkins;
+
+	Vector mHullMin;
+	Vector mHullMax;
 };
 
 }

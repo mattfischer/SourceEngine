@@ -1,5 +1,7 @@
 #include "World/Entity.hpp"
 
+#include "Geo/Transformation.hpp"
+
 #include "StringUtils.hpp"
 
 namespace World {
@@ -36,6 +38,15 @@ Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
 		const std::string &modelFilename = fileEntity.section->parameter("model");
 
 		mModel = modelCache->open(modelFilename);
+
+		if(mModel) {
+			Geo::Transformation transformation = Geo::Transformation::translate(mPosition);
+			transformation = transformation * Geo::Transformation::rotateZ(mOrientation.yaw());
+			transformation = transformation * Geo::Transformation::rotateX(mOrientation.pitch());
+			transformation = transformation * Geo::Transformation::rotateY(mOrientation.roll());
+
+			mBox = transformation * mModel->box();
+		}
 	}
 }
 

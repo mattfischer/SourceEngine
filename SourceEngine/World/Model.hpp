@@ -6,6 +6,8 @@
 #include "File/VVD.hpp"
 #include "File/IReaderFactory.hpp"
 
+#include "Geo/BoxOriented.hpp"
+
 #include "World/Material.hpp"
 
 namespace World {
@@ -21,6 +23,8 @@ public:
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
 
+	const Geo::BoxOriented &box() { return mBox; }
+
 private:
 	File::MDL *mMdl;
 	File::VVD *mVvd;
@@ -28,6 +32,8 @@ private:
 
 	int mNumMaterials;
 	Material **mMaterials;
+
+	Geo::BoxOriented mBox;
 };
 
 }

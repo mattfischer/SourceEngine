@@ -2,12 +2,6 @@
 
 namespace File {
 
-struct Vector {
-	float x;
-	float y;
-	float z;
-};
-
 struct Header
 {
 	int		id;
@@ -16,12 +10,12 @@ struct Header
 	char	name[64];
 	int		dataLength;
  
-	Vector		eyePosition;
-	Vector		illumPosition;
-	Vector		hullMin;
-	Vector		hullMax;
-	Vector	  	viewBBMin;
-	Vector	 	viewBBMax;
+	MDL::Vector		eyePosition;
+	MDL::Vector		illumPosition;
+	MDL::Vector		hullMin;
+	MDL::Vector		hullMax;
+	MDL::Vector	  	viewBBMin;
+	MDL::Vector	 	viewBBMax;
  
 	int		flags;
 

@@ -417,6 +417,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Geo\BoxOriented.hpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Geo\Coordinate.hpp"
 					>
 				</File>

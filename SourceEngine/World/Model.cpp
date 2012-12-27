@@ -8,6 +8,10 @@ Model::Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::IReaderFactor
 	mVvd = vvd;
 	mVtx = vtx;
 
+	Geo::Point hullMin(mdl->hullMin().x, mdl->hullMin().y, mdl->hullMin().z);
+	Geo::Point hullMax(mdl->hullMax().x, mdl->hullMax().y, mdl->hullMax().z);
+	mBox = Geo::BoxOriented(hullMin, hullMax);
+
 	mNumMaterials = mdl->numTextures();
 	mMaterials = new Material*[mNumMaterials];
 	for(int i=0; i<mNumMaterials; i++) {
