@@ -1,14 +1,14 @@
-#ifndef GEO_BOX_HPP
-#define GEO_BOX_HPP
+#ifndef GEO_BOX_ALIGNED_HPP
+#define GEO_BOX_ALIGNED_HPP
 
 #include "Geo/Vector.hpp"
 
 namespace Geo {
 
-class Box {
+class BoxAligned {
 public:
-	Box() {}
-	Box(const Vector &minPoint, const Vector &maxPoint)
+	BoxAligned() {}
+	BoxAligned(const Vector &minPoint, const Vector &maxPoint)
 		: mMinPoint(minPoint), mMaxPoint(maxPoint)
 	{}
 

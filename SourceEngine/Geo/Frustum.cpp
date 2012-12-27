@@ -19,7 +19,7 @@ Frustum::Frustum(float hfov, float aspectRatio)
 	mPlanes[3] = Plane(Vector(sinf(vFovRad), 0, -cosf(vFovRad)), 0);
 }
 
-bool Frustum::boxOutside(const Box &box) const
+bool Frustum::boxOutside(const BoxAligned &box) const
 {
 	bool outside;
 

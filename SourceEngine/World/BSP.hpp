@@ -5,7 +5,7 @@
 
 #include "World/Face.hpp"
 
-#include "Geo/Box.hpp"
+#include "Geo/BoxAligned.hpp"
 #include "Geo/Plane.hpp"
 
 namespace World {
@@ -21,7 +21,7 @@ public:
 		TreeItem(Type t) : type(t) {}
 
 		Type type;
-		Geo::Box bbox;
+		Geo::BoxAligned bbox;
 	};
 
 	struct Node : public TreeItem {

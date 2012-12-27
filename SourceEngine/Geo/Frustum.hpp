@@ -2,7 +2,7 @@
 #define GEO_FRUSTUM_HPP
 
 #include "Geo/Plane.hpp"
-#include "Geo/Box.hpp"
+#include "Geo/BoxAligned.hpp"
 #include "Geo/Transformation.hpp"
 
 namespace Geo {
@@ -20,7 +20,7 @@ public:
 
 	const Plane &plane(int n) const { return mPlanes[n]; }
 
-	bool boxOutside(const Box &box) const;
+	bool boxOutside(const BoxAligned &box) const;
 
 private:
 	Plane mPlanes[4];

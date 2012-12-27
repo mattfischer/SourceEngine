@@ -413,7 +413,7 @@
 				Name="Geo"
 				>
 				<File
-					RelativePath=".\Geo\Box.hpp"
+					RelativePath=".\Geo\BoxAligned.hpp"
 					>
 				</File>
 				<File

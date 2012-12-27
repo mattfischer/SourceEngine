@@ -15,7 +15,7 @@ BSP::BSP(File::BSP *file, Face **faces)
 		leaf.number = fileLeaf.cluster;
 		Geo::Vector minPoint = Geo::Vector(fileLeaf.mins[0], fileLeaf.mins[1], fileLeaf.mins[2]);
 		Geo::Vector maxPoint = Geo::Vector(fileLeaf.maxs[0], fileLeaf.maxs[1], fileLeaf.maxs[2]);
-		leaf.bbox = Geo::Box(minPoint, maxPoint);
+		leaf.bbox = Geo::BoxAligned(minPoint, maxPoint);
 		leaf.numFaces = fileLeaf.numLeafFaces;
 		leaf.faces = new Face*[leaf.numFaces];
 		for(int j=0; j<leaf.numFaces; j++) {
@@ -44,7 +44,7 @@ BSP::BSP(File::BSP *file, Face **faces)
 
 		Geo::Vector minPoint = Geo::Vector(fileNode.mins[0], fileNode.mins[1], fileNode.mins[2]);
 		Geo::Vector maxPoint = Geo::Vector(fileNode.maxs[0], fileNode.maxs[1], fileNode.maxs[2]);
-		node.bbox = Geo::Box(minPoint, maxPoint);
+		node.bbox = Geo::BoxAligned(minPoint, maxPoint);
 
 		for(int j=0; j<2; j++) {
 			int child = fileNode.children[j];
