@@ -18,6 +18,8 @@ public:
 	void setFrustum(const Geo::Frustum &frustum);
 	void setFrameTag(int frameTag);
 
+	World::BSP::Leaf *cameraLeaf() { return mCameraLeaf; }
+
 	void draw();
 
 	void setFrustumCull(bool frustumCull) { mFrustumCull = frustumCull; }

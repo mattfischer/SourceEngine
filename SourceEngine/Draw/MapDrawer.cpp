@@ -17,6 +17,8 @@ MapDrawer::MapDrawer(World::Map *map, const Geo::Frustum &startFrustum)
 
 void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orientation)
 {
+	bool drawEntities = true;
+
 	Geo::Transformation transformation = Geo::Transformation::translate(position);
 	transformation = transformation * Geo::Transformation::rotateZ(orientation.yaw());
 	transformation = transformation * Geo::Transformation::rotateY(-orientation.pitch());
@@ -32,6 +34,12 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 		mBspDrawer->setFrustum(frustum);
 	}
 
+	if(!mBspDrawer->cameraLeaf()->visibleLeaves) {
+		mFaceDrawer->setDrawLightmaps(false);
+		mFaceDrawer->setDrawTextures(false);
+		drawEntities = false;
+	}
+
 	mFrameTag++;
 	mBspDrawer->setFrameTag(mFrameTag);
 
@@ -44,14 +52,17 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 
 	mBspDrawer->draw();
 
-	for(unsigned int i=0; i<mMap->numEntities(); i++) {
-		World::Entity *entity = mMap->entity(i);
-		if(entity->model()) {
-			if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
-				mModelDrawer->draw(entity->model(), entity->position(), entity->orientation());
+	if(drawEntities) {
+		for(unsigned int i=0; i<mMap->numEntities(); i++) {
+			World::Entity *entity = mMap->entity(i);
+			if(entity->model()) {
+				if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
+					mModelDrawer->draw(entity->model(), entity->position(), entity->orientation());
+				}
 			}
 		}
 	}
+
 	glPopMatrix();
 }
 
