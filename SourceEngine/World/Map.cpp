@@ -38,6 +38,8 @@ Map::Map(File::IReaderFactory *factory, const std::string &filename)
 	for(unsigned int i=0; i<mNumEntities; i++) {
 		mEntities[i] = new Entity(file, i, modelCache);
 
+		mEntities[i]->setLeaf(mBsp->leafForPoint(mEntities[i]->position()));
+
 		if(mEntities[i]->classname() == "info_player_start") {
 			mPlayerStart = mEntities[i];
 		}

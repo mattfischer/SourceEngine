@@ -38,6 +38,7 @@ public:
 		Face **faces;
 		int number;
 		bool *visibleLeaves;
+		int frameTag;
 	};
 
 	BSP(File::BSP *file, Face **faces);
@@ -45,6 +46,7 @@ public:
 	Node *rootNode() { return mRootNode; }
 
 	bool leafVisibleFrom(const Leaf *leaf, const Leaf *cameraLeaf);
+	Leaf *leafForPoint(const Geo::Point &point);
 
 private:
 	Node *mRootNode;

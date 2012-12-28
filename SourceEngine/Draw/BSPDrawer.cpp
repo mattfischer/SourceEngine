@@ -12,27 +12,17 @@ BSPDrawer::BSPDrawer(World::BSP *bsp, FaceDrawer *faceDrawer)
 void BSPDrawer::setPosition(const Geo::Point &position)
 {
 	mPosition = position;
-
-	World::BSP::TreeItem *cursor = mBsp->rootNode();
-	while(cursor->type == World::BSP::TreeItem::TypeNode) {
-		int child;
-		World::BSP::Node *node = (World::BSP::Node*)cursor;
-
-		if(node->plane.pointInFront(position)) {
-			child = 0;
-		} else {
-			child = 1;
-		}
-
-		cursor = node->children[child];
-	}
-
-	mCameraLeaf = (World::BSP::Leaf*)cursor;
+	mCameraLeaf = mBsp->leafForPoint(mPosition);
 }
 
 void BSPDrawer::setFrustum(const Geo::Frustum &frustum)
 {
 	mFrustum = frustum;
+}
+
+void BSPDrawer::setFrameTag(int frameTag)
+{
+	mFrameTag = frameTag;
 }
 
 void BSPDrawer::draw()
@@ -43,7 +33,7 @@ void BSPDrawer::draw()
 	drawNode(mBsp->rootNode());
 }
 
-void BSPDrawer::drawLeaf(const World::BSP::Leaf *leaf)
+void BSPDrawer::drawLeaf(World::BSP::Leaf *leaf)
 {
 	if(leaf->number == -1) {
 		return;
@@ -63,9 +53,10 @@ void BSPDrawer::drawLeaf(const World::BSP::Leaf *leaf)
 	for(int j=0; j<leaf->numFaces; j++) {
 		mFaceDrawer->draw(leaf->faces[j]);
 	}
+	leaf->frameTag = mFrameTag;
 }
 
-void BSPDrawer::drawNode(const World::BSP::Node *node)
+void BSPDrawer::drawNode(World::BSP::Node *node)
 {
 	if(mFrustumCull && mFrustum.boxOutside(node->bbox)) {
 		mNumFrustumCulled++;

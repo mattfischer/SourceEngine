@@ -10,6 +10,7 @@
 
 #include "World/ModelCache.hpp"
 #include "World/Model.hpp"
+#include "World/BSP.hpp"
 
 #include <string>
 
@@ -28,6 +29,9 @@ public:
 
 	const Geo::BoxOriented &box() { return mBox; }
 
+	void setLeaf(BSP::Leaf *leaf) { mLeaf = leaf; }
+	BSP::Leaf *leaf() { return mLeaf; }
+
 private:
 	World::Model *mModel;
 	Geo::Point mPosition;
@@ -36,6 +40,8 @@ private:
 	std::string mClassname;
 
 	Geo::BoxOriented mBox;
+
+	BSP::Leaf *mLeaf;
 };
 
 }

@@ -149,10 +149,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 		if(GetTickCount() > fpsClock + 1000) {
 			Console::instance()->clear();
 			Console::instance()->printf("FPS: %i", frames);
-			Console::instance()->printf("NumPolysDrawn: %i", mapDrawer->faceDrawer()->numFacesDrawn());
+			Console::instance()->printf("NumFacesDrawn: %i", mapDrawer->faceDrawer()->numFacesDrawn());
+			Console::instance()->printf("NumFacesCulled: %i", mapDrawer->faceDrawer()->numFacesCulled());
 			Console::instance()->printf("NumFrustumCulled: %i", mapDrawer->bspDrawer()->numFrustumCulled());
 			Console::instance()->printf("NumVisLeaves: %i", mapDrawer->bspDrawer()->numVisLeaves());
-			Console::instance()->printf("NumFacesCulled: %i", mapDrawer->faceDrawer()->numFacesCulled());
 			frames = 0;
 			fpsClock = GetTickCount();
 		}

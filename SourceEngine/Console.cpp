@@ -15,7 +15,7 @@ Console *Console::instance()
 
 Console::Console()
 {
-	mHWnd = CreateWindowEx(WS_EX_TOPMOST, "STATIC", "", WS_POPUP , 0, 0, WIDTH, HEIGHT, NULL, NULL, NULL, NULL);
+	mHWnd = CreateWindowEx(WS_EX_TOPMOST, "STATIC", "", WS_VISIBLE | WS_POPUP , 0, 0, WIDTH, HEIGHT, NULL, NULL, NULL, NULL);
 	HDC hDC = GetDC(mHWnd);
 	TEXTMETRIC tm;
 	GetTextMetrics(hDC, &tm);

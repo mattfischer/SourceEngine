@@ -35,6 +35,8 @@ private:
 
 	Geo::Frustum mFrustum;
 
+	int mFrameTag;
+
 	Draw::ModelDrawer *mModelDrawer;
 	Draw::BSPDrawer *mBspDrawer;
 	Draw::FaceDrawer *mFaceDrawer;

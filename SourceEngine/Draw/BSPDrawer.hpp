@@ -16,6 +16,7 @@ public:
 
 	void setPosition(const Geo::Point &position);
 	void setFrustum(const Geo::Frustum &frustum);
+	void setFrameTag(int frameTag);
 
 	void draw();
 
@@ -26,8 +27,8 @@ public:
 	int numVisLeaves() { return mNumVisLeaves; }
 
 private:
-	void drawLeaf(const World::BSP::Leaf *leaf);
-	void drawNode(const World::BSP::Node *node);
+	void drawLeaf(World::BSP::Leaf *leaf);
+	void drawNode(World::BSP::Node *node);
 
 	World::BSP *mBsp;
 
@@ -42,6 +43,8 @@ private:
 	int mNumFrustumCulled;
 
 	int mNumVisLeaves;
+
+	int mFrameTag;
 };
 
 }
