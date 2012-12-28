@@ -14,7 +14,7 @@ namespace World {
 
 class Model {
 public:
-	Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::IReaderFactory *factory);
+	Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::IReaderFactory *factory, const std::string &modelPath);
 
 	File::MDL *mdl() { return mMdl; }
 	File::VVD *vvd() { return mVvd; }

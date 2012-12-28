@@ -25,7 +25,8 @@ Model *ModelCache::open(const std::string &filename)
 			File::VTX *vtx = File::VTX::open(mFactory, mesh);
 
 			if(mdl && vvd && vtx) {
-				model = new Model(mdl, vvd, vtx, mFactory);
+				std::string modelPath = filename.substr(0, filename.rfind("/"));
+				model = new Model(mdl, vvd, vtx, mFactory, modelPath);
 			}
 		}
 		mMap[filename] = model;
