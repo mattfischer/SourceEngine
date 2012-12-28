@@ -23,6 +23,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	Geo::Frustum frustum = mStartFrustum * transformation;
 
 	if(mUpdateFrustum) {
+		mFrustum = frustum;
 		mFaceDrawer->setPosition(position);
 		mBspDrawer->setPosition(position);
 		mBspDrawer->setFrustum(frustum);
@@ -40,7 +41,9 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	for(unsigned int i=0; i<mMap->numEntities(); i++) {
 		World::Entity *entity = mMap->entity(i);
 		if(entity->model()) {
-			mModelDrawer->draw(entity->model(), entity->position(), entity->orientation());
+			if(!mFrustum.boxOutside(entity->box())) {
+				mModelDrawer->draw(entity->model(), entity->position(), entity->orientation());
+			}
 		}
 	}
 	glPopMatrix();

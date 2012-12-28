@@ -141,6 +141,9 @@ MDL::MDL(IReader *reader)
 
 	memcpy(&header, data, sizeof(header));
 
+	mHullMin = header.hullMin;
+	mHullMax = header.hullMax;
+
 	mNumTextures = header.textureCount;
 	mTextures = new std::string[mNumTextures];
 	for(unsigned int i=0; i<mNumTextures; i++) {

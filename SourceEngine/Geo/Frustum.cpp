@@ -46,4 +46,40 @@ bool Frustum::boxOutside(const BoxAligned &box) const
 	return outside;
 }
 
+bool Frustum::boxOutside(const Geo::BoxOriented &box) const
+{
+	bool outside;
+
+	for(int i=0; i<4; i++) {
+		outside = true;
+
+		for(int j=0; j<8; j++) {
+			Geo::Point point = box.point();
+
+			if(j&1) {
+				point = point + box.vector(0);
+			}
+
+			if(j&2) {
+				point = point + box.vector(1);
+			}
+
+			if(j&4) {
+				point = point + box.vector(2);
+			}
+
+			if(mPlanes[i].pointInFront(point)) {
+				outside = false;
+				break;
+			}
+		}
+
+		if(outside) {
+			break;
+		}
+	}
+
+	return outside;
+}
+
 }

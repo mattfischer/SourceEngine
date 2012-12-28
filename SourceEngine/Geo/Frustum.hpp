@@ -3,6 +3,7 @@
 
 #include "Geo/Plane.hpp"
 #include "Geo/BoxAligned.hpp"
+#include "Geo/BoxOriented.hpp"
 #include "Geo/Transformation.hpp"
 
 namespace Geo {
@@ -21,6 +22,7 @@ public:
 	const Plane &plane(int n) const { return mPlanes[n]; }
 
 	bool boxOutside(const BoxAligned &box) const;
+	bool boxOutside(const BoxOriented &oriented) const;
 
 private:
 	Plane mPlanes[4];

@@ -33,6 +33,8 @@ private:
 
 	bool mUpdateFrustum;
 
+	Geo::Frustum mFrustum;
+
 	Draw::ModelDrawer *mModelDrawer;
 	Draw::BSPDrawer *mBspDrawer;
 	Draw::FaceDrawer *mFaceDrawer;
