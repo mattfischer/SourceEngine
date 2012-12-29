@@ -79,7 +79,7 @@ struct Vertex {
 
 #pragma pack(pop)
 
-static void parseStrip(VTX::Strip *strip, StripHeader *header, Vertex *vertices, unsigned short *indices)
+static void parseStrip(VTX::Strip *strip, StripHeader *header, Vertex *vertices, unsigned short *indices, int vertexOffset)
 {
 	strip->flags = header->flags;
 	strip->numVertices = header->numIndices;
@@ -94,11 +94,11 @@ static void parseStrip(VTX::Strip *strip, StripHeader *header, Vertex *vertices,
 		if(vertex >= header->numVertices) {
 			vertex = 0;
 		}
-		strip->vertices[i] = vertices[vertex].vertex;
+		strip->vertices[i] = vertices[vertex].vertex + vertexOffset;
 	}
 }
 
-static void parseStripGroup(VTX::StripGroup *stripGroup, StripGroupHeader *header)
+static void parseStripGroup(VTX::StripGroup *stripGroup, StripGroupHeader *header, int &vertexOffset)
 {
 	Vertex *vertices = (Vertex*)((char*)header + header->vertexOffset);
 	unsigned short *indices = (unsigned short*)((char*)header + header->indexOffset);
@@ -107,27 +107,31 @@ static void parseStripGroup(VTX::StripGroup *stripGroup, StripGroupHeader *heade
 	stripGroup->strips = new VTX::Strip[stripGroup->numStrips];
 	for(int i=0; i<stripGroup->numStrips; i++) {
 		StripHeader *sh = (StripHeader*)((char*)header + header->stripOffset + i * sizeof(StripHeader));
-		parseStrip(&stripGroup->strips[i], sh, vertices, indices);
+		parseStrip(&stripGroup->strips[i], sh, vertices, indices, vertexOffset);
 	}
+
+	vertexOffset += header->numVertices;
 }
 
-static void parseMesh(VTX::Mesh *mesh, MeshHeader *header)
+static void parseMesh(VTX::Mesh *mesh, MeshHeader *header, int &vertexOffset)
 {
 	mesh->numStripGroups = header->numStripGroups;
 	mesh->stripGroups = new VTX::StripGroup[mesh->numStripGroups];
 	for(int i=0; i<mesh->numStripGroups; i++) {
 		StripGroupHeader *sgh = (StripGroupHeader*)((char*)header + header->stripGroupHeaderOffset + i * sizeof(StripGroupHeader));
-		parseStripGroup(&mesh->stripGroups[i], sgh);
+		parseStripGroup(&mesh->stripGroups[i], sgh, vertexOffset);
 	}
 }
 
 static void parseLod(VTX::Lod *lod, LodHeader *header)
 {
+	int vertexOffset = 0;
+
 	lod->numMeshes = header->numMeshes;
 	lod->meshes = new VTX::Mesh[lod->numMeshes];
 	for(int i=0; i<lod->numMeshes; i++) {
 		MeshHeader *mh = (MeshHeader*)((char*)header + header->meshOffset + i * sizeof(MeshHeader));
-		parseMesh(&lod->meshes[i], mh);
+		parseMesh(&lod->meshes[i], mh, vertexOffset);
 	}
 }
 
