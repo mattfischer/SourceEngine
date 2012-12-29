@@ -43,7 +43,7 @@ VVD::VVD(IReader *reader)
 		} else {
 			int v = 0;
 			for(int i=0; i<header->numFixups; i++) {
-				if(fixups[i].lod <= lod) {
+				if(lod <= fixups[i].lod) {
 					for(int j=0; j<fixups[i].numVertices; j++) {
 						mLods[lod].vertices[v++] = vertices[fixups[i].sourceVertexID + j];
 					}
