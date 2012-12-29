@@ -37,8 +37,8 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 
 						for(int v=0; v<strip.numVertices; v++) {
 							File::VVD::Vertex &vertex = model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[strip.vertices[v]];
-							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
 							glTexCoord2f(vertex.texCoord.u, vertex.texCoord.v);
+							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
 						}
 						glEnd();
 					}
