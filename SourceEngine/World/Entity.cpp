@@ -11,6 +11,7 @@ Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
 	const File::BSP::Entity &fileEntity = file->entity(number);
 
 	mModel = 0;
+	mBspRoot = 0;
 
 	if(fileEntity.section->hasParameter("classname")) {
 		mClassname = fileEntity.section->parameter("classname");
@@ -37,15 +38,19 @@ Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
 	if(fileEntity.section->hasParameter("model")) {
 		const std::string &modelFilename = fileEntity.section->parameter("model");
 
-		mModel = modelCache->open(modelFilename);
+		if(modelFilename[0] == '*' && mClassname.find("trigger_") == mClassname.npos) {
+			mBspRoot = atoi(modelFilename.c_str() + 1);
+		} else {
+			mModel = modelCache->open(modelFilename);
 
-		if(mModel) {
-			Geo::Transformation transformation = Geo::Transformation::translate(mPosition);
-			transformation = transformation * Geo::Transformation::rotateZ(mOrientation.yaw());
-			transformation = transformation * Geo::Transformation::rotateX(mOrientation.pitch());
-			transformation = transformation * Geo::Transformation::rotateY(mOrientation.roll());
+			if(mModel) {
+				Geo::Transformation transformation = Geo::Transformation::translate(mPosition);
+				transformation = transformation * Geo::Transformation::rotateZ(mOrientation.yaw());
+				transformation = transformation * Geo::Transformation::rotateX(mOrientation.pitch());
+				transformation = transformation * Geo::Transformation::rotateY(mOrientation.roll());
 
-			mBox = transformation * mModel->box();
+				mBox = transformation * mModel->box();
+			}
 		}
 	}
 }

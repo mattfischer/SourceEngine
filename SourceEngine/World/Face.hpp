@@ -39,6 +39,8 @@ private:
 
 	Material *mMaterial;
 	GLuint mLightMap;
+
+	int mFlags;
 };
 
 }

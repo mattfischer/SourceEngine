@@ -6,6 +6,7 @@
 #include "Draw/FaceDrawer.hpp"
 
 #include "Geo/Point.hpp"
+#include "Geo/Orientation.hpp"
 #include "Geo/Frustum.hpp"
 
 namespace Draw {
@@ -14,13 +15,15 @@ class BSPDrawer {
 public:
 	BSPDrawer(World::BSP *bsp, FaceDrawer *faceDrawer);
 
+	void newFrame();
+
 	void setPosition(const Geo::Point &position);
 	void setFrustum(const Geo::Frustum &frustum);
 	void setFrameTag(int frameTag);
 
 	World::BSP::Leaf *cameraLeaf() { return mCameraLeaf; }
 
-	void draw();
+	void draw(int root, const Geo::Point &position, const Geo::Orientation &orientation);
 
 	void setFrustumCull(bool frustumCull) { mFrustumCull = frustumCull; }
 	bool frustumCull() { return mFrustumCull; }
@@ -29,8 +32,8 @@ public:
 	int numVisLeaves() { return mNumVisLeaves; }
 
 private:
-	void drawLeaf(World::BSP::Leaf *leaf);
-	void drawNode(World::BSP::Node *node);
+	void drawLeaf(World::BSP::Leaf *leaf, World::BSP::Leaf *cameraLeaf);
+	void drawNode(World::BSP::Node *node, World::BSP::Leaf *cameraLeaf);
 
 	World::BSP *mBsp;
 

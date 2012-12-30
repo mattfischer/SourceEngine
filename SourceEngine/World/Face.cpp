@@ -12,6 +12,8 @@ Face::Face(File::BSP *file, int number, Material *materials[])
 	int textureWidth = 1;
 	int textureHeight = 1;
 
+	mFlags = texInfo.flags;
+
 	if(fileFace.lightOfs == -1) {
 		mLightMap = 0;
 	} else {

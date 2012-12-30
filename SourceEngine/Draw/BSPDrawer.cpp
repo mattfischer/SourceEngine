@@ -1,5 +1,8 @@
 #include "Draw/BSPDrawer.hpp"
 
+#include <windows.h>
+#include <GL/gl.h>
+
 namespace Draw {
 
 BSPDrawer::BSPDrawer(World::BSP *bsp, FaceDrawer *faceDrawer)
@@ -9,10 +12,16 @@ BSPDrawer::BSPDrawer(World::BSP *bsp, FaceDrawer *faceDrawer)
 	mCameraLeaf = 0;
 }
 
+void BSPDrawer::newFrame()
+{
+	mNumFrustumCulled = 0;
+	mNumVisLeaves = 0;
+}
+
 void BSPDrawer::setPosition(const Geo::Point &position)
 {
 	mPosition = position;
-	mCameraLeaf = mBsp->leafForPoint(mPosition);
+	mCameraLeaf = mBsp->leafForPoint(0, mPosition);
 }
 
 void BSPDrawer::setFrustum(const Geo::Frustum &frustum)
@@ -25,21 +34,29 @@ void BSPDrawer::setFrameTag(int frameTag)
 	mFrameTag = frameTag;
 }
 
-void BSPDrawer::draw()
+void BSPDrawer::draw(int root, const Geo::Point &position, const Geo::Orientation &orientation)
 {
-	mNumFrustumCulled = 0;
-	mNumVisLeaves = 0;
+	glPushMatrix();
+	glTranslatef(-position.y(), position.z(), -position.x());
+	glRotatef(orientation.yaw(), 0, 1, 0);
+	glRotatef(orientation.pitch(), 1, 0, 0);
+	glRotatef(orientation.roll(), 0, 0, -1);
 
-	drawNode(mBsp->rootNode());
-}
-
-void BSPDrawer::drawLeaf(World::BSP::Leaf *leaf)
-{
-	if(leaf->number == -1) {
-		return;
+	World::BSP::Leaf *cameraLeaf;
+	if(root == 0) {
+		cameraLeaf = mCameraLeaf;
+	} else {
+		cameraLeaf = 0;
 	}
 
-	if(mCameraLeaf && !mBsp->leafVisibleFrom(leaf, mCameraLeaf)) {
+	drawNode(mBsp->root(root), cameraLeaf);
+
+	glPopMatrix();
+}
+
+void BSPDrawer::drawLeaf(World::BSP::Leaf *leaf, World::BSP::Leaf *cameraLeaf)
+{
+	if(cameraLeaf && !mBsp->leafVisibleFrom(leaf, cameraLeaf)) {
 		return;
 	}
 
@@ -56,7 +73,7 @@ void BSPDrawer::drawLeaf(World::BSP::Leaf *leaf)
 	leaf->frameTag = mFrameTag;
 }
 
-void BSPDrawer::drawNode(World::BSP::Node *node)
+void BSPDrawer::drawNode(World::BSP::Node *node, World::BSP::Leaf *cameraLeaf)
 {
 	if(mFrustumCull && mFrustum.boxOutside(node->bbox)) {
 		mNumFrustumCulled++;
@@ -69,11 +86,11 @@ void BSPDrawer::drawNode(World::BSP::Node *node)
 
 		switch(node->children[j]->type) {
 			case World::BSP::TreeItem::TypeNode:
-				drawNode((World::BSP::Node*)node->children[j]);
+				drawNode((World::BSP::Node*)node->children[j], cameraLeaf);
 				break;
 
 			case World::BSP::TreeItem::TypeLeaf:
-				drawLeaf((World::BSP::Leaf*)node->children[j]);
+				drawLeaf((World::BSP::Leaf*)node->children[j], cameraLeaf);
 				break;
 		}
 	}

@@ -32,6 +32,8 @@ public:
 	void setLeaf(BSP::Leaf *leaf) { mLeaf = leaf; }
 	BSP::Leaf *leaf() { return mLeaf; }
 
+	int bspRoot() { return mBspRoot; }
+
 private:
 	World::Model *mModel;
 	Geo::Point mPosition;
@@ -42,6 +44,8 @@ private:
 	Geo::BoxOriented mBox;
 
 	BSP::Leaf *mLeaf;
+
+	int mBspRoot;
 };
 
 }

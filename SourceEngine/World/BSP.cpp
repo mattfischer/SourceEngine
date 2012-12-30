@@ -4,8 +4,6 @@ namespace World {
 
 BSP::BSP(File::BSP *file, Face **faces)
 {
-	const File::BSP::Model &model = file->model(0);
-
 	mNumLeaves = file->numLeaves();
 	mLeaves = new Leaf[mNumLeaves];
 	for(unsigned int i=0; i<mNumLeaves; i++) {
@@ -57,7 +55,12 @@ BSP::BSP(File::BSP *file, Face **faces)
 		}
 	}
 
-	mRootNode = &mNodes[model.headNode];
+	mNumRoots = file->numModels();
+	mRoots = new Node*[mNumRoots];
+	for(unsigned int i=0; i<mNumRoots; i++) {
+		const File::BSP::Model &model = file->model(i);
+		mRoots[i] = &mNodes[model.headNode];
+	}
 }
 
 bool BSP::leafVisibleFrom(const Leaf *leaf, const Leaf *cameraLeaf)
@@ -69,9 +72,9 @@ bool BSP::leafVisibleFrom(const Leaf *leaf, const Leaf *cameraLeaf)
 	return cameraLeaf->visibleLeaves[leaf->number];
 }
 
-BSP::Leaf *BSP::leafForPoint(const Geo::Point &point)
+BSP::Leaf *BSP::leafForPoint(int root, const Geo::Point &point)
 {
-	TreeItem *cursor = mRootNode;
+	TreeItem *cursor = mRoots[root];
 	while(cursor->type == TreeItem::TypeNode) {
 		int child;
 		Node *node = (Node*)cursor;

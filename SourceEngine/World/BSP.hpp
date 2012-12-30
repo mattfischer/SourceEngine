@@ -43,13 +43,15 @@ public:
 
 	BSP(File::BSP *file, Face **faces);
 
-	Node *rootNode() { return mRootNode; }
+	size_t numRoots() { return mNumRoots; }
+	Node *root(int root) { return mRoots[root]; }
 
 	bool leafVisibleFrom(const Leaf *leaf, const Leaf *cameraLeaf);
-	Leaf *leafForPoint(const Geo::Point &point);
+	Leaf *leafForPoint(int root, const Geo::Point &point);
 
 private:
-	Node *mRootNode;
+	size_t mNumRoots;
+	Node **mRoots;
 
 	size_t mNumNodes;
 	Node *mNodes;
