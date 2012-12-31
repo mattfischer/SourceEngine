@@ -32,7 +32,7 @@ void FaceDrawer::draw(World::Face *face)
 		const Geo::Coordinate &coordinate = face->textureCoordinate(i);
 
 		glTexCoord2f(coordinate.u(), coordinate.v());
-		glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
+		glVertex3f(vertex.x(), vertex.y(), vertex.z());
 	}
 	glEnd();
 
@@ -47,7 +47,7 @@ void FaceDrawer::draw(World::Face *face)
 			const Geo::Coordinate &lightmapCoordinate = face->lightmapCoordinate(j);
 
 			glTexCoord2f(lightmapCoordinate.u(), lightmapCoordinate.v());
-			glVertex3f(-vertex.y(), vertex.z(), -vertex.x());
+			glVertex3f(vertex.x(), vertex.y(), vertex.z());
 		}
 		glEnd();
 	}

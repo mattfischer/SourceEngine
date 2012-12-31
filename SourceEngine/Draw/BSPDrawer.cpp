@@ -37,10 +37,10 @@ void BSPDrawer::setFrameTag(int frameTag)
 void BSPDrawer::draw(int root, const Geo::Point &position, const Geo::Orientation &orientation)
 {
 	glPushMatrix();
-	glTranslatef(-position.y(), position.z(), -position.x());
-	glRotatef(orientation.yaw(), 0, 1, 0);
-	glRotatef(orientation.pitch(), 1, 0, 0);
-	glRotatef(orientation.roll(), 0, 0, -1);
+	glTranslatef(position.x(), position.y(), position.z());
+	glRotatef(orientation.yaw(), 0, 0, 1);
+	glRotatef(orientation.pitch(), 0, -1, 0);
+	glRotatef(orientation.roll(), -1, 0, 0);
 
 	World::BSP::Leaf *cameraLeaf;
 	if(root == 0) {

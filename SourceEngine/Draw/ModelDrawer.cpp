@@ -5,10 +5,10 @@ namespace Draw {
 void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation)
 {
 	glPushMatrix();
-	glTranslatef(-position.y(), position.z(), -position.x());
-	glRotatef(orientation.yaw(), 0, 1, 0);
-	glRotatef(orientation.pitch(), 1, 0, 0);
-	glRotatef(orientation.roll(), 0, 0, -1);
+	glTranslatef(position.x(), position.y(), position.z());
+	glRotatef(orientation.yaw(), 0, 0, 1);
+	glRotatef(orientation.pitch(), 0, -1, 0);
+	glRotatef(orientation.roll(), -1, 0, 0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
@@ -38,7 +38,7 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 						for(int v=0; v<strip.numVertices; v++) {
 							File::VVD::Vertex &vertex = model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[strip.vertices[v]];
 							glTexCoord2f(vertex.texCoord.u, vertex.texCoord.v);
-							glVertex3f(-vertex.position.y, vertex.position.z, -vertex.position.x);
+							glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
 						}
 						glEnd();
 					}

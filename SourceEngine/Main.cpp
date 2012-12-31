@@ -67,6 +67,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				glLoadIdentity();
 				gluPerspective(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 50, 10000);
 
+				glMatrixMode(GL_MODELVIEW_MATRIX);
+				float matrix[16] = { 0.0f, 0.0f, -1.0f, 0.0f,   -1.0f, 0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f };
+				glMultMatrixf(matrix);
+
 				glEnable(GL_DEPTH_TEST);
 				glEnable(GL_TEXTURE_2D);
 				glEnable(GL_BLEND);

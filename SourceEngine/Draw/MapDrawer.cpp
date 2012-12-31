@@ -46,9 +46,9 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
-	glRotatef(-orientation.pitch(), 1, 0, 0);
-	glRotatef(-orientation.yaw(), 0, 1, 0);
-	glTranslatef(position.y(), -position.z(), position.x());
+	glRotatef(-orientation.pitch(), 0, -1, 0);
+	glRotatef(-orientation.yaw(), 0, 0, 1);
+	glTranslatef(-position.x(), -position.y(), -position.z());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	mBspDrawer->draw(0, Geo::Point(0, 0, 0), Geo::Orientation(0, 0, 0));
