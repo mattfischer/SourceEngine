@@ -83,7 +83,7 @@ static void parseStrip(VTX::Strip *strip, StripHeader *header, Vertex *vertices,
 {
 	strip->flags = header->flags;
 	strip->numVertices = header->numIndices;
-	strip->vertices = new int[strip->numVertices];
+	strip->vertices = new unsigned short[strip->numVertices];
 	for(int i=0; i<strip->numVertices; i++) {
 		int index = header->indexOffset + i;
 		if(index >= header->numIndices) {

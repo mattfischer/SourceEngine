@@ -12,7 +12,7 @@ class VTX {
 public:
 	struct Strip {
 		int numVertices;
-		int *vertices;
+		unsigned short *vertices;
 		int flags;
 	};
 

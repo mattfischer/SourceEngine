@@ -29,18 +29,18 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 					File::VTX::StripGroup &stripGroup = mesh.stripGroups[sg];
 					for(int s=0; s<stripGroup.numStrips; s++) {
 						File::VTX::Strip &strip = stripGroup.strips[s];
-						if(strip.flags == 0x1) {
-							glBegin(GL_TRIANGLES);
-						} else {
-							glBegin(GL_TRIANGLE_STRIP);
-						}
 
-						for(int v=0; v<strip.numVertices; v++) {
-							File::VVD::Vertex &vertex = model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[strip.vertices[v]];
-							glTexCoord2f(vertex.texCoord.u, vertex.texCoord.v);
-							glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+						glEnableClientState(GL_VERTEX_ARRAY);
+						glVertexPointer(3, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[0].position);
+						glTexCoordPointer(2, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[0].texCoord);
+						GLenum mode;
+						if(strip.flags == 0x1) {
+							mode = GL_TRIANGLES;
+						} else {
+							mode = GL_TRIANGLE_STRIP;
 						}
-						glEnd();
+						glDrawElements(mode, strip.numVertices, GL_UNSIGNED_SHORT, strip.vertices);
 					}
 				}
 			}
