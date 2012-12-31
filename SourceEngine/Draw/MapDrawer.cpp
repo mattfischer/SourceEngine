@@ -2,6 +2,8 @@
 
 #include "Geo/Transformation.hpp"
 
+#include <GL/glew.h>
+
 namespace Draw {
 
 MapDrawer::MapDrawer(World::Map *map, const Geo::Frustum &startFrustum)

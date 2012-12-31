@@ -1,5 +1,5 @@
 #include <windows.h>
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <GL/glu.h>
 
 #include "File/FileReaderFactory.hpp"
@@ -61,6 +61,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 				hglRC = wglCreateContext(hDC);
 				wglMakeCurrent(hDC, hglRC);
+
+				glewInit();
 
 				glMatrixMode(GL_PROJECTION_MATRIX);
 				glClearColor(0.5f, 0.5f, 0.5f, 1.0f);

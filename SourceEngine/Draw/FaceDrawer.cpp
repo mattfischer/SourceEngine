@@ -1,7 +1,6 @@
 #include "Draw/FaceDrawer.hpp"
 
-#include <windows.h>
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 namespace Draw {
 

@@ -1,5 +1,7 @@
 #include "Draw/ModelDrawer.hpp"
 
+#include <GL/glew.h>
+
 namespace Draw {
 
 void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation)

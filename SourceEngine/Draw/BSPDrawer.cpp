@@ -1,7 +1,6 @@
 #include "Draw/BSPDrawer.hpp"
 
-#include <windows.h>
-#include <GL/gl.h>
+#include <GL/glew.h>
 
 namespace Draw {
 

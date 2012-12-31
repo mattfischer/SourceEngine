@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories=".;&quot;C:\Program Files\glew-1.9.0\include&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -59,7 +59,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\glew-1.9.0\lib&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
