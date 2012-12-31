@@ -10,6 +10,7 @@ namespace File {
 class VTF {
 public:
 	VTF(IReader *reader);
+	~VTF();
 
 	int width(int n);
 	int height(int n);

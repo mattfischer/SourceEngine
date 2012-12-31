@@ -12,6 +12,7 @@ Material::Material(File::VMT *vmt, File::IReaderFactory *factory)
 		File::VTF *vtf = File::VTF::open(factory, "materials/" + textureFilename + ".vtf");
 		if(vtf) {
 			mTexture = new Draw::Texture(vtf);
+			delete vtf;
 		}
 	} else {
 		mTexture = 0;

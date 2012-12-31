@@ -167,6 +167,15 @@ VTF::VTF(IReader *reader)
 	}
 }
 
+VTF::~VTF()
+{
+	for(int i=0; i<mNumMipMaps; i++) {
+		delete[] mData[i];
+	}
+
+	delete[] mLowResData;
+}
+
 int VTF::width(int n)
 {
 	int ret = mWidth >> (mNumMipMaps - n - 1);
