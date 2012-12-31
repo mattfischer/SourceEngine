@@ -12,9 +12,9 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 	glRotatef(orientation.pitch(), 0, -1, 0);
 	glRotatef(orientation.roll(), -1, 0, 0);
 
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
-	glBlendFunc(GL_ONE, GL_ZERO);
 
 	for(int b=0; b<model->vtx()->numBodyParts(); b++) {
 		const File::VTX::BodyPart &bodyPart = model->vtx()->bodyPart(b);

@@ -48,7 +48,14 @@ void BSPDrawer::draw(int root, const Geo::Point &position, const Geo::Orientatio
 		cameraLeaf = 0;
 	}
 
+	glActiveTexture(GL_TEXTURE1);
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
 	drawNode(mBsp->root(root), cameraLeaf);
+
+	glActiveTexture(GL_TEXTURE1);
+	glDisable(GL_TEXTURE_2D);
 
 	glPopMatrix();
 }

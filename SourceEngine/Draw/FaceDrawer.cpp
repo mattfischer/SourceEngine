@@ -19,8 +19,15 @@ void FaceDrawer::draw(World::Face *face)
 
 	glBlendFunc(GL_ONE, GL_ZERO);
 	if(mDrawTextures && face->material() && face->material()->texture()) {
+		glActiveTexture(GL_TEXTURE0);
 		face->material()->texture()->select();
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, face->lightmapTex());
 	} else {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor3f(face->gray(), face->gray(), face->gray());
 	}
@@ -29,27 +36,13 @@ void FaceDrawer::draw(World::Face *face)
 	for(int i=0; i<face->numVertices(); i++) {
 		const Geo::Point &vertex = face->vertex(i);
 		const Geo::Coordinate &coordinate = face->textureCoordinate(i);
+		const Geo::Coordinate &lightmapCoordinate = face->lightmapCoordinate(i);
 
-		glTexCoord2f(coordinate.u(), coordinate.v());
+		glMultiTexCoord2f(GL_TEXTURE0, coordinate.u(), coordinate.v());
+		glMultiTexCoord2f(GL_TEXTURE1, lightmapCoordinate.u(), lightmapCoordinate.v());
 		glVertex3f(vertex.x(), vertex.y(), vertex.z());
 	}
 	glEnd();
-
-	if(mDrawLightmaps) {
-		glBindTexture(GL_TEXTURE_2D, face->lightmapTex());
-		glColor3f(1.0f, 1.0f, 1.0f);
-
-		glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-		glBegin(GL_POLYGON);
-		for(int j=0; j<face->numVertices(); j++) {
-			const Geo::Point &vertex = face->vertex(j);
-			const Geo::Coordinate &lightmapCoordinate = face->lightmapCoordinate(j);
-
-			glTexCoord2f(lightmapCoordinate.u(), lightmapCoordinate.v());
-			glVertex3f(vertex.x(), vertex.y(), vertex.z());
-		}
-		glEnd();
-	}
 
 	mNumFacesDrawn++;
 }
