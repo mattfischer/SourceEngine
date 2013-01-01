@@ -137,27 +137,25 @@ MDL::MDL(IReader *reader)
 	char *data = new char[reader->size()];
 	reader->read(data, reader->size());
 
-	Header header;
+	Header *header = (Header*)data;
 
-	memcpy(&header, data, sizeof(header));
+	mHullMin = header->hullMin;
+	mHullMax = header->hullMax;
 
-	mHullMin = header.hullMin;
-	mHullMax = header.hullMax;
-
-	mNumTextures = header.textureCount;
+	mNumTextures = header->textureCount;
 	mTextures = new std::string[mNumTextures];
 	for(unsigned int i=0; i<mNumTextures; i++) {
 		Texture texture;
-		char *texturePointer = data + header.textureOffset + i * sizeof(Texture);
+		char *texturePointer = data + header->textureOffset + i * sizeof(Texture);
 		memcpy(&texture, texturePointer, sizeof(Texture));
 		char *name = texturePointer + texture.nameOffset;
 		mTextures[i] = std::string(name);
 	}
 
-	mNumSkinZones = header.skinReferenceCount;
-	mNumSkinFamilies = header.skinReferenceFamilyCount;
+	mNumSkinZones = header->skinReferenceCount;
+	mNumSkinFamilies = header->skinReferenceFamilyCount;
 	mSkins = new unsigned int[mNumSkinZones * mNumSkinFamilies];
-	unsigned short *skinTable = (unsigned short*)(data + header.skinReferenceIndex);
+	unsigned short *skinTable = (unsigned short*)(data + header->skinReferenceIndex);
 	for(unsigned int i=0; i<mNumSkinZones * mNumSkinFamilies; i++) {
 		mSkins[i] = skinTable[i];
 	}
