@@ -9,8 +9,8 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 	glPushMatrix();
 	glTranslatef(position.x(), position.y(), position.z());
 	glRotatef(orientation.yaw(), 0, 0, 1);
-	glRotatef(orientation.pitch(), 0, -1, 0);
-	glRotatef(orientation.roll(), -1, 0, 0);
+	glRotatef(orientation.pitch(), 0, 1, 0);
+	glRotatef(orientation.roll(), 1, 0, 0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -22,7 +22,7 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 			File::VTX::Lod &lod = bodyPart.models[m].lods[bodyPart.models[m].numLods - 1];
 			for(int me=0; me<lod.numMeshes; me++) {
 				File::VTX::Mesh &mesh = lod.meshes[me];
-				World::Material *material = model->material(model->mdl()->skin(0, me));
+				World::Material *material = model->material(model->mdl()->skin(0, 0));
 				if(material && material->texture()) {
 					material->texture()->select();
 				}
