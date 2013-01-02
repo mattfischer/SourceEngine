@@ -17,21 +17,28 @@ void FaceDrawer::draw(World::Face *face)
 		return;
 	}
 
-	glBlendFunc(GL_ONE, GL_ZERO);
 	if(mDrawTextures && face->material() && face->material()->texture()) {
 		glActiveTexture(GL_TEXTURE0);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		face->material()->texture()->select();
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, face->lightmapTex());
 	} else {
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor3f(face->gray(), face->gray(), face->gray());
 	}
 
+	if(mDrawLightmaps) {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, face->lightmapTex());
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	} else {
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+	}
+
+	glBlendFunc(GL_ONE, GL_ZERO);
 	glBegin(GL_POLYGON);
 	for(int i=0; i<face->numVertices(); i++) {
 		const Geo::Point &vertex = face->vertex(i);

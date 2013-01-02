@@ -147,22 +147,32 @@ VTF::VTF(IReader *reader)
 	mHeight = header.height;
 	mNumMipMaps = header.mipmapCount;
 
-	mLowResData = readDXT(reader, header.lowResImageWidth, header.lowResImageHeight, 1);
+	int lowResDataSize = header.lowResImageWidth * header.lowResImageHeight / 2;
+	mLowResData = new unsigned char[lowResDataSize];
+	reader->read(mLowResData, lowResDataSize);
+
+	switch(header.highResImageFormat) {
+		case 0xd:
+			mFormat = FormatDXT1;
+			break;
+
+		case 0xf:
+			mFormat = FormatDXT5;
+			break;
+
+		default:
+			mFormat = FormatUnknown;
+			break;
+	}
 
 	mData = new unsigned char*[mNumMipMaps];
 	for(int i=0; i<mNumMipMaps; i++) {
-		switch(header.highResImageFormat) {
-			case 0xd:
-				mData[i] = readDXT(reader, width(i), height(i), 1);
-				break;
-
-			case 0xf:
-				mData[i] = readDXT(reader, width(i), height(i), 5);
-				break;
-
-			default:
-				mData[i] = 0;
-				break;
+		if(mFormat == FormatUnknown) {
+			mData[i] = 0;
+		} else {
+			int size = dataSize(i);
+			mData[i] = new unsigned char[size];
+			reader->read(mData[i], size);
 		}
 	}
 }
@@ -194,6 +204,32 @@ int VTF::height(int n)
 	}
 
 	return ret;
+}
+
+int VTF::dataSize(int mipMapLevel)
+{
+	int size = width(mipMapLevel) * height(mipMapLevel);
+
+	switch(mFormat) {
+		case FormatDXT1:
+			size /= 2;
+			if(size < 8) {
+				size = 8;
+			}
+			break;
+
+		case FormatDXT5:
+			if(size < 16) {
+				size = 16;
+			}
+			break;
+
+		case FormatUnknown:
+			size = 0;
+			break;
+	}
+
+	return size;
 }
 
 }
