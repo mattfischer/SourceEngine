@@ -95,6 +95,14 @@ struct Header {
     int revision;
 };
 
+struct GameLumpHeader {
+	int id;
+	unsigned short flags;
+	unsigned short version;
+	int fileOfs;
+	int fileLen;
+};
+
 template <typename T> void readLump(IReader *reader, T *&list, size_t &num, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
@@ -169,6 +177,20 @@ BSP::BSP(IReader *reader)
 	mLighting = new unsigned char[lightingLump.length];
 	reader->seek(lightingLump.offset);
 	reader->read(mLighting, lightingLump.length);
+
+	Lump &gameLump = header.lumps[LUMP_GAME_LUMP];
+	reader->seek(gameLump.offset);
+	int numGameLumps;
+	reader->read(&numGameLumps, sizeof(int));
+	GameLumpHeader *gameLumps = new GameLumpHeader[numGameLumps];
+	reader->read(gameLumps, sizeof(GameLumpHeader) * numGameLumps);
+
+	for(int i=0; i<numGameLumps; i++) {
+		if(gameLumps[i].id == 'sprp') {
+			unsigned char *staticProps = new unsigned char[gameLumps[i].fileLen];
+			parseStaticProps(reader, gameLumps[i].fileOfs);
+		}
+	}
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)
@@ -201,6 +223,26 @@ void BSP::parseVisData(unsigned char *visData, int visDataLength)
 			offset++;
 		}
 	}
+}
+
+void BSP::parseStaticProps(IReader *reader, int offset)
+{
+	reader->seek(offset);
+	reader->read(&mNumStaticPropNames, sizeof(size_t));
+	mStaticPropNames = new std::string[mNumStaticPropNames];
+	for(unsigned int i=0; i<mNumStaticPropNames; i++) {
+		char name[128];
+		reader->read(name, 128);
+		mStaticPropNames[i] = std::string(name);
+	}
+
+	reader->read(&mNumStaticPropLeaves, sizeof(size_t));
+	mStaticPropLeaves = new unsigned short[mNumStaticPropLeaves];
+	reader->read(mStaticPropLeaves, sizeof(unsigned short) * (int)mNumStaticPropLeaves);
+
+	reader->read(&mNumStaticProps, sizeof(size_t));
+	mStaticProps = new StaticProp[mNumStaticProps];
+	reader->read(mStaticProps, sizeof(StaticProp) * (int)mNumStaticProps);
 }
 
 }

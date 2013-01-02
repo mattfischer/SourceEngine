@@ -100,6 +100,33 @@ public:
 		const KeyValue::Section *section;
 	};
 
+	struct StaticProp
+	{
+		Vector origin;
+		Vector angles;
+		unsigned short propType;
+		unsigned short firstLeaf;
+		unsigned short leafCount;
+		unsigned char solid;
+		unsigned char flags;
+		int	skin;
+		float fadeMinDist;
+		float fadeMaxDist;
+		Vector lightingOrigin;
+
+		float forcedFadeScale;
+
+		unsigned short minDXLevel;
+		unsigned short maxDXLevel;
+
+		unsigned char minCPULevel;
+		unsigned char maxCPULevel;
+		unsigned char minGPULevel;
+		unsigned char maxGPULevel;
+
+		unsigned int diffuseModulation;
+	};
+
 	BSP(IReader *reader);
 
 	size_t numModels() { return mNumModels; }
@@ -145,6 +172,15 @@ public:
 	const Entity &entity(int entity) { return mEntities[entity]; }
 
 	const unsigned char *lighting(int offset) { return mLighting + offset; }
+
+	size_t numStaticPropNames() { return mNumStaticPropNames; }
+	const std::string &staticPropName(int staticPropName) { return mStaticPropNames[staticPropName]; }
+
+	size_t numStaticPropLeaves() { return mNumStaticPropLeaves; }
+	unsigned short staticPropLeaf(int staticPropLeaf) { return mStaticPropLeaves[staticPropLeaf]; }
+
+	size_t numStaticProps() { return mNumStaticProps; }
+	const StaticProp &staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
 	static BSP *open(IReaderFactory *factory, const std::string &filename);
 
@@ -194,7 +230,17 @@ private:
 
 	unsigned char *mLighting;
 
+	size_t mNumStaticPropNames;
+	std::string *mStaticPropNames;
+
+	size_t mNumStaticPropLeaves;
+	unsigned short *mStaticPropLeaves;
+
+	size_t mNumStaticProps;
+	StaticProp *mStaticProps;
+
 	void parseVisData(unsigned char *visData, int visDataLength);
+	void parseStaticProps(IReader *reader, int offset);
 };
 
 }
