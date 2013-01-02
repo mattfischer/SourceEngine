@@ -74,6 +74,17 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 				mBspDrawer->draw(entity->bspRoot(), entity->position(), entity->orientation());
 			}
 		}
+
+		for(unsigned int i=0; i<mMap->numStaticProps(); i++) {
+			World::StaticProp *staticProp = mMap->staticProp(i);
+
+			for(unsigned int j=0; j<staticProp->numLeaves(); j++) {
+				if(staticProp->leaf(j)->frameTag == mFrameTag && !mFrustum.boxOutside(staticProp->box())) {
+					mModelDrawer->draw(staticProp->model(), staticProp->position(), staticProp->orientation());
+				}
+				break;
+			}
+		}
 	}
 
 	glPopMatrix();

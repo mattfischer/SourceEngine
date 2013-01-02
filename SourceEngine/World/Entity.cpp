@@ -6,7 +6,7 @@
 
 namespace World {
 
-Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
+Entity::Entity(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
 {
 	const File::BSP::Entity &fileEntity = file->entity(number);
 
@@ -53,6 +53,8 @@ Entity::Entity(File::BSP *file, int number, ModelCache *modelCache)
 			}
 		}
 	}
+
+	mLeaf = bsp->leafForPoint(0, mPosition);
 }
 
 }

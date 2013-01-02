@@ -36,13 +36,17 @@ Map::Map(File::IReaderFactory *factory, const std::string &filename)
 	mEntities = new Entity*[mNumEntities];
 
 	for(unsigned int i=0; i<mNumEntities; i++) {
-		mEntities[i] = new Entity(file, i, modelCache);
-
-		mEntities[i]->setLeaf(mBsp->leafForPoint(0, mEntities[i]->position()));
+		mEntities[i] = new Entity(file, i, mBsp, modelCache);
 
 		if(mEntities[i]->classname() == "info_player_start") {
 			mPlayerStart = mEntities[i];
 		}
+	}
+
+	mNumStaticProps = file->numStaticProps();
+	mStaticProps = new StaticProp*[mNumStaticProps];
+	for(unsigned int i=0; i<mNumStaticProps; i++) {
+		mStaticProps[i] = new StaticProp(file, i, mBsp, modelCache);
 	}
 }
 

@@ -46,6 +46,12 @@ public:
 	size_t numRoots() { return mNumRoots; }
 	Node *root(int root) { return mRoots[root]; }
 
+	size_t numNodes() { return mNumNodes; }
+	Node *node(int node) { return &mNodes[node]; }
+
+	size_t numLeaves() { return mNumLeaves; }
+	Leaf *leaf(int leaf) { return &mLeaves[leaf]; }
+
 	bool leafVisibleFrom(const Leaf *leaf, const Leaf *cameraLeaf);
 	Leaf *leafForPoint(int root, const Geo::Point &point);
 

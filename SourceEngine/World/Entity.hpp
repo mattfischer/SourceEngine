@@ -18,7 +18,7 @@ namespace World {
 
 class Entity {
 public:
-	Entity(File::BSP *file, int number, ModelCache *modelCache);
+	Entity(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
 
 	const Geo::Point &position() { return mPosition; }
 	const Geo::Orientation &orientation() { return mOrientation; }
@@ -29,7 +29,6 @@ public:
 
 	const Geo::BoxOriented &box() { return mBox; }
 
-	void setLeaf(BSP::Leaf *leaf) { mLeaf = leaf; }
 	BSP::Leaf *leaf() { return mLeaf; }
 
 	int bspRoot() { return mBspRoot; }

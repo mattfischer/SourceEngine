@@ -5,6 +5,7 @@
 #include "World/Material.hpp"
 #include "World/BSP.hpp"
 #include "World/Entity.hpp"
+#include "World/StaticProp.hpp"
 
 #include "File/IReaderFactory.hpp"
 
@@ -23,6 +24,9 @@ public:
 	size_t numEntities() { return mNumEntities; }
 	Entity *entity(int entity) { return mEntities[entity]; }
 
+	size_t numStaticProps() { return mNumStaticProps; }
+	StaticProp *staticProp(int staticProp) { return mStaticProps[staticProp]; }
+
 private:
 	size_t mNumMaterials;
 	Material **mMaterials;
@@ -32,6 +36,9 @@ private:
 
 	size_t mNumEntities;
 	Entity **mEntities;
+
+	size_t mNumStaticProps;
+	StaticProp **mStaticProps;
 
 	BSP *mBsp;
 

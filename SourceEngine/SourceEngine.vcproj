@@ -311,6 +311,10 @@
 					RelativePath=".\World\ModelCache.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\World\StaticProp.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Draw"
@@ -483,6 +487,10 @@
 				</File>
 				<File
 					RelativePath=".\World\ModelCache.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\World\StaticProp.hpp"
 					>
 				</File>
 			</Filter>
