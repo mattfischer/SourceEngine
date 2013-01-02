@@ -11,8 +11,14 @@ Texture::Texture(File::VTF *vtf)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	for(int i=0; i<vtf->numMipMaps(); i++) {
-		glTexImage2D(GL_TEXTURE_2D, vtf->numMipMaps() - i - 1, GL_RGBA, vtf->width(i), vtf->height(i), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(i));
+	int numMip = vtf->numMipMaps() - 2;
+	if(numMip < 6) {
+		numMip = 6;
+	}
+
+	for(int i=0; i<numMip; i++) {
+		int mip = numMip - i - 1;
+		glTexImage2D(GL_TEXTURE_2D, i, GL_RGBA, vtf->width(mip), vtf->height(mip), 0, GL_RGBA, GL_UNSIGNED_BYTE, vtf->data(mip));
 	}
 
 	mWidth = vtf->width();

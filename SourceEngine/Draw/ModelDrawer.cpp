@@ -19,7 +19,7 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 	for(int b=0; b<model->vtx()->numBodyParts(); b++) {
 		const File::VTX::BodyPart &bodyPart = model->vtx()->bodyPart(b);
 		for(int m=0; m<bodyPart.numModels; m++) {
-			File::VTX::Lod &lod = bodyPart.models[m].lods[bodyPart.models[m].numLods - 1];
+			File::VTX::Lod &lod = bodyPart.models[m].lods[0];
 			for(int me=0; me<lod.numMeshes; me++) {
 				File::VTX::Mesh &mesh = lod.meshes[me];
 				World::Material *material = model->material(model->mdl()->skin(0, 0));
@@ -34,8 +34,8 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 
 						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 						glEnableClientState(GL_VERTEX_ARRAY);
-						glVertexPointer(3, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[0].position);
-						glTexCoordPointer(2, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(bodyPart.models[m].numLods - 1).vertices[0].texCoord);
+						glVertexPointer(3, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(0).vertices[0].position);
+						glTexCoordPointer(2, GL_FLOAT, sizeof(File::VVD::Vertex), &model->vvd()->lod(0).vertices[0].texCoord);
 						GLenum mode;
 						if(strip.flags == 0x1) {
 							mode = GL_TRIANGLES;

@@ -67,7 +67,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				glMatrixMode(GL_PROJECTION_MATRIX);
 				glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 				glLoadIdentity();
-				gluPerspective(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 50, 10000);
+				gluPerspective(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 10, 10000);
 
 				glMatrixMode(GL_MODELVIEW_MATRIX);
 				float matrix[16] = { 0.0f, 0.0f, -1.0f, 0.0f,   -1.0f, 0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f };
