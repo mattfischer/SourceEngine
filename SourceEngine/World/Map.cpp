@@ -54,7 +54,7 @@ Map::Map(File::Space *space, const std::string &filename)
 	mNumStaticProps = file->numStaticProps();
 	mStaticProps = new StaticProp*[mNumStaticProps];
 	for(unsigned int i=0; i<mNumStaticProps; i++) {
-		mStaticProps[i] = new StaticProp(file, i, mBsp, modelCache);
+		mStaticProps[i] = new StaticProp(file, i, mBsp, multiSpace, modelCache);
 	}
 
 	delete zipSpace;

@@ -351,6 +351,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Format\VHV.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Format\VMT.cpp"
 					>
 				</File>
@@ -534,6 +538,10 @@
 				</File>
 				<File
 					RelativePath=".\Format\MDL.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VHV.hpp"
 					>
 				</File>
 				<File

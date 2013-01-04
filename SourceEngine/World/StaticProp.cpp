@@ -1,8 +1,10 @@
 #include "World/StaticProp.hpp"
 
+#include <sstream>
+
 namespace World {
 
-StaticProp::StaticProp(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
+StaticProp::StaticProp(Format::BSP *file, int number, BSP *bsp, File::Space *space, ModelCache *modelCache)
 {
 	const Format::BSP::StaticProp &fileStaticProp = file->staticProp(number);
 	const std::string &fileName = file->staticPropName(fileStaticProp.propType);
@@ -26,6 +28,10 @@ StaticProp::StaticProp(Format::BSP *file, int number, BSP *bsp, ModelCache *mode
 
 		mBox = transformation * mModel->box();
 	}
+
+	std::stringstream ss;
+	ss << "sp_hdr_" << number << ".vhv";
+	mVhv = Format::VHV::open(space, ss.str());
 }
 
 }
