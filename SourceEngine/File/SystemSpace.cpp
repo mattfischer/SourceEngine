@@ -12,30 +12,27 @@ public:
 		: mFile(filename.c_str(), std::ios_base::in | std::ios_base::binary)
 	{
 		mFile.seekg(0, std::ios_base::end);
-		mSize = mFile.tellg();
+		int size = mFile.tellg();
 		mFile.seekg(0);
+
+		setSize(size);
 	}
 
 	virtual ~SystemFile() {}
 
-	virtual void read(void *buffer, int size)
+	virtual int doRead(void *buffer, int size)
 	{
 		mFile.read((char*)buffer, size);
+		return size;
 	}
 
-	virtual void seek(int pos)
+	virtual void doSeek(int pos)
 	{
 		mFile.seekg(pos);
 	}
 
-	virtual int size()
-	{
-		return mSize;
-	}
-
 private:
 	std::ifstream mFile;
-	int mSize;
 };
 
 SystemSpace::SystemSpace(const std::string &directory)

@@ -15,18 +15,20 @@ public:
 		: mFileInfo(fileInfo),
 		  mDirectory(directory)
 	{
-		mPointer = 0;
+		setSize(mFileInfo.preloadBytes + mFileInfo.entryLength);
 	}
 
 	virtual ~VPKFile() {}
 
-	virtual void read(void *buffer, int size)
+	virtual int doRead(void *buffer, int size)
 	{
 		int bytesRead = 0;
-		if(mPointer < mFileInfo.preloadBytes) {
-			int readSize = std::min((unsigned int)size, mFileInfo.preloadBytes - mPointer);
-			memcpy(buffer, mFileInfo.preloadData + mPointer, readSize);
-			mPointer += readSize;
+		unsigned int ptr = pointer();
+
+		if(ptr < mFileInfo.preloadBytes) {
+			int readSize = std::min((unsigned int)size, mFileInfo.preloadBytes - ptr);
+			memcpy(buffer, mFileInfo.preloadData + ptr, readSize);
+			ptr += readSize;
 			bytesRead = readSize;
 		}
 
@@ -34,25 +36,15 @@ public:
 			std::string filename = mDirectory.getArchiveName(mFileInfo.archiveIndex, mDataStart);
 			mFile.open(filename.c_str(), std::ios_base::in | std::ios_base::binary);
 		}
-		mFile.seekg(mDataStart + mFileInfo.entryOffset + mPointer - mFileInfo.preloadBytes);
+		mFile.seekg(mDataStart + mFileInfo.entryOffset + ptr - mFileInfo.preloadBytes);
 		mFile.read((char*)buffer + bytesRead, size - bytesRead);
-		mPointer += size;
-	}
 
-	virtual void seek(int pos)
-	{
-		mPointer = pos;
-	}
-
-	virtual int size()
-	{
-		return mFileInfo.preloadBytes + mFileInfo.entryLength;
+		return size;
 	}
 
 private:
 	Format::VPK::FileInfo &mFileInfo;
 	Format::VPK &mDirectory;
-	unsigned int mPointer;
 	std::ifstream mFile;
 	int mDataStart;
 };

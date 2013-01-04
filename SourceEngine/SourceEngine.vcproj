@@ -189,7 +189,7 @@
 				Name="File"
 				>
 				<File
-					RelativePath=".\File\KeyValue.cpp"
+					RelativePath=".\File\File.cpp"
 					>
 				</File>
 				<File
