@@ -183,6 +183,9 @@ public:
 	size_t numStaticProps() { return mNumStaticProps; }
 	const StaticProp &staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
+	size_t pakfileSize() { return mPakfileSize; }
+	const unsigned char *pakfile() { return mPakfile; }
+
 	static BSP *open(File::Space *space, const std::string &filename);
 
 private:
@@ -229,6 +232,7 @@ private:
 	Entity *mEntities;
 	size_t mNumEntities;
 
+	size_t mLightingSize;
 	unsigned char *mLighting;
 
 	size_t mNumStaticPropNames;
@@ -239,6 +243,9 @@ private:
 
 	size_t mNumStaticProps;
 	StaticProp *mStaticProps;
+
+	size_t mPakfileSize;
+	unsigned char *mPakfile;
 
 	void parseVisData(unsigned char *visData, int visDataLength);
 	void parseStaticProps(File::File *file, int offset);

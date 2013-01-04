@@ -2,11 +2,19 @@
 
 #include "Format/BSP.hpp"
 
+#include "File/ZipSpace.hpp"
+#include "File/MultiSpace.hpp"
+
 namespace World {
 
 Map::Map(File::Space *space, const std::string &filename)
 {
 	Format::BSP *file = Format::BSP::open(space, filename);
+
+	File::ZipSpace *zipSpace = new File::ZipSpace(file->pakfile(), file->pakfileSize());
+	File::MultiSpace *multiSpace = new File::MultiSpace();
+	multiSpace->addSpace(zipSpace);
+	multiSpace->addSpace(space);
 
 	mNumMaterials = file->numTexDatas();
 	mMaterials = new Material*[mNumMaterials];
@@ -14,9 +22,9 @@ Map::Map(File::Space *space, const std::string &filename)
 		const Format::BSP::TexData &texData = file->texData(i);
 		const std::string &materialFilename = file->texDataString(texData.nameStringTableID);
 
-		Format::VMT *vmt = Format::VMT::open(space, "materials/" + materialFilename + ".vmt");
+		Format::VMT *vmt = Format::VMT::open(multiSpace, "materials/" + materialFilename + ".vmt");
 		if(vmt) {
-			mMaterials[i] = new Material(vmt, space);
+			mMaterials[i] = new Material(vmt, multiSpace);
 		} else {
 			mMaterials[i] = 0;
 		}
@@ -30,7 +38,7 @@ Map::Map(File::Space *space, const std::string &filename)
 
 	mBsp = new BSP(file, mFaces);
 
-	ModelCache *modelCache = new ModelCache(space);
+	ModelCache *modelCache = new ModelCache(multiSpace);
 
 	mNumEntities = file->numEntities();
 	mEntities = new Entity*[mNumEntities];
@@ -48,6 +56,9 @@ Map::Map(File::Space *space, const std::string &filename)
 	for(unsigned int i=0; i<mNumStaticProps; i++) {
 		mStaticProps[i] = new StaticProp(file, i, mBsp, modelCache);
 	}
+
+	delete zipSpace;
+	delete multiSpace;
 }
 
 }

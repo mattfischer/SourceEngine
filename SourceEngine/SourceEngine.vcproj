@@ -204,6 +204,10 @@
 					RelativePath=".\File\VPKSpace.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\File\ZipSpace.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Geo"
@@ -406,6 +410,10 @@
 				</File>
 				<File
 					RelativePath=".\File\VPKSpace.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\ZipSpace.hpp"
 					>
 				</File>
 			</Filter>

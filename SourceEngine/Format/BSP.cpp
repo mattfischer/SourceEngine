@@ -144,6 +144,8 @@ BSP::BSP(File::File *file)
 	readLump(file, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
 	readLump(file, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
 	readLump(file, mLeafFaces, mNumLeafFaces, header, LUMP_LEAFFACES);
+	readLump(file, mLighting, mLightingSize, header, LUMP_LIGHTING_HDR);
+	readLump(file, mPakfile, mPakfileSize, header, LUMP_PAKFILE);
 
 	int *stringTable;
 	unsigned int stringTableLength;
@@ -175,11 +177,6 @@ BSP::BSP(File::File *file)
 		mEntities[i].section = &mEntityKeyValue->section(i);
 	}
 
-	Lump &lightingLump = header.lumps[LUMP_LIGHTING_HDR];
-	mLighting = new unsigned char[lightingLump.length];
-	file->seek(lightingLump.offset);
-	file->read(mLighting, lightingLump.length);
-
 	Lump &gameLump = header.lumps[LUMP_GAME_LUMP];
 	file->seek(gameLump.offset);
 	int numGameLumps;
@@ -193,12 +190,6 @@ BSP::BSP(File::File *file)
 			parseStaticProps(file, gameLumps[i].fileOfs);
 		}
 	}
-
-	unsigned char *pakfile = new unsigned char[header.lumps[LUMP_PAKFILE].length];
-	file->seek(header.lumps[LUMP_PAKFILE].offset);
-	file->read(pakfile, header.lumps[LUMP_PAKFILE].length);
-	std::ofstream outfile("pakfile.zip", std::ios_base::binary | std::ios_base::out);
-	outfile.write((const char*)pakfile, header.lumps[LUMP_PAKFILE].length);
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)
