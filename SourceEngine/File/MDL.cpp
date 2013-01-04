@@ -132,10 +132,10 @@ struct Texture {
 	int	unused2[10];
 };
 
-MDL::MDL(IReader *reader)
+MDL::MDL(File *file)
 {
-	char *data = new char[reader->size()];
-	reader->read(data, reader->size());
+	char *data = new char[file->size()];
+	file->read(data, file->size());
 
 	Header *header = (Header*)data;
 
@@ -163,14 +163,14 @@ MDL::MDL(IReader *reader)
 	delete[] data;
 }
 
-MDL *MDL::open(IReaderFactory *factory, const std::string &filename)
+MDL *MDL::open(Space *space, const std::string &filename)
 {
 	MDL *ret = 0;
-	IReader *reader = factory->open(filename);
+	File *file = space->open(filename);
 
-	if(reader) {
-		ret = new MDL(reader);
-		delete reader;
+	if(file) {
+		ret = new MDL(file);
+		delete file;
 	}
 
 	return ret;

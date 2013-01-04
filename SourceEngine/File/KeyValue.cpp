@@ -4,11 +4,11 @@
 
 namespace File {
 
-KeyValue::KeyValue(IReader *reader, int offset, int length)
+KeyValue::KeyValue(File *file, int offset, int length)
 {
 	char *buffer = new char[length + 1];
-	reader->seek(offset);
-	reader->read(buffer, length);
+	file->seek(offset);
+	file->read(buffer, length);
 	buffer[length] = '\0';
 
 	std::string source(buffer);

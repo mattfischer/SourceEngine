@@ -1,7 +1,7 @@
 #ifndef WORLD_MODEL_CACHE_HPP
 #define WORLD_MODEL_CACHE_HPP
 
-#include "File/IReaderFactory.hpp"
+#include "File/Space.hpp"
 
 #include "World/Model.hpp"
 
@@ -12,12 +12,12 @@ namespace World {
 
 class ModelCache {
 public:
-	ModelCache(File::IReaderFactory *factory);
+	ModelCache(File::Space *factory);
 
 	Model *open(const std::string &filename);
 
 private:
-	File::IReaderFactory *mFactory;
+	File::Space *mSpace;
 	std::map<std::string, Model*> mMap;
 };
 

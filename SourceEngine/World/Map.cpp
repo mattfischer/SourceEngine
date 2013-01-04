@@ -4,9 +4,9 @@
 
 namespace World {
 
-Map::Map(File::IReaderFactory *factory, const std::string &filename)
+Map::Map(File::Space *space, const std::string &filename)
 {
-	File::BSP *file = File::BSP::open(factory, filename);
+	File::BSP *file = File::BSP::open(space, filename);
 
 	mNumMaterials = file->numTexDatas();
 	mMaterials = new Material*[mNumMaterials];
@@ -14,9 +14,9 @@ Map::Map(File::IReaderFactory *factory, const std::string &filename)
 		const File::BSP::TexData &texData = file->texData(i);
 		const std::string &materialFilename = file->texDataString(texData.nameStringTableID);
 
-		File::VMT *vmt = File::VMT::open(factory, "materials/" + materialFilename + ".vmt");
+		File::VMT *vmt = File::VMT::open(space, "materials/" + materialFilename + ".vmt");
 		if(vmt) {
-			mMaterials[i] = new Material(vmt, factory);
+			mMaterials[i] = new Material(vmt, space);
 		} else {
 			mMaterials[i] = 0;
 		}
@@ -30,7 +30,7 @@ Map::Map(File::IReaderFactory *factory, const std::string &filename)
 
 	mBsp = new BSP(file, mFaces);
 
-	ModelCache *modelCache = new ModelCache(factory);
+	ModelCache *modelCache = new ModelCache(space);
 
 	mNumEntities = file->numEntities();
 	mEntities = new Entity*[mNumEntities];

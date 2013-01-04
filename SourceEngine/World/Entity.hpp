@@ -1,7 +1,7 @@
 #ifndef WORLD_ENTITY_HPP
 #define WORLD_ENTITY_HPP
 
-#include "File/IReaderFactory.hpp"
+#include "File/Space.hpp"
 #include "File/BSP.hpp"
 
 #include "Geo/Point.hpp"

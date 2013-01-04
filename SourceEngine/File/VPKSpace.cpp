@@ -1,23 +1,23 @@
-#include "File/VPKReaderFactory.hpp"
+#include "File/VPKSpace.hpp"
 
 #include "File/VPK.hpp"
-#include "File/IReader.hpp"
+#include "File/File.hpp"
 
 #include <fstream>
 #include <algorithm>
 
 namespace File {
 
-class VPKReader : public IReader {
+class VPKFile : public File {
 public:
-	VPKReader(File::VPK::FileInfo &fileInfo, File::VPK &directory)
+	VPKFile(::File::VPK::FileInfo &fileInfo, ::File::VPK &directory)
 		: mFileInfo(fileInfo),
 		  mDirectory(directory)
 	{
 		mPointer = 0;
 	}
 
-	virtual ~VPKReader() {}
+	virtual ~VPKFile() {}
 
 	virtual void read(void *buffer, int size)
 	{
@@ -49,30 +49,30 @@ public:
 	}
 
 private:
-	File::VPK::FileInfo &mFileInfo;
-	File::VPK &mDirectory;
+	::File::VPK::FileInfo &mFileInfo;
+	::File::VPK &mDirectory;
 	unsigned int mPointer;
 	std::ifstream mFile;
 	int mDataStart;
 };
 
-VPKReaderFactory::VPKReaderFactory(const std::string &filename)
+VPKSpace::VPKSpace(const std::string &filename)
 : mDirectory(filename)
 {
 }
 
-IReader *VPKReaderFactory::open(const std::string &name)
+File *VPKSpace::open(const std::string &name)
 {
-	IReader *reader = 0;
+	File *file = 0;
 	if(mDirectory.exists(name)) {
-		File::VPK::FileInfo &info = mDirectory.lookup(name);
-		reader = new VPKReader(info, mDirectory);
+		::File::VPK::FileInfo &info = mDirectory.lookup(name);
+		file = new VPKFile(info, mDirectory);
 	}
 
-	return reader;
+	return file;
 }
 
-bool VPKReaderFactory::exists(const std::string &name)
+bool VPKSpace::exists(const std::string &name)
 {
 	return mDirectory.exists(name);
 }

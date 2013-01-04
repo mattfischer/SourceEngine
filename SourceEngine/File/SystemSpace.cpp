@@ -1,14 +1,14 @@
-#include "File/FileReaderFactory.hpp"
+#include "File/SystemSpace.hpp"
 
-#include "File/IReader.hpp"
+#include "File/File.hpp"
 
 #include <fstream>
 
 namespace File {
 
-class FileReader : public IReader {
+class SystemFile : public File {
 public:
-	FileReader(const std::string &filename)
+	SystemFile(const std::string &filename)
 		: mFile(filename.c_str(), std::ios_base::in | std::ios_base::binary)
 	{
 		mFile.seekg(0, std::ios_base::end);
@@ -16,19 +16,19 @@ public:
 		mFile.seekg(0);
 	}
 
-	virtual ~FileReader() {}
+	virtual ~SystemFile() {}
 
-	virtual void FileReader::read(void *buffer, int size)
+	virtual void read(void *buffer, int size)
 	{
 		mFile.read((char*)buffer, size);
 	}
 
-	virtual void FileReader::seek(int pos)
+	virtual void seek(int pos)
 	{
 		mFile.seekg(pos);
 	}
 
-	virtual int FileReader::size()
+	virtual int size()
 	{
 		return mSize;
 	}
@@ -38,7 +38,7 @@ private:
 	int mSize;
 };
 
-FileReaderFactory::FileReaderFactory(const std::string &directory)
+SystemSpace::SystemSpace(const std::string &directory)
 : mDirectory(directory)
 {
 }
@@ -55,19 +55,19 @@ std::string getFilename(const std::string &directory, const std::string &name)
 	return filename;
 }
 
-IReader *FileReaderFactory::open(const std::string &name)
+File *SystemSpace::open(const std::string &name)
 {
-	IReader *reader = 0;
+	File *file = 0;
 
 	if(exists(name)) {
 		std::string filename = getFilename(mDirectory, name);
-		reader = new FileReader(filename);
+		file = new SystemFile(filename);
 	}
 
-	return reader;
+	return file;
 }
 
-bool FileReaderFactory::exists(const std::string &name)
+bool SystemSpace::exists(const std::string &name)
 {
 	std::string filename = getFilename(mDirectory, name);
 	std::ifstream file(filename.c_str());

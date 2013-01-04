@@ -1,7 +1,7 @@
 #ifndef FILE_VTF_HPP
 #define FILE_VTF_HPP
 
-#include "File/IReaderFactory.hpp"
+#include "File/Space.hpp"
 
 #include <string>
 
@@ -15,7 +15,7 @@ public:
 		FormatUnknown
 	};
 
-	VTF(IReader *reader);
+	VTF(File *file);
 	~VTF();
 
 	int width(int n);
@@ -29,7 +29,7 @@ public:
 	const unsigned char *data(int mipMapLevel) { return mData[mipMapLevel]; }
 	int dataSize(int mipMapLevel);
 
-	static VTF *open(IReaderFactory *factory, const std::string &filename);
+	static VTF *open(Space *space, const std::string &filename);
 
 private:
 	int mWidth;

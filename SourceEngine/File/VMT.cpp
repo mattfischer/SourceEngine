@@ -6,20 +6,20 @@
 
 namespace File {
 
-VMT *VMT::open(IReaderFactory *factory, const std::string &filename)
+VMT *VMT::open(Space *space, const std::string &filename)
 {
 	VMT *ret = 0;
-	IReader *reader = factory->open(filename);
-	if(reader) {
-		ret = new VMT(reader);
-		delete reader;
+	File *file = space->open(filename);
+	if(file) {
+		ret = new VMT(file);
+		delete file;
 	}
 
 	return ret;
 }
 
-VMT::VMT(IReader *reader)
-: mKeyValue(reader, 0, reader->size())
+VMT::VMT(File *file)
+: mKeyValue(file, 0, file->size())
 {
 }
 

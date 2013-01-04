@@ -50,7 +50,7 @@ unsigned int interp8888(unsigned int a, unsigned int b, int num, int den)
 	return 0xff000000 | (_r << 16) | (_g << 8) | (_b << 0);
 }
 
-unsigned char *readDXT(IReader *reader, int width, int height, int n)
+unsigned char *readDXT(File *file, int width, int height, int n)
 {
 	int srcSize;
 
@@ -71,7 +71,7 @@ unsigned char *readDXT(IReader *reader, int width, int height, int n)
 	}
 
 	unsigned char *src = new unsigned char[srcSize];
-	reader->read(src, srcSize);
+	file->read(src, srcSize);
 
 	unsigned int *dst = new unsigned int[width * height];
 
@@ -123,25 +123,25 @@ unsigned char *readDXT(IReader *reader, int width, int height, int n)
 	return (unsigned char*)dst;
 }
 
-VTF *VTF::open(IReaderFactory *factory, const std::string &filename)
+VTF *VTF::open(Space *space, const std::string &filename)
 {
 	VTF *ret = 0;
-	IReader *reader = factory->open(filename);
+	File *file = space->open(filename);
 
-	if(reader) {
-		ret = new VTF(reader);
-		delete reader;
+	if(file) {
+		ret = new VTF(file);
+		delete file;
 	}
 
 	return ret;
 }
 
-VTF::VTF(IReader *reader)
+VTF::VTF(File *file)
 {
 	VTFHeader header;
 
-	reader->read(&header, sizeof(header));
-	reader->seek(header.headerSize);
+	file->read(&header, sizeof(header));
+	file->seek(header.headerSize);
 
 	mWidth = header.width;
 	mHeight = header.height;
@@ -149,7 +149,7 @@ VTF::VTF(IReader *reader)
 
 	int lowResDataSize = header.lowResImageWidth * header.lowResImageHeight / 2;
 	mLowResData = new unsigned char[lowResDataSize];
-	reader->read(mLowResData, lowResDataSize);
+	file->read(mLowResData, lowResDataSize);
 
 	switch(header.highResImageFormat) {
 		case 0xd:
@@ -172,7 +172,7 @@ VTF::VTF(IReader *reader)
 		} else {
 			int size = dataSize(i);
 			mData[i] = new unsigned char[size];
-			reader->read(mData[i], size);
+			file->read(mData[i], size);
 		}
 	}
 }

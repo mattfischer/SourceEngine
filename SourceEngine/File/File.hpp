@@ -3,9 +3,9 @@
 
 namespace File {
 
-class IReader {
+class File {
 public:
-	virtual ~IReader() {}
+	virtual ~File() {}
 
 	virtual void read(void *buffer, int size) = 0;
 	virtual void seek(int pos) = 0;

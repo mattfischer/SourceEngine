@@ -1,8 +1,8 @@
 #ifndef FILE_VVD_HPP
 #define FILE_VVD_HPP
 
-#include "File/IReader.hpp"
-#include "File/IReaderFactory.hpp"
+#include "File/File.hpp"
+#include "File/Space.hpp"
 
 #include <string>
 
@@ -44,12 +44,12 @@ public:
 		Vertex *vertices;
 	};
 
-	VVD(IReader *reader);
+	VVD(File *file);
 
 	int numLods() { return mNumLods; }
 	const Lod &lod(int lod) { return mLods[lod]; }
 
-	static VVD *open(IReaderFactory *factory, const std::string &name);
+	static VVD *open(Space *space, const std::string &name);
 
 private:
 	int mNumLods;

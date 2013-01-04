@@ -1,7 +1,7 @@
 #ifndef FILE_KEY_VALUE_HPP
 #define FILE_KEY_VALUE_HPP
 
-#include "File/IReader.hpp"
+#include "File/File.hpp"
 
 #include "StringUtils.hpp"
 
@@ -13,7 +13,7 @@ namespace File {
 
 class KeyValue {
 public:
-	KeyValue(IReader *reader, int offset, int length);
+	KeyValue(File *file, int offset, int length);
 
 	class Section {
 	public:

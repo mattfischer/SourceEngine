@@ -7,7 +7,7 @@
 #include "World/Entity.hpp"
 #include "World/StaticProp.hpp"
 
-#include "File/IReaderFactory.hpp"
+#include "File/Space.hpp"
 
 #include <string>
 
@@ -15,7 +15,7 @@ namespace World {
 
 class Map {
 public:
-	Map(File::IReaderFactory *factory, const std::string &filename);
+	Map(File::Space *space, const std::string &filename);
 
 	BSP *bsp() { return mBsp; }
 

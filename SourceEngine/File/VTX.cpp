@@ -155,10 +155,10 @@ static void parseBodyPart(VTX::BodyPart *bodyPart, BodyPartHeader *header)
 	}
 }
 
-VTX::VTX(IReader *reader)
+VTX::VTX(File *file)
 {
-	char *data = new char[reader->size()];
-	reader->read(data, reader->size());
+	char *data = new char[file->size()];
+	file->read(data, file->size());
 
 	VTXHeader *header = (VTXHeader*)data;
 	mNumBodyParts = header->numBodyParts;
@@ -171,14 +171,14 @@ VTX::VTX(IReader *reader)
 	delete[] data;
 }
 
-VTX *VTX::open(IReaderFactory *factory, const std::string &name)
+VTX *VTX::open(Space *space, const std::string &name)
 {
 	VTX *ret = 0;
-	IReader *reader = factory->open(name);
+	File *file = space->open(name);
 
-	if(reader) {
-		ret = new VTX(reader);
-		delete reader;
+	if(file) {
+		ret = new VTX(file);
+		delete file;
 	}
 
 	return ret;

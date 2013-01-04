@@ -1,8 +1,8 @@
 #ifndef FILE_VTX_HPP
 #define FILE_VTX_HPP
 
-#include "File/IReader.hpp"
-#include "File/IReaderFactory.hpp"
+#include "File/File.hpp"
+#include "File/Space.hpp"
 
 #include <string>
 
@@ -41,12 +41,12 @@ public:
 		Model *models;
 	};
 
-	VTX(IReader *reader);
+	VTX(File *file);
 
 	int numBodyParts() { return mNumBodyParts; }
 	const BodyPart &bodyPart(int bodyPart) { return mBodyParts[bodyPart]; }
 
-	static VTX *open(IReaderFactory *factory, const std::string &name);
+	static VTX *open(Space *space, const std::string &name);
 
 private:
 	int mNumBodyParts;

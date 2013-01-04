@@ -2,9 +2,9 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 
-#include "File/FileReaderFactory.hpp"
-#include "File/VPKReaderFactory.hpp"
-#include "File/MultiReaderFactory.hpp"
+#include "File/SystemSpace.hpp"
+#include "File/VPKSpace.hpp"
+#include "File/MultiSpace.hpp"
 
 #include "Geo/Point.hpp"
 #include "Geo/Orientation.hpp"
@@ -79,10 +79,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 				glDepthFunc(GL_LEQUAL);
 
-				File::MultiReaderFactory *factory = new File::MultiReaderFactory();
-				factory->addFactory(new File::FileReaderFactory("portal2"));
-				factory->addFactory(new File::VPKReaderFactory("portal2/pak01_dir.vpk"));
-				map = new World::Map(factory, "maps/sp_a1_intro3.bsp");
+				File::MultiSpace *space = new File::MultiSpace();
+				space->addSpace(new File::SystemSpace("portal2"));
+				space->addSpace(new File::VPKSpace("portal2/pak01_dir.vpk"));
+				map = new World::Map(space, "maps/sp_a1_intro3.bsp");
 				Geo::Frustum startFrustum(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
 				mapDrawer = new Draw::MapDrawer(map, startFrustum);
 				position = map->playerStart()->position() + Geo::Vector(0, 0, 60);

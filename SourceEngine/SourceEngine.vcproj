@@ -114,7 +114,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="."
+				AdditionalIncludeDirectories=".;&quot;C:\Program Files\glew-1.9.0\include&quot;"
 				RuntimeLibrary="2"
 				WarningLevel="3"
 				WarnAsError="true"
@@ -132,7 +132,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\glew-1.9.0\lib&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -192,10 +193,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\FileReaderFactory.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\File\KeyValue.cpp"
 					>
 				</File>
@@ -204,7 +201,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\MultiReaderFactory.cpp"
+					RelativePath=".\File\MultiSpace.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\SystemSpace.cpp"
 					>
 				</File>
 				<File
@@ -216,7 +217,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\VPKReaderFactory.cpp"
+					RelativePath=".\File\VPKSpace.cpp"
 					>
 				</File>
 				<File
@@ -366,15 +367,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\FileReaderFactory.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\IReader.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\IReaderFactory.hpp"
+					RelativePath=".\File\File.hpp"
 					>
 				</File>
 				<File
@@ -386,7 +379,15 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\MultiReaderFactory.hpp"
+					RelativePath=".\File\MultiSpace.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\Space.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\File\SystemSpace.hpp"
 					>
 				</File>
 				<File
@@ -398,7 +399,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\VPKReaderFactory.hpp"
+					RelativePath=".\File\VPKSpace.hpp"
 					>
 				</File>
 				<File

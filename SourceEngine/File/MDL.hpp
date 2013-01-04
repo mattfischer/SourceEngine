@@ -1,8 +1,8 @@
 #ifndef FILE_MDL_HPP
 #define FILE_MDL_HPP
 
-#include "File/IReader.hpp"
-#include "File/IReaderFactory.hpp"
+#include "File/File.hpp"
+#include "File/Space.hpp"
 
 #include <string>
 
@@ -16,9 +16,9 @@ public:
 		float z;
 	};
 
-	MDL(IReader *reader);
+	MDL(File *file);
 
-	static MDL *open(IReaderFactory *factory, const std::string &filename);
+	static MDL *open(Space *space, const std::string &filename);
 
 	const std::string &texture(int texture) { return mTextures[texture]; }
 	unsigned int numTextures() { return mNumTextures; }

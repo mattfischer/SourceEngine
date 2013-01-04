@@ -22,10 +22,10 @@ struct Fixup {
 	int numVertices;
 };
 
-VVD::VVD(IReader *reader)
+VVD::VVD(File *file)
 {
-	char *data = new char[reader->size()];
-	reader->read(data, reader->size());
+	char *data = new char[file->size()];
+	file->read(data, file->size());
 
 	VVDHeader *header = (VVDHeader*)data;
 	Vertex *vertices = (Vertex*)(data + header->vertexDataStart);
@@ -55,14 +55,14 @@ VVD::VVD(IReader *reader)
 	delete[] data;
 }
 
-VVD *VVD::open(IReaderFactory *factory, const std::string &name)
+VVD *VVD::open(Space *space, const std::string &name)
 {
 	VVD *ret = 0;
-	IReader *reader = factory->open(name);
+	File *file = space->open(name);
 
-	if(reader) {
-		ret = new VVD(reader);
-		delete reader;
+	if(file) {
+		ret = new VVD(file);
+		delete file;
 	}
 
 	return ret;

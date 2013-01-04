@@ -1,5 +1,7 @@
 #include "File/BSP.hpp"
 
+#include <fstream>
+
 namespace File {
 
 struct Lump {
@@ -103,53 +105,53 @@ struct GameLumpHeader {
 	int fileLen;
 };
 
-template <typename T> void readLump(IReader *reader, T *&list, size_t &num, const Header &header, int lumpNum)
+template <typename T> void readLump(File *file, T *&list, size_t &num, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
 
 	num = lump.length / sizeof(T);
 	list = new T[num];
-	reader->seek(lump.offset);
-	reader->read(list, lump.length);
+	file->seek(lump.offset);
+	file->read(list, lump.length);
 }
 
-BSP *BSP::open(IReaderFactory *factory, const std::string &filename)
+BSP *BSP::open(Space *space, const std::string &filename)
 {
 	BSP *ret = 0;
-	IReader *reader = factory->open(filename);
+	File *file = space->open(filename);
 
-	if(reader) {
-		ret = new BSP(reader);
-		delete reader;
+	if(file) {
+		ret = new BSP(file);
+		delete file;
 	}
 
 	return ret;
 }
 
-BSP::BSP(IReader *reader)
+BSP::BSP(File *file)
 {
     Header header;
-    reader->read(&header, sizeof(header));
+    file->read(&header, sizeof(header));
 
-	readLump(reader, mVertices, mNumVertices, header, LUMP_VERTICES);
-	readLump(reader, mPlanes, mNumPlanes, header, LUMP_PLANES);
-	readLump(reader, mNodes, mNumNodes, header, LUMP_NODES);
-	readLump(reader, mLeaves, mNumLeaves, header, LUMP_LEAFS);
-	readLump(reader, mEdges, mNumEdges, header, LUMP_EDGES);
-	readLump(reader, mSurfEdges, mNumSurfEdges, header, LUMP_SURFEDGES);
-	readLump(reader, mFaces, mNumFaces, header, LUMP_FACES_HDR);
-	readLump(reader, mModels, mNumModels, header, LUMP_MODELS);
-	readLump(reader, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
-	readLump(reader, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
-	readLump(reader, mLeafFaces, mNumLeafFaces, header, LUMP_LEAFFACES);
+	readLump(file, mVertices, mNumVertices, header, LUMP_VERTICES);
+	readLump(file, mPlanes, mNumPlanes, header, LUMP_PLANES);
+	readLump(file, mNodes, mNumNodes, header, LUMP_NODES);
+	readLump(file, mLeaves, mNumLeaves, header, LUMP_LEAFS);
+	readLump(file, mEdges, mNumEdges, header, LUMP_EDGES);
+	readLump(file, mSurfEdges, mNumSurfEdges, header, LUMP_SURFEDGES);
+	readLump(file, mFaces, mNumFaces, header, LUMP_FACES_HDR);
+	readLump(file, mModels, mNumModels, header, LUMP_MODELS);
+	readLump(file, mTexInfos, mNumTexInfos, header, LUMP_TEXINFO);
+	readLump(file, mTexDatas, mNumTexDatas, header, LUMP_TEXDATA);
+	readLump(file, mLeafFaces, mNumLeafFaces, header, LUMP_LEAFFACES);
 
 	int *stringTable;
 	unsigned int stringTableLength;
-	readLump(reader, stringTable, stringTableLength, header, LUMP_TEXDATA_STRING_TABLE);
+	readLump(file, stringTable, stringTableLength, header, LUMP_TEXDATA_STRING_TABLE);
 
 	char *stringData;
 	unsigned int stringDataLength;
-	readLump(reader, stringData, stringDataLength, header, LUMP_TEXDATA_STRING_DATA);
+	readLump(file, stringData, stringDataLength, header, LUMP_TEXDATA_STRING_DATA);
 
 	mTexDataStringTable = new std::string[stringTableLength];
 	for(unsigned int i=0; i<stringTableLength; i++) {
@@ -161,12 +163,12 @@ BSP::BSP(IReader *reader)
 
 	unsigned char *visData;
 	unsigned int visDataLength;
-	readLump(reader, visData, visDataLength, header, LUMP_VISIBILITY);
+	readLump(file, visData, visDataLength, header, LUMP_VISIBILITY);
 	parseVisData(visData, visDataLength);
 	delete[] visData;
 
 	Lump &entityLump = header.lumps[LUMP_ENTITIES];
-	mEntityKeyValue = new KeyValue(reader, entityLump.offset, entityLump.length);
+	mEntityKeyValue = new KeyValue(file, entityLump.offset, entityLump.length);
 	mNumEntities = mEntityKeyValue->numSections();
 	mEntities = new Entity[mNumEntities];
 	for(unsigned int i=0; i<mNumEntities; i++) {
@@ -175,22 +177,28 @@ BSP::BSP(IReader *reader)
 
 	Lump &lightingLump = header.lumps[LUMP_LIGHTING_HDR];
 	mLighting = new unsigned char[lightingLump.length];
-	reader->seek(lightingLump.offset);
-	reader->read(mLighting, lightingLump.length);
+	file->seek(lightingLump.offset);
+	file->read(mLighting, lightingLump.length);
 
 	Lump &gameLump = header.lumps[LUMP_GAME_LUMP];
-	reader->seek(gameLump.offset);
+	file->seek(gameLump.offset);
 	int numGameLumps;
-	reader->read(&numGameLumps, sizeof(int));
+	file->read(&numGameLumps, sizeof(int));
 	GameLumpHeader *gameLumps = new GameLumpHeader[numGameLumps];
-	reader->read(gameLumps, sizeof(GameLumpHeader) * numGameLumps);
+	file->read(gameLumps, sizeof(GameLumpHeader) * numGameLumps);
 
 	for(int i=0; i<numGameLumps; i++) {
 		if(gameLumps[i].id == 'sprp') {
 			unsigned char *staticProps = new unsigned char[gameLumps[i].fileLen];
-			parseStaticProps(reader, gameLumps[i].fileOfs);
+			parseStaticProps(file, gameLumps[i].fileOfs);
 		}
 	}
+
+	unsigned char *pakfile = new unsigned char[header.lumps[LUMP_PAKFILE].length];
+	file->seek(header.lumps[LUMP_PAKFILE].offset);
+	file->read(pakfile, header.lumps[LUMP_PAKFILE].length);
+	std::ofstream outfile("pakfile.zip", std::ios_base::binary | std::ios_base::out);
+	outfile.write((const char*)pakfile, header.lumps[LUMP_PAKFILE].length);
 }
 
 void BSP::parseVisData(unsigned char *visData, int visDataLength)
@@ -225,24 +233,24 @@ void BSP::parseVisData(unsigned char *visData, int visDataLength)
 	}
 }
 
-void BSP::parseStaticProps(IReader *reader, int offset)
+void BSP::parseStaticProps(File *file, int offset)
 {
-	reader->seek(offset);
-	reader->read(&mNumStaticPropNames, sizeof(size_t));
+	file->seek(offset);
+	file->read(&mNumStaticPropNames, sizeof(size_t));
 	mStaticPropNames = new std::string[mNumStaticPropNames];
 	for(unsigned int i=0; i<mNumStaticPropNames; i++) {
 		char name[128];
-		reader->read(name, 128);
+		file->read(name, 128);
 		mStaticPropNames[i] = std::string(name);
 	}
 
-	reader->read(&mNumStaticPropLeaves, sizeof(size_t));
+	file->read(&mNumStaticPropLeaves, sizeof(size_t));
 	mStaticPropLeaves = new unsigned short[mNumStaticPropLeaves];
-	reader->read(mStaticPropLeaves, sizeof(unsigned short) * (int)mNumStaticPropLeaves);
+	file->read(mStaticPropLeaves, sizeof(unsigned short) * (int)mNumStaticPropLeaves);
 
-	reader->read(&mNumStaticProps, sizeof(size_t));
+	file->read(&mNumStaticProps, sizeof(size_t));
 	mStaticProps = new StaticProp[mNumStaticProps];
-	reader->read(mStaticProps, sizeof(StaticProp) * (int)mNumStaticProps);
+	file->read(mStaticProps, sizeof(StaticProp) * (int)mNumStaticProps);
 }
 
 }

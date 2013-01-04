@@ -1,7 +1,7 @@
 #ifndef FILE_BSP_HPP
 #define FILE_BSP_HPP
 
-#include "File/IReaderFactory.hpp"
+#include "File/Space.hpp"
 #include "File/KeyValue.hpp"
 
 #include <string>
@@ -127,7 +127,7 @@ public:
 		unsigned int diffuseModulation;
 	};
 
-	BSP(IReader *reader);
+	BSP(File *file);
 
 	size_t numModels() { return mNumModels; }
 	const Model &model(int model) { return mModels[model]; }
@@ -182,7 +182,7 @@ public:
 	size_t numStaticProps() { return mNumStaticProps; }
 	const StaticProp &staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
-	static BSP *open(IReaderFactory *factory, const std::string &filename);
+	static BSP *open(Space *space, const std::string &filename);
 
 private:
 	size_t mNumModels;
@@ -240,7 +240,7 @@ private:
 	StaticProp *mStaticProps;
 
 	void parseVisData(unsigned char *visData, int visDataLength);
-	void parseStaticProps(IReader *reader, int offset);
+	void parseStaticProps(File *file, int offset);
 };
 
 }
