@@ -40,7 +40,28 @@ VHV::VHV(File::File *file)
 
 		RGBA *vertices = (RGBA*)(data + meshHeader->vertexOffset);
 		for(unsigned int j=0; j<mesh.numVertices; j++) {
-			mesh.vertices[j] = vertices[j];
+			mesh.vertices[j].r = vertices[j].b;
+			mesh.vertices[j].g = vertices[j].g;
+			mesh.vertices[j].b = vertices[j].r;
+			mesh.vertices[j].a = vertices[j].a;
+
+			if(mesh.vertices[j].r >= 0x40) {
+				mesh.vertices[j].r = 0xff;
+			} else {
+				mesh.vertices[j].r *= 4;
+			}
+
+			if(mesh.vertices[j].g >= 0x40) {
+				mesh.vertices[j].g = 0xff;
+			} else {
+				mesh.vertices[j].g *= 4;
+			}
+
+			if(mesh.vertices[j].b >= 0x40) {
+				mesh.vertices[j].b = 0xff;
+			} else {
+				mesh.vertices[j].b *= 4;
+			}
 		}
 	}
 

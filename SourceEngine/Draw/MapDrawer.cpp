@@ -60,7 +60,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 			World::Entity *entity = mMap->entity(i);
 			if(entity->model()) {
 				if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
-					mModelDrawer->draw(entity->model(), entity->position(), entity->orientation());
+					mModelDrawer->draw(entity->model(), entity->position(), entity->orientation(), 0);
 				}
 			}
 
@@ -80,7 +80,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 
 			for(unsigned int j=0; j<staticProp->numLeaves(); j++) {
 				if(staticProp->leaf(j)->frameTag == mFrameTag && !mFrustum.boxOutside(staticProp->box())) {
-					mModelDrawer->draw(staticProp->model(), staticProp->position(), staticProp->orientation());
+					mModelDrawer->draw(staticProp->model(), staticProp->position(), staticProp->orientation(), staticProp->vhv());
 				}
 				break;
 			}

@@ -234,8 +234,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		if(KEY_DOWN('T')) {
 			mapDrawer->faceDrawer()->setDrawTextures(false);
+			mapDrawer->modelDrawer()->setDrawTextures(false);
 		} else {
 			mapDrawer->faceDrawer()->setDrawTextures(true);
+			mapDrawer->modelDrawer()->setDrawTextures(true);
 		}
 
 		if(KEY_DOWN('L')) {

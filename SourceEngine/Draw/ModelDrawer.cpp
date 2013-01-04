@@ -4,7 +4,7 @@
 
 namespace Draw {
 
-void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation)
+void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation, Format::VHV *vhv)
 {
 	glPushMatrix();
 	glTranslatef(position.x(), position.y(), position.z());
@@ -27,7 +27,12 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 				Format::VTX::Mesh &mesh = lod.meshes[me];
 				World::Material *material = model->material(model->mdl()->skin(0, 0));
 				if(material && material->texture()) {
-					material->texture()->select();
+					if(mDrawTextures) {
+						material->texture()->select();
+					} else {
+						glBindTexture(GL_TEXTURE_2D, 0);
+					}
+					glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				}
 
 				for(int sg=0; sg<mesh.numStripGroups; sg++) {
@@ -35,10 +40,20 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 					for(int s=0; s<stripGroup.numStrips; s++) {
 						Format::VTX::Strip &strip = stripGroup.strips[s];
 
-						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 						glEnableClientState(GL_VERTEX_ARRAY);
 						glVertexPointer(3, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vvd()->lod(0).vertices[0].position);
+
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 						glTexCoordPointer(2, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vvd()->lod(0).vertices[0].texCoord);
+
+						if(vhv) {
+							glEnableClientState(GL_COLOR_ARRAY);
+							glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Format::VHV::RGBA), vhv->mesh(0).vertices);
+						} else {
+							glDisableClientState(GL_COLOR_ARRAY);
+							glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+						}
+
 						GLenum mode;
 						if(strip.flags == 0x1) {
 							mode = GL_TRIANGLES;
