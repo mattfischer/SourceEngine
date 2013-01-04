@@ -2,12 +2,12 @@
 
 namespace World {
 
-BSP::BSP(File::BSP *file, Face **faces)
+BSP::BSP(Format::BSP *file, Face **faces)
 {
 	mNumLeaves = file->numLeaves();
 	mLeaves = new Leaf[mNumLeaves];
 	for(unsigned int i=0; i<mNumLeaves; i++) {
-		const File::BSP::Leaf &fileLeaf = file->leaf(i);
+		const Format::BSP::Leaf &fileLeaf = file->leaf(i);
 		Leaf &leaf = mLeaves[i];
 
 		leaf.number = fileLeaf.cluster;
@@ -35,10 +35,10 @@ BSP::BSP(File::BSP *file, Face **faces)
 	mNumNodes = file->numNodes();
 	mNodes = new Node[mNumNodes];
 	for(unsigned int i=0; i<mNumNodes; i++) {
-		const File::BSP::Node &fileNode = file->node(i);
+		const Format::BSP::Node &fileNode = file->node(i);
 		Node &node = mNodes[i];
 
-		const File::BSP::Plane &filePlane = file->plane(fileNode.planeNum);
+		const Format::BSP::Plane &filePlane = file->plane(fileNode.planeNum);
 		node.plane = Geo::Plane(Geo::Vector(filePlane.normal.x, filePlane.normal.y, filePlane.normal.z), filePlane.dist);
 
 		Geo::Vector minPoint = Geo::Vector(fileNode.mins[0], fileNode.mins[1], fileNode.mins[2]);
@@ -58,7 +58,7 @@ BSP::BSP(File::BSP *file, Face **faces)
 	mNumRoots = file->numModels();
 	mRoots = new Node*[mNumRoots];
 	for(unsigned int i=0; i<mNumRoots; i++) {
-		const File::BSP::Model &model = file->model(i);
+		const Format::BSP::Model &model = file->model(i);
 		mRoots[i] = &mNodes[model.headNode];
 	}
 }

@@ -1,6 +1,6 @@
-#include "File/VVD.hpp"
+#include "Format/VVD.hpp"
 
-namespace File {
+namespace Format {
 
 #define MAX_NUM_LODS 8
 
@@ -22,7 +22,7 @@ struct Fixup {
 	int numVertices;
 };
 
-VVD::VVD(File *file)
+VVD::VVD(File::File *file)
 {
 	char *data = new char[file->size()];
 	file->read(data, file->size());
@@ -55,10 +55,10 @@ VVD::VVD(File *file)
 	delete[] data;
 }
 
-VVD *VVD::open(Space *space, const std::string &name)
+VVD *VVD::open(File::Space *space, const std::string &name)
 {
 	VVD *ret = 0;
-	File *file = space->open(name);
+	File::File *file = space->open(name);
 
 	if(file) {
 		ret = new VVD(file);

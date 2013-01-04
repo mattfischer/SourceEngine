@@ -1,12 +1,12 @@
-#ifndef FILE_VTX_HPP
-#define FILE_VTX_HPP
+#ifndef FORMAT_VTX_HPP
+#define FORMAT_VTX_HPP
 
 #include "File/File.hpp"
 #include "File/Space.hpp"
 
 #include <string>
 
-namespace File {
+namespace Format {
 
 class VTX {
 public:
@@ -41,12 +41,12 @@ public:
 		Model *models;
 	};
 
-	VTX(File *file);
+	VTX(File::File *file);
 
 	int numBodyParts() { return mNumBodyParts; }
 	const BodyPart &bodyPart(int bodyPart) { return mBodyParts[bodyPart]; }
 
-	static VTX *open(Space *space, const std::string &name);
+	static VTX *open(File::Space *space, const std::string &name);
 
 private:
 	int mNumBodyParts;

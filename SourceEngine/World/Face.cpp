@@ -4,10 +4,10 @@
 
 namespace World {
 
-Face::Face(File::BSP *file, int number, Material *materials[])
+Face::Face(Format::BSP *file, int number, Material *materials[])
 {
-	const File::BSP::Face &fileFace = file->face(number);
-	const File::BSP::TexInfo &texInfo = file->texInfo(fileFace.texInfo);
+	const Format::BSP::Face &fileFace = file->face(number);
+	const Format::BSP::TexInfo &texInfo = file->texInfo(fileFace.texInfo);
 
 	int textureWidth = 1;
 	int textureHeight = 1;
@@ -56,7 +56,7 @@ Face::Face(File::BSP *file, int number, Material *materials[])
 		delete[] data;
 	}
 
-	const File::BSP::Plane filePlane = file->plane(fileFace.planeNum);
+	const Format::BSP::Plane filePlane = file->plane(fileFace.planeNum);
 	mPlane = Geo::Plane(Geo::Vector(filePlane.normal.x, filePlane.normal.y, filePlane.normal.z), filePlane.dist);
 	mMaterial = materials[texInfo.texdata];
 	mGray = (rand() % 255) / 255.0f;
@@ -76,7 +76,7 @@ Face::Face(File::BSP *file, int number, Material *materials[])
 		} else {
 			vertIndex = file->edge(-surfEdge).v[1];
 		}
-		const File::BSP::Vector &fileVector = file->vertex(vertIndex);
+		const Format::BSP::Vector &fileVector = file->vertex(vertIndex);
 
 		Geo::Point vertex(fileVector.x, fileVector.y, fileVector.z);
 		mVertices[i] = vertex;

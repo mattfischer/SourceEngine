@@ -1,4 +1,4 @@
-#include "File/VPK.hpp"
+#include "Format/VPK.hpp"
 
 #include "StringUtils.hpp"
 
@@ -7,7 +7,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace File {
+namespace Format {
 
 struct Header_v1
 {

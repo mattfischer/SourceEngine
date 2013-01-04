@@ -1,12 +1,13 @@
-#ifndef FILE_BSP_HPP
-#define FILE_BSP_HPP
+#ifndef FORMAT_BSP_HPP
+#define FORMAT_BSP_HPP
 
 #include "File/Space.hpp"
-#include "File/KeyValue.hpp"
+
+#include "Format/KeyValue.hpp"
 
 #include <string>
 
-namespace File {
+namespace Format {
 
 class BSP {
 public:
@@ -127,7 +128,7 @@ public:
 		unsigned int diffuseModulation;
 	};
 
-	BSP(File *file);
+	BSP(File::File *file);
 
 	size_t numModels() { return mNumModels; }
 	const Model &model(int model) { return mModels[model]; }
@@ -182,7 +183,7 @@ public:
 	size_t numStaticProps() { return mNumStaticProps; }
 	const StaticProp &staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
-	static BSP *open(Space *space, const std::string &filename);
+	static BSP *open(File::Space *space, const std::string &filename);
 
 private:
 	size_t mNumModels;
@@ -240,7 +241,7 @@ private:
 	StaticProp *mStaticProps;
 
 	void parseVisData(unsigned char *visData, int visDataLength);
-	void parseStaticProps(File *file, int offset);
+	void parseStaticProps(File::File *file, int offset);
 };
 
 }

@@ -2,9 +2,9 @@
 
 namespace World {
 
-StaticProp::StaticProp(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
+StaticProp::StaticProp(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
 {
-	const File::BSP::StaticProp &fileStaticProp = file->staticProp(number);
+	const Format::BSP::StaticProp &fileStaticProp = file->staticProp(number);
 	const std::string &fileName = file->staticPropName(fileStaticProp.propType);
 
 	mModel = modelCache->open(fileName);

@@ -2,7 +2,7 @@
 
 namespace World {
 
-Model::Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::Space *space, const std::string &modelPath)
+Model::Model(Format::MDL *mdl, Format::VVD *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath)
 {
 	mMdl = mdl;
 	mVvd = vvd;
@@ -15,9 +15,9 @@ Model::Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::Space *space,
 	mNumMaterials = mdl->numTextures();
 	mMaterials = new Material*[mNumMaterials];
 	for(int i=0; i<mNumMaterials; i++) {
-		File::VMT *vmt = File::VMT::open(space, "materials/" + modelPath + "/" + mdl->texture(i) + ".vmt");
+		Format::VMT *vmt = Format::VMT::open(space, "materials/" + modelPath + "/" + mdl->texture(i) + ".vmt");
 		if(!vmt) {
-			vmt = File::VMT::open(space, "materials/" + mdl->texture(i) + ".vmt");
+			vmt = Format::VMT::open(space, "materials/" + mdl->texture(i) + ".vmt");
 		}
 
 		if(vmt) {

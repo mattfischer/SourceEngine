@@ -1,6 +1,6 @@
-#include "File/VTF.hpp"
+#include "Format/VTF.hpp"
 
-namespace File {
+namespace Format {
 
 #pragma pack(push, 1)
 struct VTFHeader
@@ -50,7 +50,7 @@ unsigned int interp8888(unsigned int a, unsigned int b, int num, int den)
 	return 0xff000000 | (_r << 16) | (_g << 8) | (_b << 0);
 }
 
-unsigned char *readDXT(File *file, int width, int height, int n)
+unsigned char *readDXT(File::File *file, int width, int height, int n)
 {
 	int srcSize;
 
@@ -123,10 +123,10 @@ unsigned char *readDXT(File *file, int width, int height, int n)
 	return (unsigned char*)dst;
 }
 
-VTF *VTF::open(Space *space, const std::string &filename)
+VTF *VTF::open(File::Space *space, const std::string &filename)
 {
 	VTF *ret = 0;
-	File *file = space->open(filename);
+	File::File *file = space->open(filename);
 
 	if(file) {
 		ret = new VTF(file);
@@ -136,7 +136,7 @@ VTF *VTF::open(Space *space, const std::string &filename)
 	return ret;
 }
 
-VTF::VTF(File *file)
+VTF::VTF(File::File *file)
 {
 	VTFHeader header;
 

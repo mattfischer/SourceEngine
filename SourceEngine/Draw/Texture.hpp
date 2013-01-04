@@ -1,7 +1,7 @@
 #ifndef DRAW_TEXTURE_HPP
 #define DRAW_TEXTURE_HPP
 
-#include "File/VTF.hpp"
+#include "Format/VTF.hpp"
 
 #include "GL/glew.h"
 
@@ -11,7 +11,7 @@ namespace Draw {
 
 class Texture {
 public:
-	Texture(File::VTF *vtf);
+	Texture(Format::VTF *vtf);
 
 	void select();
 

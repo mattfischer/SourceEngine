@@ -1,15 +1,15 @@
-#include "File/VMT.hpp"
+#include "Format/VMT.hpp"
 
 #include "StringUtils.hpp"
 
 #include <vector>
 
-namespace File {
+namespace Format {
 
-VMT *VMT::open(Space *space, const std::string &filename)
+VMT *VMT::open(File::Space *space, const std::string &filename)
 {
 	VMT *ret = 0;
-	File *file = space->open(filename);
+	File::File *file = space->open(filename);
 	if(file) {
 		ret = new VMT(file);
 		delete file;
@@ -18,7 +18,7 @@ VMT *VMT::open(Space *space, const std::string &filename)
 	return ret;
 }
 
-VMT::VMT(File *file)
+VMT::VMT(File::File *file)
 : mKeyValue(file, 0, file->size())
 {
 }

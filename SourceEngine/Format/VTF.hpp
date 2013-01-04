@@ -1,11 +1,11 @@
-#ifndef FILE_VTF_HPP
-#define FILE_VTF_HPP
+#ifndef FORMAT_VTF_HPP
+#define FORMAT_VTF_HPP
 
 #include "File/Space.hpp"
 
 #include <string>
 
-namespace File {
+namespace Format {
 
 class VTF {
 public:
@@ -15,7 +15,7 @@ public:
 		FormatUnknown
 	};
 
-	VTF(File *file);
+	VTF(File::File *file);
 	~VTF();
 
 	int width(int n);
@@ -29,7 +29,7 @@ public:
 	const unsigned char *data(int mipMapLevel) { return mData[mipMapLevel]; }
 	int dataSize(int mipMapLevel);
 
-	static VTF *open(Space *space, const std::string &filename);
+	static VTF *open(File::Space *space, const std::string &filename);
 
 private:
 	int mWidth;

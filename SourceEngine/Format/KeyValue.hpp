@@ -1,5 +1,5 @@
-#ifndef FILE_KEY_VALUE_HPP
-#define FILE_KEY_VALUE_HPP
+#ifndef FORMAT_KEY_VALUE_HPP
+#define FORMAT_KEY_VALUE_HPP
 
 #include "File/File.hpp"
 
@@ -9,11 +9,11 @@
 #include <map>
 #include <vector>
 
-namespace File {
+namespace Format {
 
 class KeyValue {
 public:
-	KeyValue(File *file, int offset, int length);
+	KeyValue(File::File *file, int offset, int length);
 
 	class Section {
 	public:

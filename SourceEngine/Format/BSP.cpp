@@ -1,8 +1,8 @@
-#include "File/BSP.hpp"
+#include "Format/BSP.hpp"
 
 #include <fstream>
 
-namespace File {
+namespace Format {
 
 struct Lump {
     int offset;
@@ -105,7 +105,7 @@ struct GameLumpHeader {
 	int fileLen;
 };
 
-template <typename T> void readLump(File *file, T *&list, size_t &num, const Header &header, int lumpNum)
+template <typename T> void readLump(File::File *file, T *&list, size_t &num, const Header &header, int lumpNum)
 {
 	const Lump &lump = header.lumps[lumpNum];
 
@@ -115,10 +115,10 @@ template <typename T> void readLump(File *file, T *&list, size_t &num, const Hea
 	file->read(list, lump.length);
 }
 
-BSP *BSP::open(Space *space, const std::string &filename)
+BSP *BSP::open(File::Space *space, const std::string &filename)
 {
 	BSP *ret = 0;
-	File *file = space->open(filename);
+	File::File *file = space->open(filename);
 
 	if(file) {
 		ret = new BSP(file);
@@ -128,7 +128,7 @@ BSP *BSP::open(Space *space, const std::string &filename)
 	return ret;
 }
 
-BSP::BSP(File *file)
+BSP::BSP(File::File *file)
 {
     Header header;
     file->read(&header, sizeof(header));
@@ -233,7 +233,7 @@ void BSP::parseVisData(unsigned char *visData, int visDataLength)
 	}
 }
 
-void BSP::parseStaticProps(File *file, int offset)
+void BSP::parseStaticProps(File::File *file, int offset)
 {
 	file->seek(offset);
 	file->read(&mNumStaticPropNames, sizeof(size_t));

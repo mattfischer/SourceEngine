@@ -1,20 +1,20 @@
 #include "World/Map.hpp"
 
-#include "File/BSP.hpp"
+#include "Format/BSP.hpp"
 
 namespace World {
 
 Map::Map(File::Space *space, const std::string &filename)
 {
-	File::BSP *file = File::BSP::open(space, filename);
+	Format::BSP *file = Format::BSP::open(space, filename);
 
 	mNumMaterials = file->numTexDatas();
 	mMaterials = new Material*[mNumMaterials];
 	for(unsigned int i=0; i<mNumMaterials; i++) {
-		const File::BSP::TexData &texData = file->texData(i);
+		const Format::BSP::TexData &texData = file->texData(i);
 		const std::string &materialFilename = file->texDataString(texData.nameStringTableID);
 
-		File::VMT *vmt = File::VMT::open(space, "materials/" + materialFilename + ".vmt");
+		Format::VMT *vmt = Format::VMT::open(space, "materials/" + materialFilename + ".vmt");
 		if(vmt) {
 			mMaterials[i] = new Material(vmt, space);
 		} else {

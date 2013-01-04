@@ -1,7 +1,7 @@
 #ifndef WORLD_BSP_HPP
 #define WORLD_BSP_HPP
 
-#include "File/BSP.hpp"
+#include "Format/BSP.hpp"
 
 #include "World/Face.hpp"
 
@@ -41,7 +41,7 @@ public:
 		int frameTag;
 	};
 
-	BSP(File::BSP *file, Face **faces);
+	BSP(Format::BSP *file, Face **faces);
 
 	size_t numRoots() { return mNumRoots; }
 	Node *root(int root) { return mRoots[root]; }

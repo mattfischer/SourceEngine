@@ -1,10 +1,10 @@
-#ifndef FILE_VPK_HPP
-#define FILE_VPK_HPP
+#ifndef FORMAT_VPK_HPP
+#define FORMAT_VPK_HPP
 
 #include <map>
 #include <string>
 
-namespace File {
+namespace Format {
 
 class VPK {
 public:

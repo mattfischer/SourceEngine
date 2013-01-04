@@ -1,7 +1,8 @@
 #include "File/VPKSpace.hpp"
 
-#include "File/VPK.hpp"
 #include "File/File.hpp"
+
+#include "Format/VPK.hpp"
 
 #include <fstream>
 #include <algorithm>
@@ -10,7 +11,7 @@ namespace File {
 
 class VPKFile : public File {
 public:
-	VPKFile(::File::VPK::FileInfo &fileInfo, ::File::VPK &directory)
+	VPKFile(Format::VPK::FileInfo &fileInfo, Format::VPK &directory)
 		: mFileInfo(fileInfo),
 		  mDirectory(directory)
 	{
@@ -49,24 +50,24 @@ public:
 	}
 
 private:
-	::File::VPK::FileInfo &mFileInfo;
-	::File::VPK &mDirectory;
+	Format::VPK::FileInfo &mFileInfo;
+	Format::VPK &mDirectory;
 	unsigned int mPointer;
 	std::ifstream mFile;
 	int mDataStart;
 };
 
 VPKSpace::VPKSpace(const std::string &filename)
-: mDirectory(filename)
+: mVpk(filename)
 {
 }
 
 File *VPKSpace::open(const std::string &name)
 {
 	File *file = 0;
-	if(mDirectory.exists(name)) {
-		::File::VPK::FileInfo &info = mDirectory.lookup(name);
-		file = new VPKFile(info, mDirectory);
+	if(mVpk.exists(name)) {
+		Format::VPK::FileInfo &info = mVpk.lookup(name);
+		file = new VPKFile(info, mVpk);
 	}
 
 	return file;
@@ -74,7 +75,7 @@ File *VPKSpace::open(const std::string &name)
 
 bool VPKSpace::exists(const std::string &name)
 {
-	return mDirectory.exists(name);
+	return mVpk.exists(name);
 }
 
 }

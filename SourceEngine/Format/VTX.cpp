@@ -1,6 +1,6 @@
-#include "File/VTX.hpp"
+#include "Format/VTX.hpp"
 
-namespace File {
+namespace Format {
 
 #pragma pack(push, 1)
 struct VTXHeader
@@ -155,7 +155,7 @@ static void parseBodyPart(VTX::BodyPart *bodyPart, BodyPartHeader *header)
 	}
 }
 
-VTX::VTX(File *file)
+VTX::VTX(File::File *file)
 {
 	char *data = new char[file->size()];
 	file->read(data, file->size());
@@ -171,10 +171,10 @@ VTX::VTX(File *file)
 	delete[] data;
 }
 
-VTX *VTX::open(Space *space, const std::string &name)
+VTX *VTX::open(File::Space *space, const std::string &name)
 {
 	VTX *ret = 0;
-	File *file = space->open(name);
+	File::File *file = space->open(name);
 
 	if(file) {
 		ret = new VTX(file);

@@ -1,10 +1,11 @@
 #ifndef WORLD_MODEL_HPP
 #define WORLD_MODEL_HPP
 
-#include "File/MDL.hpp"
-#include "File/VTX.hpp"
-#include "File/VVD.hpp"
 #include "File/Space.hpp"
+
+#include "Format/MDL.hpp"
+#include "Format/VTX.hpp"
+#include "Format/VVD.hpp"
 
 #include "Geo/BoxOriented.hpp"
 
@@ -14,11 +15,11 @@ namespace World {
 
 class Model {
 public:
-	Model(File::MDL *mdl, File::VVD *vvd, File::VTX *vtx, File::Space *space, const std::string &modelPath);
+	Model(Format::MDL *mdl, Format::VVD *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath);
 
-	File::MDL *mdl() { return mMdl; }
-	File::VVD *vvd() { return mVvd; }
-	File::VTX *vtx() { return mVtx; }
+	Format::MDL *mdl() { return mMdl; }
+	Format::VVD *vvd() { return mVvd; }
+	Format::VTX *vtx() { return mVtx; }
 
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
@@ -26,9 +27,9 @@ public:
 	const Geo::BoxOriented &box() { return mBox; }
 
 private:
-	File::MDL *mMdl;
-	File::VVD *mVvd;
-	File::VTX *mVtx;
+	Format::MDL *mMdl;
+	Format::VVD *mVvd;
+	Format::VTX *mVtx;
 
 	int mNumMaterials;
 	Material **mMaterials;

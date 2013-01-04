@@ -14,15 +14,15 @@ Model *ModelCache::open(const std::string &filename)
 	if(mMap.find(filename) == mMap.end()) {
 		size_t pos = filename.find(".mdl");
 		if(pos != filename.npos) {
-			File::MDL *mdl = File::MDL::open(mSpace, filename);
+			Format::MDL *mdl = Format::MDL::open(mSpace, filename);
 
 			std::string vertices = filename;
 			vertices.replace(pos, 4, ".vvd");
-			File::VVD *vvd = File::VVD::open(mSpace, vertices);
+			Format::VVD *vvd = Format::VVD::open(mSpace, vertices);
 
 			std::string mesh = filename;
 			mesh.replace(pos, 4, ".vtx");
-			File::VTX *vtx = File::VTX::open(mSpace, mesh);
+			Format::VTX *vtx = Format::VTX::open(mSpace, mesh);
 
 			if(mdl && vvd && vtx) {
 				std::string modelPath = filename.substr(0, filename.rfind("/"));

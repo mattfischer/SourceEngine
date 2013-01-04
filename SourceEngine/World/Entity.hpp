@@ -2,7 +2,8 @@
 #define WORLD_ENTITY_HPP
 
 #include "File/Space.hpp"
-#include "File/BSP.hpp"
+
+#include "Format/BSP.hpp"
 
 #include "Geo/Point.hpp"
 #include "Geo/Orientation.hpp"
@@ -18,7 +19,7 @@ namespace World {
 
 class Entity {
 public:
-	Entity(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
+	Entity(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
 
 	const Geo::Point &position() { return mPosition; }
 	const Geo::Orientation &orientation() { return mOrientation; }

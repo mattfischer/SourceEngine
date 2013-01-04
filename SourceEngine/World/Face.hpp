@@ -1,7 +1,7 @@
 #ifndef WORLD_FACE_HPP
 #define WORLD_FACE_HPP
 
-#include "File/BSP.hpp"
+#include "Format/BSP.hpp"
 
 #include "Geo/Point.hpp"
 #include "Geo/Coordinate.hpp"
@@ -13,7 +13,7 @@ namespace World {
 
 class Face {
 public:
-	Face(File::BSP *file, int number, Material *materials[]);
+	Face(Format::BSP *file, int number, Material *materials[]);
 
 	const Geo::Plane &plane() { return mPlane; }
 

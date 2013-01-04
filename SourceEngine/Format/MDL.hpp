@@ -1,12 +1,12 @@
-#ifndef FILE_MDL_HPP
-#define FILE_MDL_HPP
+#ifndef FORMAT_MDL_HPP
+#define FORMAT_MDL_HPP
 
 #include "File/File.hpp"
 #include "File/Space.hpp"
 
 #include <string>
 
-namespace File {
+namespace Format {
 
 class MDL {
 public:
@@ -16,9 +16,9 @@ public:
 		float z;
 	};
 
-	MDL(File *file);
+	MDL(File::File *file);
 
-	static MDL *open(Space *space, const std::string &filename);
+	static MDL *open(File::Space *space, const std::string &filename);
 
 	const std::string &texture(int texture) { return mTextures[texture]; }
 	unsigned int numTextures() { return mNumTextures; }

@@ -1,10 +1,10 @@
-#include "File/KeyValue.hpp"
+#include "Format/KeyValue.hpp"
 
 #include "StringUtils.hpp"
 
-namespace File {
+namespace Format {
 
-KeyValue::KeyValue(File *file, int offset, int length)
+	KeyValue::KeyValue(File::File *file, int offset, int length)
 {
 	char *buffer = new char[length + 1];
 	file->seek(offset);

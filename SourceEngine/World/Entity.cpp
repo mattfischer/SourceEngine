@@ -6,9 +6,9 @@
 
 namespace World {
 
-Entity::Entity(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
+Entity::Entity(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
 {
-	const File::BSP::Entity &fileEntity = file->entity(number);
+	const Format::BSP::Entity &fileEntity = file->entity(number);
 
 	mModel = 0;
 	mBspRoot = 0;

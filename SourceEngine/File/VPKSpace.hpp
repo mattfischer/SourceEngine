@@ -2,7 +2,7 @@
 #define FILE_VPK_SPACE_HPP
 
 #include "File/Space.hpp"
-#include "File/VPK.hpp"
+#include "Format/VPK.hpp"
 
 #include <string>
 #include <fstream>
@@ -17,7 +17,7 @@ public:
 	virtual bool exists(const std::string &name);
 
 private:
-	VPK mDirectory;
+	Format::VPK mVpk;
 };
 
 }

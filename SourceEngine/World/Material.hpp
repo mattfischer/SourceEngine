@@ -2,7 +2,9 @@
 #define WORLD_MATERIAL_HPP
 
 #include "File/Space.hpp"
-#include "File/VMT.hpp"
+
+#include "Format/VMT.hpp"
+
 #include "Draw/Texture.hpp"
 
 #include <string>
@@ -11,7 +13,7 @@ namespace World {
 
 class Material {
 public:
-	Material(File::VMT *vmt, File::Space *space);
+	Material(Format::VMT *vmt, File::Space *space);
 
 	Draw::Texture *texture() { return mTexture; }
 

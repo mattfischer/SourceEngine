@@ -1,6 +1,6 @@
-#include "File/MDL.hpp"
+#include "Format/MDL.hpp"
 
-namespace File {
+namespace Format {
 
 struct Header
 {
@@ -132,7 +132,7 @@ struct Texture {
 	int	unused2[10];
 };
 
-MDL::MDL(File *file)
+MDL::MDL(File::File *file)
 {
 	char *data = new char[file->size()];
 	file->read(data, file->size());
@@ -163,10 +163,10 @@ MDL::MDL(File *file)
 	delete[] data;
 }
 
-MDL *MDL::open(Space *space, const std::string &filename)
+MDL *MDL::open(File::Space *space, const std::string &filename)
 {
 	MDL *ret = 0;
-	File *file = space->open(filename);
+	File::File *file = space->open(filename);
 
 	if(file) {
 		ret = new MDL(file);

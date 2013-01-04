@@ -1,6 +1,8 @@
 #ifndef WORLD_STATIC_PROP_HPP
 #define WORLD_STATIC_PROP_HPP
 
+#include "Format/BSP.hpp"
+
 #include "Geo/Point.hpp"
 #include "Geo/Orientation.hpp"
 #include "Geo/BoxOriented.hpp"
@@ -9,13 +11,11 @@
 #include "World/ModelCache.hpp"
 #include "World/BSP.hpp"
 
-#include "File/BSP.hpp"
-
 namespace World {
 
 class StaticProp {
 public:
-	StaticProp(File::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
+	StaticProp(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
 
 	const Geo::Point &position() { return mPosition; }
 	const Geo::Orientation &orientation() { return mOrientation; }

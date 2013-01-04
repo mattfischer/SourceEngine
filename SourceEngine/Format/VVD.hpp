@@ -1,12 +1,12 @@
-#ifndef FILE_VVD_HPP
-#define FILE_VVD_HPP
+#ifndef FORMAT_VVD_HPP
+#define FORMAT_VVD_HPP
 
 #include "File/File.hpp"
 #include "File/Space.hpp"
 
 #include <string>
 
-namespace File {
+namespace Format {
 
 #define MAX_NUM_BONES_PER_VERT 3
 
@@ -44,12 +44,12 @@ public:
 		Vertex *vertices;
 	};
 
-	VVD(File *file);
+	VVD(File::File *file);
 
 	int numLods() { return mNumLods; }
 	const Lod &lod(int lod) { return mLods[lod]; }
 
-	static VVD *open(Space *space, const std::string &name);
+	static VVD *open(File::Space *space, const std::string &name);
 
 private:
 	int mNumLods;

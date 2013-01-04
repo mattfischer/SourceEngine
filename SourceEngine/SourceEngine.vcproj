@@ -189,15 +189,7 @@
 				Name="File"
 				>
 				<File
-					RelativePath=".\File\BSP.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\File\KeyValue.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\MDL.cpp"
 					>
 				</File>
 				<File
@@ -209,27 +201,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\VMT.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VPK.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\File\VPKSpace.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VTF.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VTX.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VVD.cpp"
 					>
 				</File>
 			</Filter>
@@ -341,6 +313,60 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Format"
+				>
+				<File
+					RelativePath=".\Format\BSP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\KeyValue.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Format\MDL.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VMT.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VPK.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VTF.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VTX.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VVD.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -363,19 +389,7 @@
 				Name="File"
 				>
 				<File
-					RelativePath=".\File\BSP.hpp"
-					>
-				</File>
-				<File
 					RelativePath=".\File\File.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\KeyValue.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\MDL.hpp"
 					>
 				</File>
 				<File
@@ -391,27 +405,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\File\VMT.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VPK.hpp"
-					>
-				</File>
-				<File
 					RelativePath=".\File\VPKSpace.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VTF.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VTX.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\File\VVD.hpp"
 					>
 				</File>
 			</Filter>
@@ -516,6 +510,42 @@
 				</File>
 				<File
 					RelativePath=".\Draw\Texture.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Format"
+				>
+				<File
+					RelativePath=".\Format\BSP.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\KeyValue.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\MDL.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VMT.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VPK.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VTF.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VTX.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Format\VVD.hpp"
 					>
 				</File>
 			</Filter>
