@@ -38,7 +38,7 @@ void FaceDrawer::draw(World::Face *face)
 		glDisable(GL_TEXTURE_2D);
 	}
 
-	glBlendFunc(GL_ONE, GL_ZERO);
+	glDisable(GL_BLEND);
 	glBegin(GL_POLYGON);
 	for(int i=0; i<face->numVertices(); i++) {
 		const Geo::Point &vertex = face->vertex(i);

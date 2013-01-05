@@ -76,7 +76,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				glEnable(GL_DEPTH_TEST);
 				glEnable(GL_TEXTURE_2D);
 				glEnable(GL_BLEND);
-
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glDepthFunc(GL_LEQUAL);
 
 				File::MultiSpace *space = new File::MultiSpace();

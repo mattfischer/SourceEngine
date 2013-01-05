@@ -17,8 +17,12 @@ public:
 
 	Draw::Texture *texture() { return mTexture; }
 
+	bool translucent() { return mTranslucent; }
+
 private:
 	Draw::Texture *mTexture;
+
+	bool mTranslucent;
 };
 
 }

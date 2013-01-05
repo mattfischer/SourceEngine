@@ -17,6 +17,23 @@ Material::Material(Format::VMT *vmt, File::Space *space)
 			delete vtf;
 		}
 	}
+
+	mTranslucent = false;
+	if(vmt->hasParameter("$translucent")) {
+		const std::string &translucent = vmt->parameter("$translucent");
+
+		if(translucent == "1") {
+			mTranslucent = true;
+		}
+	}
+
+	if(vmt->hasParameter("$alphatest")) {
+		const std::string &alphatest = vmt->parameter("$alphatest");
+
+		if(alphatest == "1") {
+			mTranslucent = true;
+		}
+	}
 }
 
 }
