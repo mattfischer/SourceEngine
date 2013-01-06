@@ -28,12 +28,11 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 
 	if(mUpdateFrustum) {
 		mFrustum = frustum;
-		mFaceDrawer->setPosition(position);
-		mBspDrawer->setPosition(position);
+		mBspDrawer->setCameraPosition(position);
 		mBspDrawer->setFrustum(frustum);
 	}
 
-	if(!mBspDrawer->cameraLeaf()->visibleLeaves) {
+	if(!mMap->bsp()->leafForPoint(0, position)->visibleLeaves) {
 		mFaceDrawer->setDrawLightmaps(false);
 		mFaceDrawer->setDrawTextures(false);
 		drawEntities = false;
@@ -61,12 +60,6 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 			}
 
 			if(entity->bspRoot() != 0) {
-				Geo::Transformation bspTransform = Geo::Transformation::translate(-1 * entity->position());
-				Geo::Frustum bspFrustum = frustum * bspTransform;
-				Geo::Point bspPosition = bspTransform * position;
-
-				mBspDrawer->setFrustum(bspFrustum);
-				mBspDrawer->setPosition(bspPosition);
 				mBspDrawer->draw(entity->bspRoot(), entity->position(), entity->orientation());
 			}
 		}

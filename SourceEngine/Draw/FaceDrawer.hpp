@@ -11,22 +11,18 @@ class FaceDrawer {
 public:
 	void newFrame();
 
-	void setPosition(const Geo::Point &position) { mPosition = position; }
-
 	bool drawTextures() { return mDrawTextures; }
 	void setDrawTextures(bool drawTextures) { mDrawTextures = drawTextures; }
 
 	bool drawLightmaps() { return mDrawLightmaps; }
 	void setDrawLightmaps(bool drawLightmaps) { mDrawLightmaps = drawLightmaps; }
 
-	void draw(World::Face *face);
+	void draw(World::Face *face, const Geo::Point &cameraPosition);
 
 	int numFacesDrawn() { return mNumFacesDrawn; }
 	int numFacesCulled() { return mNumFacesCulled; }
 
 private:
-	Geo::Point mPosition;
-
 	bool mDrawTextures;
 	bool mDrawLightmaps;
 	int mNumFacesDrawn;

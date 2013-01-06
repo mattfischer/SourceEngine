@@ -17,11 +17,9 @@ public:
 
 	void newFrame();
 
-	void setPosition(const Geo::Point &position);
-	void setFrustum(const Geo::Frustum &frustum);
-	void setFrameTag(int frameTag);
-
-	World::BSP::Leaf *cameraLeaf() { return mCameraLeaf; }
+	void setCameraPosition(const Geo::Point &cameraPosition) { mCameraPosition = cameraPosition; }
+	void setFrustum(const Geo::Frustum &frustum) { mFrustum = frustum; }
+	void setFrameTag(int frameTag) { mFrameTag = frameTag; }
 
 	void draw(int root, const Geo::Point &position, const Geo::Orientation &orientation);
 
@@ -32,16 +30,14 @@ public:
 	int numVisLeaves() { return mNumVisLeaves; }
 
 private:
-	void drawLeaf(World::BSP::Leaf *leaf, World::BSP::Leaf *cameraLeaf);
-	void drawNode(World::BSP::Node *node, World::BSP::Leaf *cameraLeaf);
+	void drawLeaf(World::BSP::Leaf *leaf, World::BSP::Leaf *cameraLeaf, const Geo::Point &cameraPosition, const Geo::Frustum &frustum);
+	void drawNode(World::BSP::Node *node, World::BSP::Leaf *cameraLeaf, const Geo::Point &cameraPosition, const Geo::Frustum &frustum);
 
 	World::BSP *mBsp;
 
 	Draw::FaceDrawer *mFaceDrawer;
 
-	World::BSP::Leaf *mCameraLeaf;
-
-	Geo::Point mPosition;
+	Geo::Point mCameraPosition;
 	Geo::Frustum mFrustum;
 
 	bool mFrustumCull;
