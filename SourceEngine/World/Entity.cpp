@@ -61,4 +61,14 @@ Entity::Entity(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
 	}
 }
 
+Entity::Entity(const std::string &classname, const Geo::Point &position, const Geo::Orientation &orientation)
+{
+	mClassname = classname;
+	mPosition = position;
+	mOrientation = orientation;
+	mModel = 0;
+	mLeaf = 0;
+	mBspRoot = 0;
+}
+
 }

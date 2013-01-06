@@ -20,7 +20,7 @@ public:
 
 	BSP *bsp() { return mBsp; }
 
-	Entity *playerStart() { return mPlayerStart; }
+	Entity *player() { return mPlayer; }
 
 	size_t numEntities() { return mNumEntities; }
 	Entity *entity(int entity) { return mEntities[entity]; }
@@ -47,7 +47,7 @@ private:
 
 	BSP *mBsp;
 
-	Entity *mPlayerStart;
+	Entity *mPlayer;
 
 	Skybox *mSkybox;
 };

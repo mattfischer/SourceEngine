@@ -20,9 +20,13 @@ namespace World {
 class Entity {
 public:
 	Entity(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache);
+	Entity(const std::string &classname, const Geo::Point &position, const Geo::Orientation &orientation);
 
 	const Geo::Point &position() { return mPosition; }
+	void setPosition(const Geo::Point &position) { mPosition = position; }
+
 	const Geo::Orientation &orientation() { return mOrientation; }
+	void setOrientation(const Geo::Orientation &orientation) { mOrientation = orientation; }
 
 	World::Model *model() { return mModel; }
 

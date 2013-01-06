@@ -22,8 +22,6 @@ HGLRC hglRC;
 
 World::Map *map;
 Draw::MapDrawer *mapDrawer;
-Geo::Point position;
-Geo::Orientation orientation;
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 800
@@ -86,8 +84,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				map = new World::Map(space, "maps/sp_a1_intro3.bsp");
 				Geo::Frustum startFrustum(70, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
 				mapDrawer = new Draw::MapDrawer(map, startFrustum);
-				position = map->playerStart()->position() + Geo::Vector(0, 0, 60);
-				orientation = map->playerStart()->orientation();
 
 				return 0;
 			}
@@ -139,6 +135,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	DWORD fpsClock = GetTickCount();
 	int frames = 0;
+	World::Entity *player = map->player();
+
 	while(1) {
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -149,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			break;
 		}
 
-		mapDrawer->draw(position, orientation);
+		mapDrawer->draw(player->position(), player->orientation());
 		SwapBuffers(hDC);
 
 		frames++;
@@ -169,6 +167,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 
 		POINT point;
 		GetCursorPos(&point);
+		Geo::Orientation orientation = player->orientation();
 		float pitch = orientation.pitch();
 		float yaw = orientation.yaw();
 
@@ -182,12 +181,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 		if(yaw < 0) { yaw += 360; }
 
 		orientation = Geo::Orientation(pitch, yaw, 0);
+		player->setOrientation(orientation);
 
 		SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
 #define KEY_DOWN(x) (GetAsyncKeyState(x) & 0x80000000)
 
 		float speed = 30;
+		Geo::Point position = player->position();
+
 		if(KEY_DOWN('W')) {
 			Geo::Vector delta(1, 0, 0);
 			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
@@ -204,7 +206,6 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 			Geo::Vector delta(0, 1, 0);
 			delta = Geo::Transformation::rotateZ(orientation.yaw()) * delta;
 			position = position + speed * delta;
-
 		}
 
 		if(KEY_DOWN('D')) {
@@ -220,6 +221,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 		if(KEY_DOWN('X')) {
 			position = position + speed * Geo::Vector(0, 0, 1);
 		}
+
+		player->setPosition(position);
 
 		if(KEY_DOWN('F')) {
 			mapDrawer->bspDrawer()->setFrustumCull(false);

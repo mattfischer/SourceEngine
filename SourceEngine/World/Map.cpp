@@ -40,16 +40,20 @@ Map::Map(File::Space *space, const std::string &filename)
 
 	ModelCache *modelCache = new ModelCache(multiSpace);
 
-	mNumEntities = file->numEntities();
+	mNumEntities = file->numEntities() + 1;
 	mEntities = new Entity*[mNumEntities];
 
-	for(unsigned int i=0; i<mNumEntities; i++) {
+	Entity *playerStart;
+	for(unsigned int i=0; i<file->numEntities(); i++) {
 		mEntities[i] = new Entity(file, i, mBsp, modelCache);
 
 		if(mEntities[i]->classname() == "info_player_start") {
-			mPlayerStart = mEntities[i];
+			playerStart = mEntities[i];
 		}
 	}
+
+	mPlayer = new Entity("player", playerStart->position() + Geo::Vector(0, 0, 60), playerStart->orientation());
+	mEntities[mNumEntities - 1] = mPlayer;
 
 	if(worldspawn()->skyname() != "") {
 		mSkybox = new Skybox(multiSpace, worldspawn()->skyname());
