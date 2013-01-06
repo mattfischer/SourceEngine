@@ -21,11 +21,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 {
 	bool drawEntities = true;
 
-	Geo::Transformation transformation = Geo::Transformation::translate(position);
-	transformation = transformation * Geo::Transformation::rotateZ(orientation.yaw());
-	transformation = transformation * Geo::Transformation::rotateY(-orientation.pitch());
-
-	Geo::Frustum frustum = mStartFrustum * transformation;
+	Geo::Frustum frustum = mStartFrustum * Geo::Transformation::translateRotate(position, orientation);
 
 	mBspDrawer->newFrame();
 	mFaceDrawer->newFrame();

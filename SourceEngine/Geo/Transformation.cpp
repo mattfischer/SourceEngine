@@ -1,6 +1,7 @@
 #include "Geo/Transformation.hpp"
 
 #include "Geo/Vector.hpp"
+#include "Geo/Orientation.hpp"
 
 #include <math.h>
 
@@ -103,6 +104,20 @@ Transformation Transformation::rotateZ(float angle)
 	i[3][0] = 0.0f; i[3][1] = 0.0f; i[3][2] = 0.0f; i[3][3] = 1.0f;
 
 	return Transformation(m, i);
+}
+
+Transformation Transformation::rotate(const Geo::Orientation &orientation)
+{
+	Transformation transformation = rotateZ(orientation.yaw());
+	transformation = transformation * rotateY(-orientation.pitch());
+	transformation = transformation * rotateX(-orientation.roll());
+
+	return transformation;
+}
+
+Transformation Transformation::translateRotate(const Geo::Vector &vector, const Geo::Orientation &orientation)
+{
+	return translate(vector) * rotate(orientation);
 }
 
 }

@@ -86,7 +86,7 @@ static Plane operator*(const Plane &plane, const Matrix &matrix)
 
 static Plane operator*(const Plane &plane, const Transformation &transformation)
 {
-	return plane * transformation.inverse();
+	return plane * transformation.inverseMatrix();
 }
 
 }
