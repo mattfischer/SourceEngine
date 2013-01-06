@@ -51,6 +51,10 @@ Map::Map(File::Space *space, const std::string &filename)
 		}
 	}
 
+	if(worldspawn()->skyname() != "") {
+		mSkybox = new Skybox(multiSpace, worldspawn()->skyname());
+	}
+
 	mNumStaticProps = file->numStaticProps();
 	mStaticProps = new StaticProp*[mNumStaticProps];
 	for(unsigned int i=0; i<mNumStaticProps; i++) {

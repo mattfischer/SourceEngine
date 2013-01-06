@@ -34,6 +34,8 @@ public:
 
 	int bspRoot() { return mBspRoot; }
 
+	const std::string &skyname() { return mSkyname; }
+
 private:
 	World::Model *mModel;
 	Geo::Point mPosition;
@@ -46,6 +48,8 @@ private:
 	BSP::Leaf *mLeaf;
 
 	int mBspRoot;
+
+	std::string mSkyname;
 };
 
 }

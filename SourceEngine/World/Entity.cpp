@@ -55,6 +55,10 @@ Entity::Entity(Format::BSP *file, int number, BSP *bsp, ModelCache *modelCache)
 	}
 
 	mLeaf = bsp->leafForPoint(0, mPosition);
+
+	if(fileEntity.section->hasParameter("skyname")) {
+		mSkyname = fileEntity.section->parameter("skyname");
+	}
 }
 
 }

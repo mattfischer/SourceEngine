@@ -6,6 +6,7 @@
 #include "World/BSP.hpp"
 #include "World/Entity.hpp"
 #include "World/StaticProp.hpp"
+#include "World/Skybox.hpp"
 
 #include "File/Space.hpp"
 
@@ -27,6 +28,8 @@ public:
 	size_t numStaticProps() { return mNumStaticProps; }
 	StaticProp *staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
+	Entity *worldspawn() { return mEntities[0]; }
+
 private:
 	size_t mNumMaterials;
 	Material **mMaterials;
@@ -43,6 +46,8 @@ private:
 	BSP *mBsp;
 
 	Entity *mPlayerStart;
+
+	Skybox *mSkybox;
 };
 
 }
