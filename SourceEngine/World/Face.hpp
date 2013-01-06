@@ -26,6 +26,8 @@ public:
 
 	float gray() { return mGray; }
 
+	int flags() { return mFlags; }
+
 	GLuint lightmapTex() { return mLightMap; }
 
 private:

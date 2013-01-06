@@ -30,6 +30,8 @@ public:
 
 	Entity *worldspawn() { return mEntities[0]; }
 
+	Skybox *skybox() { return mSkybox; }
+
 private:
 	size_t mNumMaterials;
 	Material **mMaterials;

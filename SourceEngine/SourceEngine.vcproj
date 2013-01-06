@@ -317,6 +317,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Draw\SkyboxDrawer.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Draw\Texture.cpp"
 					>
 				</File>
@@ -526,6 +530,10 @@
 				</File>
 				<File
 					RelativePath=".\Draw\ModelDrawer.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Draw\SkyboxDrawer.hpp"
 					>
 				</File>
 				<File

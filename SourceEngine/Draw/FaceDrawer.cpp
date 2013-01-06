@@ -12,6 +12,10 @@ void FaceDrawer::newFrame()
 
 void FaceDrawer::draw(World::Face *face, const Geo::Point &cameraPosition)
 {
+	if(face->flags() & 0x6) {
+		return;
+	}
+
 	if(face->plane().normal() * (face->vertex(0) - cameraPosition)> 0) {
 		mNumFacesCulled++;
 		return;

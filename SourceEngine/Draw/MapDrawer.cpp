@@ -15,6 +15,7 @@ MapDrawer::MapDrawer(World::Map *map, const Geo::Frustum &startFrustum)
 	mFaceDrawer = new FaceDrawer;
 	mBspDrawer = new BSPDrawer(map->bsp(), mFaceDrawer);
 	mModelDrawer = new ModelDrawer;
+	mSkyboxDrawer = new SkyboxDrawer;
 }
 
 void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orientation)
@@ -41,12 +42,20 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	mFrameTag++;
 	mBspDrawer->setFrameTag(mFrameTag);
 
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	glMatrixMode(GL_MODELVIEW_MATRIX);
 	glPushMatrix();
 	glRotatef(-orientation.pitch(), 0, -1, 0);
 	glRotatef(-orientation.yaw(), 0, 0, 1);
+	mSkyboxDrawer->draw(mMap->skybox());
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-orientation.pitch(), 0, -1, 0);
+	glRotatef(-orientation.yaw(), 0, 0, 1);
 	glTranslatef(-position.x(), -position.y(), -position.z());
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	mBspDrawer->draw(0, Geo::Point(0, 0, 0), Geo::Orientation(0, 0, 0));
 

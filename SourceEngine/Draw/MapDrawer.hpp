@@ -10,6 +10,7 @@
 #include "Draw/BSPDrawer.hpp"
 #include "Draw/FaceDrawer.hpp"
 #include "Draw/ModelDrawer.hpp"
+#include "Draw/SkyboxDrawer.hpp"
 
 namespace Draw {
 
@@ -40,6 +41,7 @@ private:
 	Draw::ModelDrawer *mModelDrawer;
 	Draw::BSPDrawer *mBspDrawer;
 	Draw::FaceDrawer *mFaceDrawer;
+	Draw::SkyboxDrawer *mSkyboxDrawer;
 };
 }
 #endif
