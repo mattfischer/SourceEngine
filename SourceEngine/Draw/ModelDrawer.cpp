@@ -37,6 +37,12 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 						glDisable(GL_BLEND);
 					}
 
+					if(material->alphaTest()) {
+						glEnable(GL_ALPHA_TEST);
+					} else {
+						glDisable(GL_ALPHA_TEST);
+					}
+
 					glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				}
 

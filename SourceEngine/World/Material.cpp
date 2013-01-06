@@ -35,7 +35,7 @@ Material::Material(Format::VMT *vmt, File::Space *space)
 		const std::string &alphatest = vmt->parameter("$alphatest");
 
 		if(alphatest == "1") {
-			mTranslucent = true;
+			mAlphaTest = true;
 		}
 	}
 }

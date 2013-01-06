@@ -18,11 +18,13 @@ public:
 	Draw::Texture *texture() { return mTexture; }
 
 	bool translucent() { return mTranslucent; }
+	bool alphaTest() { return mAlphaTest; }
 
 private:
 	Draw::Texture *mTexture;
 
 	bool mTranslucent;
+	bool mAlphaTest;
 };
 
 }

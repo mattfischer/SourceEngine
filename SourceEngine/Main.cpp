@@ -78,6 +78,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glDepthFunc(GL_LEQUAL);
+				glAlphaFunc(GL_GEQUAL, 0.5f);
 
 				File::MultiSpace *space = new File::MultiSpace();
 				space->addSpace(new File::SystemSpace("portal2"));

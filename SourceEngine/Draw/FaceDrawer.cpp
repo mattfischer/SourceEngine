@@ -43,6 +43,7 @@ void FaceDrawer::draw(World::Face *face, const Geo::Point &cameraPosition)
 	}
 
 	glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);
 	glBegin(GL_POLYGON);
 	for(int i=0; i<face->numVertices(); i++) {
 		const Geo::Point &vertex = face->vertex(i);
