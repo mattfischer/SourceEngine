@@ -11,5 +11,7 @@ WorldSpawn::WorldSpawn(const Format::KeyValue::Section *section, World::Map *map
 	}
 }
 
+DECLARE_ENTITY_CLASS("worldspawn", WorldSpawn);
+
 }
 }

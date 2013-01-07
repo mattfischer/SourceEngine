@@ -300,6 +300,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\World\Entity\Registry.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\World\Entity\Worldspawn.cpp"
 						>
 					</File>
@@ -312,6 +316,14 @@
 						</File>
 						<File
 							RelativePath=".\World\Entity\Prop\Static.cpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Info"
+						>
+						<File
+							RelativePath=".\World\Entity\Info\PlayerStart.cpp"
 							>
 						</File>
 					</Filter>
@@ -536,6 +548,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\World\Entity\Registry.hpp"
+						>
+					</File>
+					<File
 						RelativePath=".\World\Entity\Worldspawn.hpp"
 						>
 					</File>
@@ -548,6 +564,14 @@
 						</File>
 						<File
 							RelativePath=".\World\Entity\Prop\Static.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Info"
+						>
+						<File
+							RelativePath=".\World\Entity\Info\PlayerStart.hpp"
 							>
 						</File>
 					</Filter>

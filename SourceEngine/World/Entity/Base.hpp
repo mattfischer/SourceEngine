@@ -1,6 +1,8 @@
 #ifndef WORLD_ENTITY_BASE_HPP
 #define WORLD_ENTITY_BASE_HPP
 
+#include "World/Entity/Registry.hpp"
+
 #include "Format/KeyValue.hpp"
 
 #include <string>
@@ -16,6 +18,11 @@ public:
 	Base(const std::string &classname);
 
 	const std::string &classname() { return mClassname; }
+
+	static Base *create(const Format::KeyValue::Section *section, Map *map)
+	{
+		return Registry::create(section, map);
+	}
 
 private:
 	std::string mClassname;

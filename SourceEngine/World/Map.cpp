@@ -1,6 +1,7 @@
 #include "World/Map.hpp"
 
 #include "World/Entity/Prop/Dynamic.hpp"
+#include "World/Entity/Info/PlayerStart.hpp"
 
 #include "Format/BSP.hpp"
 
@@ -48,19 +49,17 @@ Map::Map(File::Space *space, const std::string &filename)
 	mEntities = new Entity::Base*[mNumEntities];
 	Entity::Point *playerStart;
 	for(unsigned int i=0; i<file->numEntities(); i++) {
-		const std::string &classname = file->entity(i).section->parameter("classname");
+		Entity::Base *entity = Entity::Base::create(file->entity(i).section, this);
 
-		mEntities[i] = 0;
-		if(classname == "worldspawn") {
-			mWorldSpawn = new Entity::WorldSpawn(file->entity(i).section, this);
-		}
+		mEntities[i] = entity;
+		if(entity) {
+			if(entity->classname() == "worldspawn") {
+				mWorldSpawn = static_cast<Entity::WorldSpawn*>(entity);
+			}
 
-		if(classname == "info_player_start") {
-			playerStart = new Entity::Point(file->entity(i).section, this);
-		}
-
-		if(classname == "prop_dynamic") {
-			mEntities[i] = new Entity::Prop::Dynamic(file->entity(i).section, this);
+			if(entity->classname() == "info_player_start") {
+				playerStart = static_cast<Entity::Info::PlayerStart*>(entity);
+			}
 		}
 	}
 
