@@ -247,10 +247,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\World\Entity.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\World\Face.cpp"
 					>
 				</File>
@@ -292,10 +288,30 @@
 					RelativePath=".\World\Skybox.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\World\StaticProp.cpp"
+				<Filter
+					Name="Entity"
 					>
-				</File>
+					<File
+						RelativePath=".\World\Entity\Base.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\World\Entity\Point.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\World\Entity\Worldspawn.cpp"
+						>
+					</File>
+					<Filter
+						Name="Prop"
+						>
+						<File
+							RelativePath=".\World\Entity\Prop\Static.cpp"
+							>
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Draw"
@@ -481,10 +497,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\World\Entity.hpp"
-					>
-				</File>
-				<File
 					RelativePath=".\World\Face.hpp"
 					>
 				</File>
@@ -508,10 +520,30 @@
 					RelativePath=".\World\Skybox.hpp"
 					>
 				</File>
-				<File
-					RelativePath=".\World\StaticProp.hpp"
+				<Filter
+					Name="Entity"
 					>
-				</File>
+					<File
+						RelativePath=".\World\Entity\Base.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\World\Entity\Point.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\World\Entity\Worldspawn.hpp"
+						>
+					</File>
+					<Filter
+						Name="Prop"
+						>
+						<File
+							RelativePath=".\World\Entity\Prop\Static.hpp"
+							>
+						</File>
+					</Filter>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Draw"

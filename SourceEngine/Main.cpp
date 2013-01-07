@@ -135,7 +135,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	DWORD fpsClock = GetTickCount();
 	int frames = 0;
-	World::Entity *player = map->player();
+	World::Entity::Point *player = map->player();
 
 	while(1) {
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

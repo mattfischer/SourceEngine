@@ -4,9 +4,12 @@
 #include "World/Face.hpp"
 #include "World/Material.hpp"
 #include "World/BSP.hpp"
-#include "World/Entity.hpp"
-#include "World/StaticProp.hpp"
 #include "World/Skybox.hpp"
+#include "World/ModelCache.hpp"
+#include "World/Entity/Base.hpp"
+#include "World/Entity/Point.hpp"
+#include "World/Entity/Prop/Static.hpp"
+#include "World/Entity/Worldspawn.hpp"
 
 #include "File/Space.hpp"
 
@@ -20,17 +23,21 @@ public:
 
 	BSP *bsp() { return mBsp; }
 
-	Entity *player() { return mPlayer; }
+	Entity::Point *player() { return mPlayer; }
 
 	size_t numEntities() { return mNumEntities; }
-	Entity *entity(int entity) { return mEntities[entity]; }
+	Entity::Base *entity(int entity) { return mEntities[entity]; }
 
 	size_t numStaticProps() { return mNumStaticProps; }
-	StaticProp *staticProp(int staticProp) { return mStaticProps[staticProp]; }
+	Entity::Prop::Static *staticProp(int staticProp) { return mStaticProps[staticProp]; }
 
-	Entity *worldspawn() { return mEntities[0]; }
+	Entity::WorldSpawn *worldSpawn() { return mWorldSpawn; }
 
 	Skybox *skybox() { return mSkybox; }
+
+	ModelCache *modelCache() { return mModelCache; }
+
+	File::Space *space() { return mSpace; }
 
 private:
 	size_t mNumMaterials;
@@ -40,16 +47,21 @@ private:
 	Face **mFaces;
 
 	size_t mNumEntities;
-	Entity **mEntities;
+	Entity::Base **mEntities;
 
 	size_t mNumStaticProps;
-	StaticProp **mStaticProps;
+	Entity::Prop::Static **mStaticProps;
 
 	BSP *mBsp;
 
-	Entity *mPlayer;
+	Entity::Point *mPlayer;
 
+	Entity::WorldSpawn *mWorldSpawn;
 	Skybox *mSkybox;
+
+	ModelCache *mModelCache;
+
+	File::Space *mSpace;
 };
 
 }

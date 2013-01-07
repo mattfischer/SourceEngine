@@ -60,21 +60,8 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	mBspDrawer->draw(0, Geo::Point(0, 0, 0), Geo::Orientation(0, 0, 0));
 
 	if(drawEntities) {
-		for(unsigned int i=0; i<mMap->numEntities(); i++) {
-			World::Entity *entity = mMap->entity(i);
-			if(entity->model()) {
-				if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
-					mModelDrawer->draw(entity->model(), entity->position(), entity->orientation(), 0);
-				}
-			}
-
-			if(entity->bspRoot() != 0) {
-				mBspDrawer->draw(entity->bspRoot(), entity->position(), entity->orientation());
-			}
-		}
-
 		for(unsigned int i=0; i<mMap->numStaticProps(); i++) {
-			World::StaticProp *staticProp = mMap->staticProp(i);
+			World::Entity::Prop::Static *staticProp = mMap->staticProp(i);
 
 			for(unsigned int j=0; j<staticProp->numLeaves(); j++) {
 				if(staticProp->leaf(j)->frameTag == mFrameTag && !mFrustum.boxOutside(staticProp->box())) {

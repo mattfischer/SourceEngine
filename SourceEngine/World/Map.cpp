@@ -16,6 +16,8 @@ Map::Map(File::Space *space, const std::string &filename)
 	multiSpace->addSpace(zipSpace);
 	multiSpace->addSpace(space);
 
+	mSpace = multiSpace;
+
 	mNumMaterials = file->numTexDatas();
 	mMaterials = new Material*[mNumMaterials];
 	for(unsigned int i=0; i<mNumMaterials; i++) {
@@ -38,31 +40,33 @@ Map::Map(File::Space *space, const std::string &filename)
 
 	mBsp = new BSP(file, mFaces);
 
-	ModelCache *modelCache = new ModelCache(multiSpace);
+	mModelCache = new ModelCache(multiSpace);
 
-	mNumEntities = file->numEntities() + 1;
-	mEntities = new Entity*[mNumEntities];
-
-	Entity *playerStart;
+	Entity::Point *playerStart;
 	for(unsigned int i=0; i<file->numEntities(); i++) {
-		mEntities[i] = new Entity(file, i, mBsp, modelCache);
+		mEntities[i] = 0;
+		if(file->entity(i).section->parameter("classname") == "worldspawn") {
+			mWorldSpawn = new Entity::WorldSpawn(file->entity(i).section);
+		}
 
-		if(mEntities[i]->classname() == "info_player_start") {
-			playerStart = mEntities[i];
+		if(file->entity(i).section->parameter("classname") == "info_player_start") {
+			playerStart = new Entity::Point(file->entity(i).section);
 		}
 	}
 
-	mPlayer = new Entity("player", playerStart->position() + Geo::Vector(0, 0, 60), playerStart->orientation());
+	mPlayer = new Entity::Point("player");
+	mPlayer->setPosition(playerStart->position() + Geo::Vector(0, 0, 60));
+	mPlayer->setOrientation(playerStart->orientation());
 	mEntities[mNumEntities - 1] = mPlayer;
 
-	if(worldspawn()->skyname() != "") {
-		mSkybox = new Skybox(multiSpace, worldspawn()->skyname());
+	if(worldSpawn()->skyname() != "") {
+		mSkybox = new Skybox(multiSpace, worldSpawn()->skyname());
 	}
 
 	mNumStaticProps = file->numStaticProps();
-	mStaticProps = new StaticProp*[mNumStaticProps];
+	mStaticProps = new Entity::Prop::Static*[mNumStaticProps];
 	for(unsigned int i=0; i<mNumStaticProps; i++) {
-		mStaticProps[i] = new StaticProp(file, i, mBsp, multiSpace, modelCache);
+		mStaticProps[i] = new Entity::Prop::Static(file, i, this);
 	}
 
 	delete zipSpace;
