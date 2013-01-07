@@ -3,7 +3,7 @@
 namespace World {
 namespace Entity {
 
-Base::Base(const Format::KeyValue::Section *section)
+Base::Base(const Format::KeyValue::Section *section, Map *map)
 {
 	mClassname = section->parameter("classname");
 }

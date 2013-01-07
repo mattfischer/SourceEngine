@@ -307,6 +307,10 @@
 						Name="Prop"
 						>
 						<File
+							RelativePath=".\World\Entity\Prop\Dynamic.cpp"
+							>
+						</File>
+						<File
 							RelativePath=".\World\Entity\Prop\Static.cpp"
 							>
 						</File>
@@ -538,6 +542,10 @@
 					<Filter
 						Name="Prop"
 						>
+						<File
+							RelativePath=".\World\Entity\Prop\Dynamic.hpp"
+							>
+						</File>
 						<File
 							RelativePath=".\World\Entity\Prop\Static.hpp"
 							>

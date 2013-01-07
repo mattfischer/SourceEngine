@@ -1,5 +1,7 @@
 #include "World/Map.hpp"
 
+#include "World/Entity/Prop/Dynamic.hpp"
+
 #include "Format/BSP.hpp"
 
 #include "File/ZipSpace.hpp"
@@ -42,15 +44,23 @@ Map::Map(File::Space *space, const std::string &filename)
 
 	mModelCache = new ModelCache(multiSpace);
 
+	mNumEntities = file->numEntities() + 1;
+	mEntities = new Entity::Base*[mNumEntities];
 	Entity::Point *playerStart;
 	for(unsigned int i=0; i<file->numEntities(); i++) {
+		const std::string &classname = file->entity(i).section->parameter("classname");
+
 		mEntities[i] = 0;
-		if(file->entity(i).section->parameter("classname") == "worldspawn") {
-			mWorldSpawn = new Entity::WorldSpawn(file->entity(i).section);
+		if(classname == "worldspawn") {
+			mWorldSpawn = new Entity::WorldSpawn(file->entity(i).section, this);
 		}
 
-		if(file->entity(i).section->parameter("classname") == "info_player_start") {
-			playerStart = new Entity::Point(file->entity(i).section);
+		if(classname == "info_player_start") {
+			playerStart = new Entity::Point(file->entity(i).section, this);
+		}
+
+		if(classname == "prop_dynamic") {
+			mEntities[i] = new Entity::Prop::Dynamic(file->entity(i).section, this);
 		}
 	}
 

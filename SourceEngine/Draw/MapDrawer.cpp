@@ -2,6 +2,8 @@
 
 #include "Geo/Transformation.hpp"
 
+#include "World/Entity/Prop/Dynamic.hpp"
+
 #include <GL/glew.h>
 
 namespace Draw {
@@ -60,6 +62,24 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	mBspDrawer->draw(0, Geo::Point(0, 0, 0), Geo::Orientation(0, 0, 0));
 
 	if(drawEntities) {
+		for(unsigned int i=0; i<mMap->numEntities(); i++) {
+			World::Entity::Base *base = mMap->entity(i);
+
+			if(!base) {
+				continue;
+			}
+
+			if(base->classname() == "prop_dynamic") {
+				World::Entity::Prop::Dynamic *entity = (World::Entity::Prop::Dynamic*)base;
+
+				if(entity->model()) {
+					if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
+						   mModelDrawer->draw(entity->model(), entity->position(), entity->orientation(), 0);
+					}
+				}
+			}
+		}
+
 		for(unsigned int i=0; i<mMap->numStaticProps(); i++) {
 			World::Entity::Prop::Static *staticProp = mMap->staticProp(i);
 

@@ -3,8 +3,8 @@
 namespace World {
 namespace Entity {
 
-WorldSpawn::WorldSpawn(const Format::KeyValue::Section *section)
-: Base(section)
+WorldSpawn::WorldSpawn(const Format::KeyValue::Section *section, World::Map *map)
+: Base(section, map)
 {
 	if(section->hasParameter("skyname")) {
 		mSkyname = section->parameter("skyname");

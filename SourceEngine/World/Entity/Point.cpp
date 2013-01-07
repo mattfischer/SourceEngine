@@ -5,8 +5,8 @@
 namespace World {
 namespace Entity {
 
-Point::Point(const Format::KeyValue::Section *section)
-: Base(section)
+Point::Point(const Format::KeyValue::Section *section, Map *map)
+: Base(section, map)
 {
 	if(section->hasParameter("origin")) {
 		const std::string &position = section->parameter("origin");
