@@ -3,14 +3,19 @@
 namespace World {
 namespace Entity {
 
-std::map<std::string, Registry::CreatorBase*> *Registry::mCreators = 0;
+Registry *Registry::instance()
+{
+	static Registry inst;
+
+	return &inst;
+}
 
 Base *Registry::create(const Format::KeyValue::Section *section, Map *map)
 {
 	const std::string &classname = section->parameter("classname");
 	Base *ret = 0;
-	if(mCreators->find(classname) != mCreators->end()) {
-		ret = (*mCreators)[classname]->create(section, map);
+	if(mCreators.find(classname) != mCreators.end()) {
+		ret = mCreators[classname]->create(section, map);
 	}
 
 	return ret;
@@ -18,11 +23,7 @@ Base *Registry::create(const Format::KeyValue::Section *section, Map *map)
 
 void Registry::registerCreator(const std::string &classname, CreatorBase *creator)
 {
-	if(!mCreators) {
-		mCreators = new std::map<std::string, CreatorBase*>;
-	}
-
-	(*mCreators)[classname] = creator;
+	mCreators[classname] = creator;
 }
 
 }

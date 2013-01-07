@@ -21,7 +21,7 @@ public:
 
 	static Base *create(const Format::KeyValue::Section *section, Map *map)
 	{
-		return Registry::create(section, map);
+		return Registry::instance()->create(section, map);
 	}
 
 private:
