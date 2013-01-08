@@ -15,21 +15,23 @@ namespace World {
 
 class Model {
 public:
-	Model(Format::MDL *mdl, Format::VVD *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath);
+	Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath);
 
 	Format::MDL *mdl() { return mMdl; }
-	Format::VVD *vvd() { return mVvd; }
 	Format::VTX *vtx() { return mVtx; }
 
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
 
+	Format::VVD::Vertex *vertices(int lod) { return mVertices[lod]; }
+
 	const Geo::BoxOriented &box() { return mBox; }
 
 private:
 	Format::MDL *mMdl;
-	Format::VVD *mVvd;
 	Format::VTX *mVtx;
+
+	Format::VVD::Vertex **mVertices;
 
 	int mNumMaterials;
 	Material **mMaterials;

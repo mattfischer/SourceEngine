@@ -18,7 +18,7 @@ Model *ModelCache::open(const std::string &filename)
 
 			std::string vertices = filename;
 			vertices.replace(pos, 4, ".vvd");
-			Format::VVD *vvd = Format::VVD::open(mSpace, vertices);
+			Format::VVD::Header *vvd = Format::VVD::open(mSpace, vertices);
 
 			std::string mesh = filename;
 			mesh.replace(pos, 4, ".vtx");

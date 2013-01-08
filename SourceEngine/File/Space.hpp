@@ -11,6 +11,8 @@ class Space {
 public:
 	virtual File *open(const std::string &name) = 0;
 	virtual bool exists(const std::string &name) = 0;
+
+	char *read(const std::string &name);
 };
 
 }

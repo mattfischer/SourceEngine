@@ -52,10 +52,10 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 						Format::VTX::Strip &strip = stripGroup.strips[s];
 
 						glEnableClientState(GL_VERTEX_ARRAY);
-						glVertexPointer(3, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vvd()->lod(0).vertices[0].position);
+						glVertexPointer(3, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vertices(0)->position);
 
 						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-						glTexCoordPointer(2, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vvd()->lod(0).vertices[0].texCoord);
+						glTexCoordPointer(2, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vertices(0)->texCoord);
 
 						if(vhv) {
 							glEnableClientState(GL_COLOR_ARRAY);

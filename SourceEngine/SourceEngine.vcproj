@@ -197,6 +197,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\File\Space.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\File\SystemSpace.cpp"
 					>
 				</File>
@@ -408,10 +412,6 @@
 				</File>
 				<File
 					RelativePath=".\Format\VTX.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Format\VVD.cpp"
 					>
 				</File>
 			</Filter>
