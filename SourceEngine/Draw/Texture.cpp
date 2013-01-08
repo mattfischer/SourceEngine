@@ -2,7 +2,7 @@
 
 namespace Draw {
 
-Texture::Texture(Format::VTF *vtf)
+Texture::Texture(Format::VTF::Header *vtf)
 {
 	glGenTextures(1, &mTex);
 	glBindTexture(GL_TEXTURE_2D, mTex);
@@ -11,8 +11,8 @@ Texture::Texture(Format::VTF *vtf)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	GLenum internalFormat;
-	switch(vtf->format()) {
+	GLenum internalFormat = 0;
+	switch(vtf->highResImageFormat) {
 		case Format::VTF::FormatDXT1:
 			internalFormat = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
 			break;
@@ -22,15 +22,36 @@ Texture::Texture(Format::VTF *vtf)
 			break;
 	}
 
-	if(vtf->format() != Format::VTF::FormatUnknown) {
-		for(int i=0; i<vtf->numMipMaps(); i++) {
-			int mip = vtf->numMipMaps() - i - 1;
-			glCompressedTexImage2D(GL_TEXTURE_2D, i, internalFormat, vtf->width(mip), vtf->height(mip), 0, vtf->dataSize(mip), vtf->data(mip));
+	char *data = (char*)vtf + vtf->headerSize;
+	data += Format::VTF::dataSize(vtf->lowResImageWidth, vtf->lowResImageHeight, vtf->lowResImageFormat);
+
+	if(internalFormat != 0) {
+		for(int i=0; i<vtf->mipmapCount; i++) {
+			int mip = vtf->mipmapCount - i - 1;
+
+			int width = vtf->width >> mip;
+			if(width == 0) {
+				width = 1;
+			}
+
+			int height = vtf->height >> mip;
+			if(height == 0) {
+				height = 1;
+			}
+
+			int dataSize = Format::VTF::dataSize(width, height, vtf->highResImageFormat);
+			for(int frame = 0; frame<vtf->frames; frame++) {
+				if(frame == 0) {
+					glCompressedTexImage2D(GL_TEXTURE_2D, mip, internalFormat, width, height, 0, dataSize, data);
+				}
+
+				data += dataSize;
+			}
 		}
 	}
 
-	mWidth = vtf->width();
-	mHeight = vtf->height();
+	mWidth = vtf->width;
+	mHeight = vtf->height;
 }
 
 void Texture::select()

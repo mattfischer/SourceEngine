@@ -15,7 +15,7 @@ Material::Material(Format::VMT *vmt, File::Space *space)
 			textureFilename += ".vtf";
 		}
 
-		Format::VTF *vtf = Format::VTF::open(space, textureFilename);
+		Format::VTF::Header *vtf = Format::VTF::open(space, textureFilename);
 		if(vtf) {
 			mTexture = new Draw::Texture(vtf);
 			delete vtf;

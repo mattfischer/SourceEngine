@@ -11,7 +11,7 @@ namespace Draw {
 
 class Texture {
 public:
-	Texture(Format::VTF *vtf);
+	Texture(Format::VTF::Header *vtf);
 
 	void select();
 

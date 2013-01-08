@@ -6,40 +6,62 @@
 #include <string>
 
 namespace Format {
+namespace VTF {
 
-class VTF {
-public:
-	enum Format {
-		FormatDXT1,
-		FormatDXT5,
-		FormatUnknown
-	};
+const unsigned int FormatDXT1 = 0xd;
+const unsigned int FormatDXT5 = 0xf;
 
-	VTF(File::File *file);
-	~VTF();
-
-	int width(int n);
-	int height(int n);
-	int width() { return width(mNumMipMaps - 1); }
-	int height() { return height(mNumMipMaps - 1); }
-	int numMipMaps() { return mNumMipMaps; }
-	Format format() { return mFormat; }
-
-	const unsigned char *lowResData() { return mLowResData; }
-	const unsigned char *data(int mipMapLevel) { return mData[mipMapLevel]; }
-	int dataSize(int mipMapLevel);
-
-	static VTF *open(File::Space *space, const std::string &filename);
-
-private:
-	int mWidth;
-	int mHeight;
-	int mNumMipMaps;
-	Format mFormat;
-
-	unsigned char *mLowResData;
-	unsigned char **mData;
+#pragma pack(push, 1)
+struct Header
+{
+	char			signature[4];
+	unsigned int	version[2];
+	unsigned int	headerSize;
+	unsigned short	width;
+	unsigned short	height;
+	unsigned int	flags;
+	unsigned short	frames;
+	unsigned short	firstFrame;
+	unsigned char	padding0[4];
+	float			reflectivity[3];
+	unsigned char	padding1[4];
+	float			bumpmapScale;
+	unsigned int	highResImageFormat;
+	unsigned char	mipmapCount;
+	unsigned int	lowResImageFormat;
+	unsigned char	lowResImageWidth;
+	unsigned char	lowResImageHeight;
+	unsigned short	depth;
 };
+#pragma pack(pop)
 
+static int dataSize(int width, int height, unsigned int format)
+{
+	int size = 0;
+	switch(format) {
+		case FormatDXT1:
+			size = width * height / 2;
+			if(size < 8) {
+				size = 8;
+			}
+			break;
+
+		case FormatDXT5:
+			size = width * height;
+			if(size < 16) {
+				size = 16;
+			}
+			break;
+	}
+
+	return size;
+}
+
+static Header *open(File::Space *space, const std::string &name)
+{
+	return (Header*)space->read(name);
+}
+
+}
 }
 #endif

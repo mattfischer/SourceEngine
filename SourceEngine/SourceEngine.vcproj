@@ -407,10 +407,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Format\VTF.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Format\VTX.cpp"
 					>
 				</File>
