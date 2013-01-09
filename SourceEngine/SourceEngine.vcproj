@@ -391,10 +391,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\Format\MDL.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Format\VMT.cpp"
 					>
 				</File>

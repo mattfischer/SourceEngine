@@ -14,7 +14,7 @@ Model *ModelCache::open(const std::string &filename)
 	if(mMap.find(filename) == mMap.end()) {
 		size_t pos = filename.find(".mdl");
 		if(pos != filename.npos) {
-			Format::MDL *mdl = Format::MDL::open(mSpace, filename);
+			Format::MDL::Header *mdl = Format::MDL::open(mSpace, filename);
 
 			std::string vertices = filename;
 			vertices.replace(pos, 4, ".vvd");

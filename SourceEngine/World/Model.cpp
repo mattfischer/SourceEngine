@@ -2,10 +2,8 @@
 
 namespace World {
 
-Model::Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath)
+Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath)
 {
-	mMdl = mdl;
-
 	mVertices = new Format::VVD::Vertex*[vvd->numLods];
 	for(int lod=0; lod<vvd->numLods; lod++) {
 		int numLodVertices = vvd->numLodVertices[lod];
@@ -66,16 +64,17 @@ Model::Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vt
 		}
 	}
 
-	Geo::Point hullMin(mdl->hullMin().x, mdl->hullMin().y, mdl->hullMin().z);
-	Geo::Point hullMax(mdl->hullMax().x, mdl->hullMax().y, mdl->hullMax().z);
+	Geo::Point hullMin(mdl->hullMin.x, mdl->hullMin.y, mdl->hullMin.z);
+	Geo::Point hullMax(mdl->hullMax.x, mdl->hullMax.y, mdl->hullMax.z);
 	mBox = Geo::BoxOriented(hullMin, hullMax);
 
-	mNumMaterials = mdl->numTextures();
+	mNumMaterials = mdl->textureCount;
 	mMaterials = new Material*[mNumMaterials];
 	for(int i=0; i<mNumMaterials; i++) {
-		Format::VMT *vmt = Format::VMT::open(space, "materials/" + modelPath + "/" + mdl->texture(i) + ".vmt");
+		std::string texture(mdl->texture(i)->name());
+		Format::VMT *vmt = Format::VMT::open(space, "materials/" + modelPath + "/" + texture + ".vmt");
 		if(!vmt) {
-			vmt = Format::VMT::open(space, "materials/" + mdl->texture(i) + ".vmt");
+			vmt = Format::VMT::open(space, "materials/" + texture + ".vmt");
 		}
 
 		if(vmt) {

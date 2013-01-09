@@ -17,7 +17,7 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
 
-	World::Material *material = model->material(model->mdl()->skin(0, 0));
+	World::Material *material = model->material(0);
 	if(material && material->texture()) {
 		if(mDrawTextures) {
 			material->texture()->select();

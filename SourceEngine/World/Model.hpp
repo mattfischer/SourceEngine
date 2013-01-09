@@ -15,9 +15,7 @@ namespace World {
 
 class Model {
 public:
-	Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath);
-
-	Format::MDL *mdl() { return mMdl; }
+	Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath);
 
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
@@ -34,8 +32,6 @@ public:
 	const Lod &lod(int lod) { return mLods[lod]; }
 
 private:
-	Format::MDL *mMdl;
-
 	Format::VVD::Vertex **mVertices;
 
 	int mNumMaterials;
