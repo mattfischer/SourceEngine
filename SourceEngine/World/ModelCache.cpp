@@ -22,7 +22,7 @@ Model *ModelCache::open(const std::string &filename)
 
 			std::string mesh = filename;
 			mesh.replace(pos, 4, ".vtx");
-			Format::VTX *vtx = Format::VTX::open(mSpace, mesh);
+			Format::VTX::Header *vtx = Format::VTX::open(mSpace, mesh);
 
 			if(mdl && vvd && vtx) {
 				std::string modelPath = filename.substr(0, filename.rfind("/"));

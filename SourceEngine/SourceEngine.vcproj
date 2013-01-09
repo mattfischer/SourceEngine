@@ -402,10 +402,6 @@
 					RelativePath=".\Format\VPK.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\Format\VTX.cpp"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter

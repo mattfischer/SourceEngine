@@ -2,10 +2,9 @@
 
 namespace World {
 
-Model::Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath)
+Model::Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath)
 {
 	mMdl = mdl;
-	mVtx = vtx;
 
 	mVertices = new Format::VVD::Vertex*[vvd->numLods];
 	for(int lod=0; lod<vvd->numLods; lod++) {
@@ -26,6 +25,43 @@ Model::Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX *vtx, File:
 						v++;
 					}
 				}
+			}
+		}
+	}
+
+	Format::VTX::BodyPart *bodyPart = vtx->bodyPart(0);
+	Format::VTX::Model *model = bodyPart->model(0);
+	mNumLods = model->numLods;
+	mLods = new Lod[mNumLods];
+	for(int i=0; i<mNumLods; i++) {
+		Format::VTX::Lod *lod = model->lod(i);
+		int numIndices = 0;
+		for(int j=0; j<lod->numMeshes; j++) {
+			Format::VTX::Mesh *mesh = lod->mesh(j);
+			for(int k=0; k<mesh->numStripGroups; k++) {
+				numIndices += mesh->stripGroup(k)->numIndices;
+			}
+		}
+
+		mLods[i].numIndices = numIndices;
+		mLods[i].indices = new unsigned short[numIndices];
+
+		int index = 0;
+		int vertexOffset = 0;
+		for(int j=0; j<lod->numMeshes; j++) {
+			Format::VTX::Mesh *mesh = lod->mesh(j);
+			for(int k=0; k<mesh->numStripGroups; k++) {
+				Format::VTX::StripGroup *stripGroup = mesh->stripGroup(k);
+				for(int l=0; l<stripGroup->numStrips; l++) {
+					Format::VTX::Strip *strip = stripGroup->strip(l);
+					for(int m=0; m<strip->numIndices; m++) {
+						unsigned short x = strip->vertexOffset + *stripGroup->index(strip->indexOffset + m);
+						mLods[i].indices[index] = stripGroup->vertex(x)->vertex + vertexOffset;
+						index++;
+					}
+				}
+
+				vertexOffset += stripGroup->numVertices;
 			}
 		}
 	}

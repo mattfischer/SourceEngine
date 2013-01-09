@@ -15,10 +15,9 @@ namespace World {
 
 class Model {
 public:
-	Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX *vtx, File::Space *space, const std::string &modelPath);
+	Model(Format::MDL *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath);
 
 	Format::MDL *mdl() { return mMdl; }
-	Format::VTX *vtx() { return mVtx; }
 
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
@@ -27,14 +26,23 @@ public:
 
 	const Geo::BoxOriented &box() { return mBox; }
 
+	struct Lod {
+		int numIndices;
+		unsigned short *indices;
+	};
+
+	const Lod &lod(int lod) { return mLods[lod]; }
+
 private:
 	Format::MDL *mMdl;
-	Format::VTX *mVtx;
 
 	Format::VVD::Vertex **mVertices;
 
 	int mNumMaterials;
 	Material **mMaterials;
+
+	int mNumLods;
+	Lod *mLods;
 
 	Geo::BoxOriented mBox;
 };
