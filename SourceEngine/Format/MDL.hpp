@@ -67,7 +67,7 @@ struct Header
 
 	int		textureCount;
 	int		textureOffset;
-	Texture *texture(int n) { return (Texture*)((char*)this + textureOffset + n * sizeof(Texture)); }
+	Texture *texture(int n) { return (Texture*)((char*)this + textureOffset) + n; }
 
 	int		textureDirCount;
 	int		textureDirOffset;
@@ -75,7 +75,7 @@ struct Header
 	int		skinReferenceCount;
 	int		skinReferenceFamilyCount;
 	int     skinReferenceIndex;
-	unsigned short *skin(int family, int reference) { return (unsigned short*)((char*)this + skinReferenceIndex + (family * skinReferenceCount + reference) * sizeof(unsigned short)); }
+	unsigned short *skin(int family, int reference) { return (unsigned short*)((char*)this + skinReferenceIndex) + family * skinReferenceCount + reference; }
 
 	int		bodyPartCount;
 	int		bodyPartOffset;

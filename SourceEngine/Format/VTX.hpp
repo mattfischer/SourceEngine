@@ -42,9 +42,9 @@ struct StripGroup {
 	int numStrips;
 	int stripOffset;
 
-	Strip *strip(int n) { return (Strip*)((char*)this + stripOffset + n * sizeof(Strip)); }
-	Vertex *vertex(int n) { return (Vertex*)((char*)this + vertexOffset + n * sizeof(Vertex)); }
-	unsigned short *index(int n) { return (unsigned short*)((char*)this + indexOffset + n * sizeof(unsigned short)); }
+	Strip *strip(int n) { return (Strip*)((char*)this + stripOffset) + n; }
+	Vertex *vertex(int n) { return (Vertex*)((char*)this + vertexOffset) + n; }
+	unsigned short *index(int n) { return (unsigned short*)((char*)this + indexOffset) + n; }
 };
 
 struct Mesh {
@@ -52,7 +52,7 @@ struct Mesh {
 	int stripGroupOffset;
 	unsigned char flags;
 
-	StripGroup *stripGroup(int n) { return (StripGroup*)((char*)this + stripGroupOffset + n * sizeof(StripGroup)); }
+	StripGroup *stripGroup(int n) { return (StripGroup*)((char*)this + stripGroupOffset) + n; }
 };
 
 struct Lod {
@@ -60,21 +60,21 @@ struct Lod {
 	int meshOffset;
 	float switchPoint;
 
-	Mesh *mesh(int n) { return (Mesh*)((char*)this + meshOffset + n * sizeof(Mesh)); }
+	Mesh *mesh(int n) { return (Mesh*)((char*)this + meshOffset) + n; }
 };
 
 struct Model {
 	int numLods;
 	int lodOffset;
 
-	Lod *lod(int n) { return (Lod*)((char*)this + lodOffset + n * sizeof(Lod)); }
+	Lod *lod(int n) { return (Lod*)((char*)this + lodOffset) + n; }
 };
 
 struct BodyPart {
 	int numModels;
 	int modelOffset;
 
-	Model *model(int n) { return (Model*)((char*)this + modelOffset + n * sizeof(Model)); }
+	Model *model(int n) { return (Model*)((char*)this + modelOffset) + n; }
 };
 
 struct Header
@@ -94,7 +94,7 @@ struct Header
 
 	int numBodyParts;
 	int bodyPartOffset;
-	BodyPart *bodyPart(int n) { return (BodyPart*)((char*)this + bodyPartOffset + n * sizeof(BodyPart)); }
+	BodyPart *bodyPart(int n) { return (BodyPart*)((char*)this + bodyPartOffset) + n; }
 };
 
 #pragma pack(pop)

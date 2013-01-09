@@ -52,10 +52,10 @@ struct Header {
 
 	int	numFixups;
 	int	fixupTableStart;
-	Fixup *fixup(int n) { return (Fixup*)((char*)this + fixupTableStart + n * sizeof(Fixup)); }
+	Fixup *fixup(int n) { return (Fixup*)((char*)this + fixupTableStart) + n; }
 
 	int	vertexDataStart;
-	Vertex *vertex(int n) { return (Vertex*)((char*)this + vertexDataStart + n * sizeof(Vertex)); }
+	Vertex *vertex(int n) { return (Vertex*)((char*)this + vertexDataStart) + n; }
 
 	int	tangentDataStart;
 };

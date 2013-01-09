@@ -33,7 +33,7 @@ struct Header
 	int numMeshes;
 	unsigned int unused[4];
 
-	Mesh *mesh(int n) { return (Mesh*)((char*)this + sizeof(Header) + n * sizeof(Mesh)); }
+	Mesh *mesh(int n) { return (Mesh*)((char*)this + sizeof(Header)) + n; }
 	RGBA *vertices(int m) { return (RGBA*)((char*)this + mesh(m)->vertexOffset); }
 };
 
