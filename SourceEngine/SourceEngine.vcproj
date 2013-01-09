@@ -395,10 +395,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Format\VHV.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Format\VMT.cpp"
 					>
 				</File>

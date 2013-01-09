@@ -4,7 +4,7 @@
 
 namespace Draw {
 
-void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation, Format::VHV *vhv)
+void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation, Format::VHV::Header *vhv)
 {
 	glPushMatrix();
 	glTranslatef(position.x(), position.y(), position.z());
@@ -59,7 +59,7 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 
 						if(vhv) {
 							glEnableClientState(GL_COLOR_ARRAY);
-							glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Format::VHV::RGBA), vhv->mesh(0).vertices);
+							glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Format::VHV::RGBA), vhv->vertices(0));
 						} else {
 							glDisableClientState(GL_COLOR_ARRAY);
 							glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

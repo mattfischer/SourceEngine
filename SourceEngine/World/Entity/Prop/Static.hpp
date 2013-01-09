@@ -28,7 +28,7 @@ public:
 
 	const Geo::BoxOriented &box() { return mBox; }
 
-	Format::VHV *vhv() { return mVhv; }
+	Format::VHV::Header *vhv() { return mVhv; }
 
 private:
 	World::Model *mModel;
@@ -37,7 +37,7 @@ private:
 	size_t mNumLeaves;
 	BSP::Leaf **mLeaves;
 
-	Format::VHV *mVhv;
+	Format::VHV::Header *mVhv;
 };
 
 }

@@ -35,6 +35,32 @@ Static::Static(Format::BSP *file, int number, World::Map *map)
 	std::stringstream ss;
 	ss << "sp_hdr_" << number << ".vhv";
 	mVhv = Format::VHV::open(map->space(), ss.str());
+	for(int mesh=0; mesh<mVhv->numMeshes; mesh++) {
+		for(unsigned int v=0; v<mVhv->mesh(mesh)->numVertices; v++) {
+			Format::VHV::RGBA *rgba = mVhv->vertices(mesh) + v;
+			unsigned char t = rgba->r;
+			rgba->r = rgba->b;
+			rgba->b = t;
+
+			if(rgba->r >= 0x40) {
+				rgba->r = 0xff;
+			} else {
+				rgba->r *= 4;
+			}
+
+			if(rgba->g >= 0x40) {
+				rgba->g = 0xff;
+			} else {
+				rgba->g *= 4;
+			}
+
+			if(rgba->b >= 0x40) {
+				rgba->b = 0xff;
+			} else {
+				rgba->b *= 4;
+			}
+		}
+	}
 }
 
 }
