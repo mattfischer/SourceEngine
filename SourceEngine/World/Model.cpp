@@ -27,39 +27,47 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 		}
 	}
 
-	Format::VTX::BodyPart *bodyPart = vtx->bodyPart(0);
-	Format::VTX::Model *model = bodyPart->model(0);
-	mNumLods = model->numLods;
-	mLods = new Lod[mNumLods];
-	for(int i=0; i<mNumLods; i++) {
-		Format::VTX::Lod *lod = model->lod(i);
-		int numIndices = 0;
-		for(int j=0; j<lod->numMeshes; j++) {
-			Format::VTX::Mesh *mesh = lod->mesh(j);
-			for(int k=0; k<mesh->numStripGroups; k++) {
-				numIndices += mesh->stripGroup(k)->numIndices;
-			}
-		}
-
-		mLods[i].numIndices = numIndices;
-		mLods[i].indices = new unsigned short[numIndices];
-
-		int index = 0;
-		int vertexOffset = 0;
-		for(int j=0; j<lod->numMeshes; j++) {
-			Format::VTX::Mesh *mesh = lod->mesh(j);
-			for(int k=0; k<mesh->numStripGroups; k++) {
-				Format::VTX::StripGroup *stripGroup = mesh->stripGroup(k);
-				for(int l=0; l<stripGroup->numStrips; l++) {
-					Format::VTX::Strip *strip = stripGroup->strip(l);
-					for(int m=0; m<strip->numIndices; m++) {
-						unsigned short x = strip->vertexOffset + *stripGroup->index(strip->indexOffset + m);
-						mLods[i].indices[index] = stripGroup->vertex(x)->vertex + vertexOffset;
-						index++;
+	mNumBodyParts = vtx->numBodyParts;
+	mBodyParts = new BodyPart[mNumBodyParts];
+	for(int bp=0; bp<vtx->numBodyParts; bp++) {
+		Format::VTX::BodyPart *vtxBodyPart = vtx->bodyPart(bp);
+		BodyPart &bodyPart = mBodyParts[bp];
+		bodyPart.numModels = vtxBodyPart->numModels;
+		bodyPart.models = new _Model[bodyPart.numModels];
+		for(int m=0; m<vtxBodyPart->numModels; m++) {
+			Format::VTX::Model *vtxModel = vtxBodyPart->model(m);
+			_Model &model = bodyPart.models[m];
+			model.numLods = vtxModel->numLods;
+			model.lods = new Lod[model.numLods];
+			for(int l=0; l<vtxModel->numLods; l++) {
+				Format::VTX::Lod *vtxLod = vtxModel->lod(l);
+				Lod &lod = model.lods[l];
+				lod.numMeshes = vtxLod->numMeshes;
+				lod.meshes = new Mesh[lod.numMeshes];
+				int vertexOffset = 0;
+				for(int me=0; me<vtxLod->numMeshes; me++) {
+					Format::VTX::Mesh *vtxMesh = vtxLod->mesh(me);
+					Mesh &mesh = lod.meshes[me];
+					mesh.numStripGroups = vtxMesh->numStripGroups;
+					mesh.stripGroups = new StripGroup[mesh.numStripGroups];
+					for(int sg=0; sg<vtxMesh->numStripGroups; sg++) {
+						Format::VTX::StripGroup *vtxStripGroup = vtxMesh->stripGroup(sg);
+						StripGroup &stripGroup = mesh.stripGroups[sg];
+						stripGroup.numStrips = vtxStripGroup->numStrips;
+						stripGroup.strips = new Strip[stripGroup.numStrips];
+						for(int s=0; s<vtxStripGroup->numStrips; s++) {
+							Format::VTX::Strip *vtxStrip = vtxStripGroup->strip(s);
+							Strip &strip = stripGroup.strips[s];
+							strip.numIndices = vtxStrip->numIndices;
+							strip.indices = new unsigned short[strip.numIndices];
+							for(int i=0; i<vtxStrip->numIndices; i++) {
+								unsigned short x = vtxStrip->vertexOffset + *vtxStripGroup->index(vtxStrip->indexOffset + i);
+								strip.indices[i] = vtxStripGroup->vertex(x)->vertex + vertexOffset;
+							}
+						}
+						vertexOffset += vtxStripGroup->numVertices;
 					}
 				}
-
-				vertexOffset += stripGroup->numVertices;
 			}
 		}
 	}

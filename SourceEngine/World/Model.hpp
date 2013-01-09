@@ -24,12 +24,38 @@ public:
 
 	const Geo::BoxOriented &box() { return mBox; }
 
-	struct Lod {
+	struct Strip {
 		int numIndices;
 		unsigned short *indices;
 	};
 
-	const Lod &lod(int lod) { return mLods[lod]; }
+	struct StripGroup {
+		int numStrips;
+		Strip *strips;
+	};
+
+	struct Mesh {
+		int numStripGroups;
+		StripGroup *stripGroups;
+	};
+
+	struct Lod {
+		int numMeshes;
+		Mesh *meshes;
+	};
+
+	struct _Model {
+		int numLods;
+		Lod *lods;
+	};
+
+	struct BodyPart {
+		int numModels;
+		_Model *models;
+	};
+
+	int numBodyParts() { return mNumBodyParts; }
+	const BodyPart &bodyPart(int bodyPart) { return mBodyParts[bodyPart]; }
 
 private:
 	Format::VVD::Vertex **mVertices;
@@ -37,8 +63,8 @@ private:
 	int mNumMaterials;
 	Material **mMaterials;
 
-	int mNumLods;
-	Lod *mLods;
+	int mNumBodyParts;
+	BodyPart *mBodyParts;
 
 	Geo::BoxOriented mBox;
 };
