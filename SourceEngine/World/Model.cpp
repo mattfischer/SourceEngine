@@ -31,11 +31,13 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 	mBodyParts = new BodyPart[mNumBodyParts];
 	for(int bp=0; bp<vtx->numBodyParts; bp++) {
 		Format::VTX::BodyPart *vtxBodyPart = vtx->bodyPart(bp);
+		Format::MDL::BodyPart *mdlBodyPart = mdl->bodyPart(bp);
 		BodyPart &bodyPart = mBodyParts[bp];
 		bodyPart.numModels = vtxBodyPart->numModels;
 		bodyPart.models = new _Model[bodyPart.numModels];
 		for(int m=0; m<vtxBodyPart->numModels; m++) {
 			Format::VTX::Model *vtxModel = vtxBodyPart->model(m);
+			Format::MDL::Model *mdlModel = mdlBodyPart->model(m);
 			_Model &model = bodyPart.models[m];
 			model.numLods = vtxModel->numLods;
 			model.lods = new Lod[model.numLods];
@@ -44,9 +46,9 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 				Lod &lod = model.lods[l];
 				lod.numMeshes = vtxLod->numMeshes;
 				lod.meshes = new Mesh[lod.numMeshes];
-				int vertexOffset = 0;
 				for(int me=0; me<vtxLod->numMeshes; me++) {
 					Format::VTX::Mesh *vtxMesh = vtxLod->mesh(me);
+					Format::MDL::Mesh *mdlMesh = mdlModel->mesh(me);
 					Mesh &mesh = lod.meshes[me];
 					mesh.numStripGroups = vtxMesh->numStripGroups;
 					mesh.stripGroups = new StripGroup[mesh.numStripGroups];
@@ -62,10 +64,9 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 							strip.indices = new unsigned short[strip.numIndices];
 							for(int i=0; i<vtxStrip->numIndices; i++) {
 								unsigned short x = vtxStrip->vertexOffset + *vtxStripGroup->index(vtxStrip->indexOffset + i);
-								strip.indices[i] = vtxStripGroup->vertex(x)->vertex + vertexOffset;
+								strip.indices[i] = vtxStripGroup->vertex(x)->vertex + mdlMesh->vertexOffset;
 							}
 						}
-						vertexOffset += vtxStripGroup->numVertices;
 					}
 				}
 			}

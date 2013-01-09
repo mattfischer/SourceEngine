@@ -30,6 +30,61 @@ struct Texture {
 	int	unused2[10];
 };
 
+struct Mesh {
+	int					material;
+
+	int					modelIndex;
+
+	int					numVertices;
+	int					vertexOffset;
+
+	int					numFlexes;
+	int					flexIndex;
+
+	int					materialType;
+	int					materialParam;
+
+	int					meshId;
+
+	Vector				center;
+
+	int					unused[17];
+};
+
+struct Model {
+	char				name[64];
+
+	int					type;
+
+	float				boundingRadius;
+
+	int					numMeshes;
+	int					meshIndex;
+	Mesh *mesh(int n) { return (Mesh*)((char*)this + meshIndex) + n; }
+
+	int					numVertices;
+	int					vertexIndex;
+	int					tangentsIndex;
+
+	int					numAttachments;
+	int					attachmentIndex;
+
+	int					numEyeballs;
+	int					eyeballIndex;
+
+	int					unused[10];
+};
+
+struct BodyPart {
+	int					nameOffset;
+	char *name() { return ((char*)this) + nameOffset; }
+
+	int					numModels;
+	int					base;
+	int					modelOffset;
+	Model *model(int n) { return (Model*)((char*)this + modelOffset) + n; }
+};
+
 struct Header
 {
 	int		id;
@@ -79,6 +134,7 @@ struct Header
 
 	int		bodyPartCount;
 	int		bodyPartOffset;
+	BodyPart *bodyPart(int n) { return (BodyPart*)((char*)this + bodyPartOffset) + n; }
 
 	int		attachmentCount;
 	int		attachmentOffset;
