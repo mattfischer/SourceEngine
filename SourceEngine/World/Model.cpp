@@ -52,6 +52,7 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 					Mesh &mesh = lod.meshes[me];
 					mesh.numStripGroups = vtxMesh->numStripGroups;
 					mesh.stripGroups = new StripGroup[mesh.numStripGroups];
+					mesh.material = mdlMesh->material;
 					for(int sg=0; sg<vtxMesh->numStripGroups; sg++) {
 						Format::VTX::StripGroup *vtxStripGroup = vtxMesh->stripGroup(sg);
 						StripGroup &stripGroup = mesh.stripGroups[sg];
@@ -90,6 +91,14 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 			mMaterials[i] = new Material(vmt, space);
 		} else {
 			mMaterials[i] = 0;
+		}
+	}
+
+	mSkins = new int*[mdl->skinReferenceFamilyCount];
+	for(int i=0; i<mdl->skinReferenceFamilyCount; i++) {
+		mSkins[i] = new int[mdl->skinReferenceCount];
+		for(int j=0; j<mdl->skinReferenceCount; j++) {
+			mSkins[i][j] = *mdl->skin(i, j);
 		}
 	}
 }

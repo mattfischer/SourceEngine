@@ -37,6 +37,7 @@ public:
 	struct Mesh {
 		int numStripGroups;
 		StripGroup *stripGroups;
+		int material;
 	};
 
 	struct Lod {
@@ -57,6 +58,8 @@ public:
 	int numBodyParts() { return mNumBodyParts; }
 	const BodyPart &bodyPart(int bodyPart) { return mBodyParts[bodyPart]; }
 
+	int skin(int family, int material) { return mSkins[family][material]; }
+
 private:
 	Format::VVD::Vertex **mVertices;
 
@@ -67,6 +70,8 @@ private:
 	BodyPart *mBodyParts;
 
 	Geo::BoxOriented mBox;
+
+	int **mSkins;
 };
 
 }

@@ -25,33 +25,35 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 			const World::Model::Lod &lod = _model.lods[lodNum];
 			for(int me=0; me<lod.numMeshes; me++) {
 				const World::Model::Mesh &mesh = lod.meshes[me];
+
+				int materialIndex = model->skin(0, mesh.material);
+				World::Material *material = model->material(materialIndex);
+				if(material && material->texture()) {
+					if(mDrawTextures) {
+						material->texture()->select();
+					} else {
+						glBindTexture(GL_TEXTURE_2D, 0);
+					}
+
+					if(material->translucent()) {
+						glEnable(GL_BLEND);
+					} else {
+						glDisable(GL_BLEND);
+					}
+
+					if(material->alphaTest()) {
+						glEnable(GL_ALPHA_TEST);
+					} else {
+						glDisable(GL_ALPHA_TEST);
+					}
+
+					glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+				}
+
 				for(int sg=0; sg<mesh.numStripGroups; sg++) {
 					const World::Model::StripGroup &stripGroup = mesh.stripGroups[sg];
 					for(int s=0; s<stripGroup.numStrips; s++) {
 						const World::Model::Strip &strip = stripGroup.strips[s];
-
-						World::Material *material = model->material(0);
-						if(material && material->texture()) {
-							if(mDrawTextures) {
-								material->texture()->select();
-							} else {
-								glBindTexture(GL_TEXTURE_2D, 0);
-							}
-
-							if(material->translucent()) {
-								glEnable(GL_BLEND);
-							} else {
-								glDisable(GL_BLEND);
-							}
-
-							if(material->alphaTest()) {
-								glEnable(GL_ALPHA_TEST);
-							} else {
-								glDisable(GL_ALPHA_TEST);
-							}
-
-							glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-						}
 
 						glEnableClientState(GL_VERTEX_ARRAY);
 						glVertexPointer(3, GL_FLOAT, sizeof(Format::VVD::Vertex), &model->vertices(lodNum)->position);
