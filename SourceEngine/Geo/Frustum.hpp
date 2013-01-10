@@ -21,6 +21,7 @@ public:
 
 	const Plane &plane(int n) const { return mPlanes[n]; }
 
+	bool pointOutside(const Geo::Point &point) const;
 	bool boxOutside(const BoxAligned &box) const;
 	bool boxOutside(const BoxOriented &oriented) const;
 

@@ -35,6 +35,19 @@ public:
 	}
 
 	float operator()(int i, int j) const { return mElements[i][j]; }
+	const float *elements() const { return (const float*)mElements; }
+
+	Matrix transpose() const
+	{
+		float elements[4][4];
+		for(int i=0; i<4; i++) {
+			for(int j=0; j<4; j++) {
+				elements[i][j] = mElements[j][i];
+			}
+		}
+
+		return Matrix(elements);
+	}
 
 	Matrix operator*(const Matrix &other) const
 	{

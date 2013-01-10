@@ -19,15 +19,13 @@ void BSPDrawer::newFrame()
 void BSPDrawer::draw(int root, const Geo::Point &position, const Geo::Orientation &orientation)
 {
 	glPushMatrix();
-	glTranslatef(position.x(), position.y(), position.z());
-	glRotatef(orientation.yaw(), 0, 0, 1);
-	glRotatef(orientation.pitch(), 0, -1, 0);
-	glRotatef(orientation.roll(), -1, 0, 0);
+	Geo::Transformation transformation = Geo::Transformation::translateRotate(position, orientation);
+	Geo::Transformation inverseTransformation = transformation.inverse();
 
-	Geo::Transformation transformation = Geo::Transformation::translateRotate(position, orientation).inverse();
+	glMultMatrixf(transformation.matrix().transpose().elements());
 
-	Geo::Point cameraPosition = transformation * mCameraPosition;
-	Geo::Frustum frustum = mFrustum * transformation;
+	Geo::Point cameraPosition = inverseTransformation * mCameraPosition;
+	Geo::Frustum frustum = mFrustum * inverseTransformation;
 
 	World::BSP::Leaf *cameraLeaf = mBsp->leafForPoint(root, cameraPosition);
 

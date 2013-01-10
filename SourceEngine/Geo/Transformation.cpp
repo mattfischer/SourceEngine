@@ -109,8 +109,8 @@ Transformation Transformation::rotateZ(float angle)
 Transformation Transformation::rotate(const Geo::Orientation &orientation)
 {
 	Transformation transformation = rotateZ(orientation.yaw());
-	transformation = transformation * rotateY(-orientation.pitch());
-	transformation = transformation * rotateX(-orientation.roll());
+	transformation = transformation * rotateY(orientation.pitch());
+	transformation = transformation * rotateX(orientation.roll());
 
 	return transformation;
 }

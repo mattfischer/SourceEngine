@@ -7,10 +7,8 @@ namespace Draw {
 void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Geo::Orientation &orientation, Format::VHV::Header *vhv)
 {
 	glPushMatrix();
-	glTranslatef(position.x(), position.y(), position.z());
-	glRotatef(orientation.yaw(), 0, 0, 1);
-	glRotatef(orientation.pitch(), 0, 1, 0);
-	glRotatef(orientation.roll(), 1, 0, 0);
+	Geo::Transformation transformation = Geo::Transformation::translateRotate(position, orientation);
+	glMultMatrixf(transformation.matrix().transpose().elements());
 
 	glActiveTexture(GL_TEXTURE0);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);

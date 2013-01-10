@@ -24,7 +24,8 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 {
 	bool drawEntities = true;
 
-	Geo::Frustum frustum = mStartFrustum * Geo::Transformation::translateRotate(position, orientation);
+	Geo::Transformation transformation = Geo::Transformation::translateRotate(position, orientation);
+	Geo::Frustum frustum = mStartFrustum * transformation;
 
 	mBspDrawer->newFrame();
 	mFaceDrawer->newFrame();
@@ -55,9 +56,8 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 	glPopMatrix();
 
 	glPushMatrix();
-	glRotatef(-orientation.pitch(), 0, -1, 0);
-	glRotatef(-orientation.yaw(), 0, 0, 1);
-	glTranslatef(-position.x(), -position.y(), -position.z());
+
+	glMultMatrixf(transformation.inverseMatrix().transpose().elements());
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	mBspDrawer->draw(0, Geo::Point(0, 0, 0), Geo::Orientation(0, 0, 0));
@@ -75,7 +75,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 
 				if(entity->model()) {
 					if(entity->leaf()->frameTag == mFrameTag && !mFrustum.boxOutside(entity->box())) {
-						   mModelDrawer->draw(entity->model(), entity->position(), entity->orientation(), 0);
+						mModelDrawer->draw(entity->model(), entity->position(), entity->orientation(), 0);
 					}
 				}
 			}

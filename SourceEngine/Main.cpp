@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int iC
 		float pitch = orientation.pitch();
 		float yaw = orientation.yaw();
 
-		pitch += -((int)point.y - SCREEN_HEIGHT/2);
+		pitch += ((int)point.y - SCREEN_HEIGHT/2);
 		yaw += -((int)point.x - SCREEN_WIDTH/2);
 
 		pitch = min(pitch, 70.0f);

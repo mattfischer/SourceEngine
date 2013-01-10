@@ -13,10 +13,20 @@ Frustum::Frustum(float hfov, float aspectRatio)
 	mPlanes[0] = Plane(Vector(sinf(hFovRad), cosf(hFovRad), 0), 0);
 	mPlanes[1] = Plane(Vector(sinf(hFovRad), -cosf(hFovRad), 0), 0);
 
-	float vFovRad = atanf(aspectRatio * tanf(hFovRad));
+	float vFovRad = atanf(tanf(hFovRad) / aspectRatio);
 
 	mPlanes[2] = Plane(Vector(sinf(vFovRad), 0, cosf(vFovRad)), 0);
 	mPlanes[3] = Plane(Vector(sinf(vFovRad), 0, -cosf(vFovRad)), 0);
+}
+
+bool Frustum::pointOutside(const Geo::Point &point) const
+{
+	for(int i=0; i<4; i++) {
+		if(!mPlanes[i].pointInFront(point)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Frustum::boxOutside(const BoxAligned &box) const
