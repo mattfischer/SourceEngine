@@ -41,6 +41,7 @@ public:
 	};
 
 	struct Lod {
+		float switchPoint;
 		int numMeshes;
 		Mesh *meshes;
 	};

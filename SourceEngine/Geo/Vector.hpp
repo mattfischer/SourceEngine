@@ -50,6 +50,8 @@ public:
 	float y() const { return mElements[1]; }
 	float z() const { return mElements[2]; }
 
+	float magnitude2() const { return mElements[0] * mElements[0] + mElements[1] * mElements[1] + mElements[2] * mElements[2]; }
+
 	Vector operator+(const Vector &other) const
 	{
 		return Vector(x() + other.x(), y() + other.y(), z() + other.z());

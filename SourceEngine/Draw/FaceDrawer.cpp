@@ -28,7 +28,12 @@ void FaceDrawer::draw(World::Face *face, const Geo::Point &cameraPosition)
 	} else {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		glColor3f(face->gray(), face->gray(), face->gray());
+
+		if(mDrawLightmaps) {
+			glColor3f(1.0f, 1.0f, 1.0f);
+		} else {
+			glColor3f(face->gray(), face->gray(), face->gray());
+		}
 	}
 
 	if(mDrawLightmaps) {

@@ -17,11 +17,22 @@ void ModelDrawer::draw(World::Model *model, const Geo::Point &position, const Ge
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.0f);
 
+	float distance2 = (position - mCameraPosition).magnitude2();
+
 	for(int bp=0; bp<model->numBodyParts(); bp++) {
 		const World::Model::BodyPart &bodyPart = model->bodyPart(bp);
 		for(int m=0; m<bodyPart.numModels; m++) {
 			const World::Model::_Model &_model = bodyPart.models[m];
 			int lodNum = 0;
+			for(int lod=0; lod<_model.numLods; lod++) {
+				float switchPoint2 = _model.lods[lod].switchPoint * _model.lods[lod].switchPoint;
+				if(distance2 > switchPoint2) {
+					lodNum = lod;
+				} else {
+					break;
+				}
+			}
+
 			const World::Model::Lod &lod = _model.lods[lodNum];
 			for(int me=0; me<lod.numMeshes; me++) {
 				const World::Model::Mesh &mesh = lod.meshes[me];

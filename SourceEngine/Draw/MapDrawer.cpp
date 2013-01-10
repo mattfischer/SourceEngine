@@ -33,6 +33,7 @@ void MapDrawer::draw(const Geo::Point &position, const Geo::Orientation &orienta
 		mFrustum = frustum;
 		mBspDrawer->setCameraPosition(position);
 		mBspDrawer->setFrustum(frustum);
+		mModelDrawer->setCameraPosition(position);
 	}
 
 	if(!mMap->bsp()->leafForPoint(0, position)->visibleLeaves) {

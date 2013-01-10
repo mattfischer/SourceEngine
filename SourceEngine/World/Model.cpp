@@ -38,6 +38,7 @@ Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::He
 			for(int l=0; l<vtxModel->numLods; l++) {
 				Format::VTX::Lod *vtxLod = vtxModel->lod(l);
 				Lod &lod = model.lods[l];
+				lod.switchPoint = vtxLod->switchPoint;
 				lod.numMeshes = vtxLod->numMeshes;
 				lod.meshes = new Mesh[lod.numMeshes];
 				for(int me=0; me<vtxLod->numMeshes; me++) {
