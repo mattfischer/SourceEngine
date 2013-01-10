@@ -8,8 +8,9 @@ namespace Entity {
 
 class WorldSpawn : public Base {
 public:
-	WorldSpawn(const Format::KeyValue::Section *section, World::Map *map);
-	WorldSpawn(const std::string &classname);
+	WorldSpawn();
+
+	virtual void init(const Format::KeyValue::Section *section, Map *map);
 
 	const std::string &skyname() { return mSkyname; }
 

@@ -17,13 +17,11 @@ class Registry {
 public:
 	class CreatorBase {
 	public:
-		virtual Base *create(const Format::KeyValue::Section *section, World::Map *map) = 0;
-		virtual Base *create(const std::string &classname) = 0;
+		virtual Base *create() = 0;
 	};
 
 	static Registry *instance();
 
-	Base *create(const Format::KeyValue::Section *section, World::Map *map);
 	Base *create(const std::string &classname);
 
 	void registerCreator(const std::string &classname, CreatorBase *creator);
@@ -36,14 +34,9 @@ public:
 			Registry::instance()->registerCreator(classname, this);
 		}
 
-		Base *create(const Format::KeyValue::Section *section, Map *map)
+		Base *create()
 		{
-			return new T(section, map);
-		}
-
-		Base *create(const std::string &classname)
-		{
-			return new T(classname);
+			return new T;
 		}
 	};
 

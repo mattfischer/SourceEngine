@@ -5,9 +5,15 @@
 namespace World {
 namespace Entity {
 
-Point::Point(const Format::KeyValue::Section *section, Map *map)
-: Base(section, map)
+Point::Point(const std::string &classname)
+: Base(classname)
 {
+}
+
+void Point::init(const Format::KeyValue::Section *section, Map *map)
+{
+	Base::init(section, map);
+
 	if(section->hasParameter("origin")) {
 		const std::string &position = section->parameter("origin");
 		std::vector<std::string> posParts = StringUtils::split(position, " ");
@@ -25,11 +31,6 @@ Point::Point(const Format::KeyValue::Section *section, Map *map)
 		float roll = (float)atof(angleParts[2].c_str());
 		mOrientation = Geo::Orientation(pitch, yaw, roll);
 	}
-}
-
-Point::Point(const std::string &classname)
-: Base(classname)
-{
 }
 
 }

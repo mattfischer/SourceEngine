@@ -9,8 +9,14 @@ namespace World {
 namespace Entity {
 namespace Prop {
 
-Static::Static(Format::BSP *file, int number, World::Map *map)
-: Point("prop_static")
+static const char *ClassName = "prop_static";
+
+Static::Static()
+: Point(ClassName)
+{
+}
+
+void Static::init(Format::BSP *file, int number, World::Map *map)
 {
 	const Format::BSP::StaticProp &fileStaticProp = file->staticProp(number);
 
@@ -63,10 +69,7 @@ Static::Static(Format::BSP *file, int number, World::Map *map)
 	}
 }
 
-Static::Static(const std::string &classname)
-: Point(classname)
-{
-}
+DECLARE_ENTITY_CLASS(ClassName, Static);
 
 }
 }

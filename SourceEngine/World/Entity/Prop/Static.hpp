@@ -19,8 +19,9 @@ namespace Prop {
 
 class Static : public World::Entity::Point {
 public:
-	Static(Format::BSP *file, int number, World::Map *map);
-	Static(const std::string &classname);
+	Static();
+
+	void init(Format::BSP *file, int number, World::Map *map);
 
 	size_t numLeaves() { return mNumLeaves; }
 	World::BSP::Leaf *leaf(int leaf) { return mLeaves[leaf]; }

@@ -14,19 +14,25 @@ namespace Entity {
 
 class Base {
 public:
-	Base(const Format::KeyValue::Section *section, Map *map);
 	Base(const std::string &classname);
 
-	const std::string &classname() { return mClassname; }
+	virtual void init(const Format::KeyValue::Section *section, Map *map);
 
-	static Base *create(const Format::KeyValue::Section *section, Map *map)
-	{
-		return Registry::instance()->create(section, map);
-	}
+	const std::string &classname() { return mClassname; }
 
 	static Base *create(const std::string &classname)
 	{
 		return Registry::instance()->create(classname);
+	}
+
+	static Base *create(const Format::KeyValue::Section *section, Map *map)
+	{
+		Base *ret = create(section->parameter("classname"));
+		if(ret) {
+			ret->init(section, map);
+		}
+
+		return ret;
 	}
 
 private:

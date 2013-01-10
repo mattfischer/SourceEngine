@@ -11,8 +11,9 @@ namespace Entity {
 
 class Point : public Base {
 public:
-	Point(const Format::KeyValue::Section *section, Map *map);
 	Point(const std::string &classname);
+
+	virtual void init(const Format::KeyValue::Section *section, Map *map);
 
 	const Geo::Point &position() { return mPosition; }
 	void setPosition(const Geo::Point &position) { mPosition = position; }

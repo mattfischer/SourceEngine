@@ -8,8 +8,7 @@ namespace Entity {
 
 class Player : public Point {
 public:
-	Player(const Format::KeyValue::Section *section, Map *map);
-	Player(const std::string &classname);
+	Player();
 };
 
 }

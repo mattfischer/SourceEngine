@@ -4,17 +4,14 @@ namespace World {
 namespace Entity {
 namespace Info {
 
-PlayerStart::PlayerStart(const Format::KeyValue::Section *section, Map *map)
-: Point(section, map)
+static const char *ClassName = "info_player_start";
+
+PlayerStart::PlayerStart()
+: Point(ClassName)
 {
 }
 
-PlayerStart::PlayerStart(const std::string &classname)
-: Point(classname)
-{
-}
-
-DECLARE_ENTITY_CLASS("info_player_start", PlayerStart);
+DECLARE_ENTITY_CLASS(ClassName, PlayerStart);
 
 }
 }

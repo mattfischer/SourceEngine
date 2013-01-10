@@ -75,7 +75,10 @@ Map::Map(File::Space *space, const std::string &filename)
 	mNumStaticProps = file->numStaticProps();
 	mStaticProps = new Entity::Prop::Static*[mNumStaticProps];
 	for(unsigned int i=0; i<mNumStaticProps; i++) {
-		mStaticProps[i] = new Entity::Prop::Static(file, i, this);
+		Entity::Prop::Static *entity = new Entity::Prop::Static;
+		entity->init(file, i, this);
+
+		mStaticProps[i] = entity;
 	}
 
 	delete zipSpace;

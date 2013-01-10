@@ -6,9 +6,17 @@ namespace World {
 namespace Entity {
 namespace Prop {
 
-Dynamic::Dynamic(const Format::KeyValue::Section *section, World::Map *map)
-: Point(section, map)
+static const char *ClassName = "prop_dynamic";
+
+Dynamic::Dynamic()
+: Point(ClassName)
 {
+}
+
+void Dynamic::init(const Format::KeyValue::Section *section, World::Map *map)
+{
+	Point::init(section, map);
+
 	mModel = 0;
 	if(section->hasParameter("model")) {
 		const std::string &fileName = section->parameter("model");
@@ -23,12 +31,7 @@ Dynamic::Dynamic(const Format::KeyValue::Section *section, World::Map *map)
 	mLeaf = map->bsp()->leafForPoint(0, position());
 }
 
-Dynamic::Dynamic(const std::string &classname)
-: Point(classname)
-{
-}
-
-DECLARE_ENTITY_CLASS("prop_dynamic", Dynamic);
+DECLARE_ENTITY_CLASS(ClassName, Dynamic);
 
 }
 }
