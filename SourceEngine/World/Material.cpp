@@ -31,6 +31,7 @@ Material::Material(Format::VMT *vmt, File::Space *space)
 		}
 	}
 
+	mAlphaTest = false;
 	if(vmt->hasParameter("$alphatest")) {
 		const std::string &alphatest = vmt->parameter("$alphatest");
 
