@@ -20,7 +20,7 @@ public:
 	int numMaterials() { return mNumMaterials; }
 	Material *material(int material) { return mMaterials[material]; }
 
-	Format::VVD::Vertex *vertices(int lod) { return mVertices[lod]; }
+	Format::VVD::Vertex *vertices() { return mVertices; }
 
 	const Geo::BoxOriented &box() { return mBox; }
 
@@ -61,7 +61,7 @@ public:
 	int skin(int family, int material) { return mSkins[family][material]; }
 
 private:
-	Format::VVD::Vertex **mVertices;
+	Format::VVD::Vertex *mVertices;
 
 	int mNumMaterials;
 	Material **mMaterials;

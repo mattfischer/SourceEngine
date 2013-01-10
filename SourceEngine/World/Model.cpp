@@ -4,25 +4,19 @@ namespace World {
 
 Model::Model(Format::MDL::Header *mdl, Format::VVD::Header *vvd, Format::VTX::Header *vtx, File::Space *space, const std::string &modelPath)
 {
-	mVertices = new Format::VVD::Vertex*[vvd->numLods];
-	for(int lod=0; lod<vvd->numLods; lod++) {
-		int numLodVertices = vvd->numLodVertices[lod];
-
-		mVertices[lod] = new Format::VVD::Vertex[numLodVertices];
-		if(vvd->numFixups == 0) {
-			for(int v=0; v<numLodVertices; v++) {
-				mVertices[lod][v] = *vvd->vertex(v);
-			}
-		} else {
-			int v = 0;
-			for(int i=0; i<vvd->numFixups; i++) {
-				Format::VVD::Fixup *fixup = vvd->fixup(i);
-				if(lod <= fixup->lod) {
-					for(int j=0; j<fixup->numVertices; j++) {
-						mVertices[lod][v] = *vvd->vertex(fixup->sourceVertexId + j);
-						v++;
-					}
-				}
+	int numLodVertices = vvd->numLodVertices[0];
+	mVertices = new Format::VVD::Vertex[numLodVertices];
+	if(vvd->numFixups == 0) {
+		for(int v=0; v<numLodVertices; v++) {
+			mVertices[v] = *vvd->vertex(v);
+		}
+	} else {
+		int v = 0;
+		for(int i=0; i<vvd->numFixups; i++) {
+			Format::VVD::Fixup *fixup = vvd->fixup(i);
+			for(int j=0; j<fixup->numVertices; j++) {
+				mVertices[v] = *vvd->vertex(fixup->sourceVertexId + j);
+				v++;
 			}
 		}
 	}
