@@ -47,7 +47,7 @@ Map::Map(File::Space *space, const std::string &filename)
 
 	mNumEntities = file->numEntities() + 1;
 	mEntities = new Entity::Base*[mNumEntities];
-	Entity::Point *playerStart;
+	Entity::Info::PlayerStart *playerStart;
 	for(unsigned int i=0; i<file->numEntities(); i++) {
 		Entity::Base *entity = Entity::Base::create(file->entity(i).section, this);
 
@@ -63,7 +63,7 @@ Map::Map(File::Space *space, const std::string &filename)
 		}
 	}
 
-	mPlayer = new Entity::Point("player");
+	mPlayer = static_cast<Entity::Player*>(Entity::Base::create("player"));
 	mPlayer->setPosition(playerStart->position() + Geo::Vector(0, 0, 60));
 	mPlayer->setOrientation(playerStart->orientation());
 	mEntities[mNumEntities - 1] = mPlayer;

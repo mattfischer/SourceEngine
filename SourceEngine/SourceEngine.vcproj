@@ -300,6 +300,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\World\Entity\Player.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\World\Entity\Point.cpp"
 						>
 					</File>
@@ -525,6 +529,10 @@
 					>
 					<File
 						RelativePath=".\World\Entity\Base.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\World\Entity\Player.hpp"
 						>
 					</File>
 					<File

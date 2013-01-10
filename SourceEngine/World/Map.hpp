@@ -7,7 +7,7 @@
 #include "World/Skybox.hpp"
 #include "World/ModelCache.hpp"
 #include "World/Entity/Base.hpp"
-#include "World/Entity/Point.hpp"
+#include "World/Entity/Player.hpp"
 #include "World/Entity/Prop/Static.hpp"
 #include "World/Entity/Worldspawn.hpp"
 
@@ -23,7 +23,7 @@ public:
 
 	BSP *bsp() { return mBsp; }
 
-	Entity::Point *player() { return mPlayer; }
+	Entity::Player *player() { return mPlayer; }
 
 	size_t numEntities() { return mNumEntities; }
 	Entity::Base *entity(int entity) { return mEntities[entity]; }
@@ -54,7 +54,7 @@ private:
 
 	BSP *mBsp;
 
-	Entity::Point *mPlayer;
+	Entity::Player *mPlayer;
 
 	Entity::WorldSpawn *mWorldSpawn;
 	Skybox *mSkybox;

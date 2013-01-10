@@ -24,6 +24,11 @@ public:
 		return Registry::instance()->create(section, map);
 	}
 
+	static Base *create(const std::string &classname)
+	{
+		return Registry::instance()->create(classname);
+	}
+
 private:
 	std::string mClassname;
 };
