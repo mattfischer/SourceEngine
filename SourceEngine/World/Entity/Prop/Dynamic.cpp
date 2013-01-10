@@ -23,6 +23,11 @@ Dynamic::Dynamic(const Format::KeyValue::Section *section, World::Map *map)
 	mLeaf = map->bsp()->leafForPoint(0, position());
 }
 
+Dynamic::Dynamic(const std::string &classname)
+: Point(classname)
+{
+}
+
 DECLARE_ENTITY_CLASS("prop_dynamic", Dynamic);
 
 }

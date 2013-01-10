@@ -9,6 +9,11 @@ PlayerStart::PlayerStart(const Format::KeyValue::Section *section, Map *map)
 {
 }
 
+PlayerStart::PlayerStart(const std::string &classname)
+: Point(classname)
+{
+}
+
 DECLARE_ENTITY_CLASS("info_player_start", PlayerStart);
 
 }

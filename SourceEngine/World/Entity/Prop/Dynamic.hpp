@@ -16,6 +16,7 @@ namespace Prop {
 class Dynamic : public Point {
 public:
 	Dynamic(const Format::KeyValue::Section *section, World::Map *map);
+	Dynamic(const std::string &classname);
 
 	World::Model *model() { return mModel; }
 	const Geo::BoxOriented &box() { return mBox; }

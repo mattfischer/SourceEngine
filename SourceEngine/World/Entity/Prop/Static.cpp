@@ -63,6 +63,11 @@ Static::Static(Format::BSP *file, int number, World::Map *map)
 	}
 }
 
+Static::Static(const std::string &classname)
+: Point(classname)
+{
+}
+
 }
 }
 }

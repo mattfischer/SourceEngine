@@ -18,11 +18,14 @@ public:
 	class CreatorBase {
 	public:
 		virtual Base *create(const Format::KeyValue::Section *section, World::Map *map) = 0;
+		virtual Base *create(const std::string &classname) = 0;
 	};
 
 	static Registry *instance();
 
 	Base *create(const Format::KeyValue::Section *section, World::Map *map);
+	Base *create(const std::string &classname);
+
 	void registerCreator(const std::string &classname, CreatorBase *creator);
 	
 	template<typename T>
@@ -36,6 +39,11 @@ public:
 		Base *create(const Format::KeyValue::Section *section, Map *map)
 		{
 			return new T(section, map);
+		}
+
+		Base *create(const std::string &classname)
+		{
+			return new T(classname);
 		}
 	};
 

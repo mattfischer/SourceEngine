@@ -11,6 +11,11 @@ WorldSpawn::WorldSpawn(const Format::KeyValue::Section *section, World::Map *map
 	}
 }
 
+WorldSpawn::WorldSpawn(const std::string &classname)
+: Base(classname)
+{
+}
+
 DECLARE_ENTITY_CLASS("worldspawn", WorldSpawn);
 
 }

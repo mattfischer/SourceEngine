@@ -10,6 +10,7 @@ namespace Info {
 class PlayerStart : public Point {
 public:
 	PlayerStart(const Format::KeyValue::Section *section, Map *map);
+	PlayerStart(const std::string &classname);
 };
 
 }
