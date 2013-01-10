@@ -21,6 +21,8 @@ Face::Face(Format::BSP *file, int number, Material *materials[])
 		glBindTexture(GL_TEXTURE_2D, mLightMap);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		int lightmapWidth = fileFace.lightmapTextureSizeInLuxels[0] + 1;
 		int lightmapHeight = fileFace.lightmapTextureSizeInLuxels[1] + 1;
