@@ -1,5 +1,7 @@
 #include "Draw/BSPDrawer.hpp"
 
+#include "Draw/BoxDrawer.hpp"
+
 #include <GL/glew.h>
 
 namespace Draw {
@@ -53,6 +55,7 @@ void BSPDrawer::drawLeaf(World::BSP::Leaf *leaf, World::BSP::Leaf *cameraLeaf, c
 	for(int j=0; j<leaf->numFaces; j++) {
 		mFaceDrawer->draw(leaf->faces[j], cameraPosition);
 	}
+
 	leaf->frameTag = mFrameTag;
 }
 

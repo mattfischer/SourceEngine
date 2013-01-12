@@ -341,6 +341,10 @@
 				Name="Draw"
 				>
 				<File
+					RelativePath=".\Draw\BoxDrawer.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Draw\BSPDrawer.cpp"
 					>
 				</File>
@@ -572,6 +576,10 @@
 			<Filter
 				Name="Draw"
 				>
+				<File
+					RelativePath=".\Draw\BoxDrawer.hpp"
+					>
+				</File>
 				<File
 					RelativePath=".\Draw\BSPDrawer.hpp"
 					>
