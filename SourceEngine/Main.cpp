@@ -65,7 +65,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				glMatrixMode(GL_PROJECTION_MATRIX);
 				glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 				glLoadIdentity();
-				gluPerspective(75, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 10, 10000);
+				gluPerspective(37.5, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 10, 10000);
 
 				glMatrixMode(GL_MODELVIEW_MATRIX);
 				float matrix[16] = { 0.0f, 0.0f, -1.0f, 0.0f,   -1.0f, 0.0f, 0.0f, 0.0f,   0.0f, 1.0f, 0.0f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f };
@@ -82,7 +82,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				space->addSpace(new File::SystemSpace("portal2"));
 				space->addSpace(new File::VPKSpace("portal2/pak01_dir.vpk"));
 				map = new World::Map(space, "maps/sp_a1_intro3.bsp");
-				Geo::Frustum startFrustum(75, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
+				Geo::Frustum startFrustum(37.5, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
 				mapDrawer = new Draw::MapDrawer(map, startFrustum);
 
 				return 0;
